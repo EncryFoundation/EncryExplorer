@@ -6,5 +6,5 @@ import scala.concurrent.duration.FiniteDuration
 
 case class RESTApiSettings(bindAddress: InetSocketAddress,
                            apiKeyHash: Option[String],
-                           corsAllowedOrigin: Option[String],
+                           corsAllowed: Boolean,
                            timeout: FiniteDuration)
