@@ -19,7 +19,8 @@ object BlocksTable extends Table {
     "miner_address",
     "miner_reward",
     "fees_total",
-    "txs_size"
+    "txs_size",
+    "best_chain"
   )
   val fieldsString: String = fields.mkString("(", ", ", ")")
 }

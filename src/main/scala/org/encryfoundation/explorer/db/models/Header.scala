@@ -1,8 +1,6 @@
 package org.encryfoundation.explorer.db.models
 
-import doobie.Fragment
-import doobie.implicits._
-import doobie.util.query.Query0
+import scorex.crypto.encode.Base16
 
 case class Header(id: String,
                   parentId: String,
@@ -12,23 +10,40 @@ case class Header(id: String,
                   stateRoot: String,
                   transactionsRoot: String,
                   timestamp: Long,
-                  difficulty: BigInt,
-                  equihashSolution: List[Int],
-                  adProofs: List[Array[Byte]],
-                  txsQty: Int,
-                  txsSize: Int,
+                  difficulty: Long,
+                  blockSize: Long,
+                  equihashSolutions: String,
+                  adProofsOpt: Option[Array[Byte]],
+                  txsQty: Long,
                   minerAddress: String,
                   minerReward: Long,
-                  totalFees: Long)
+                  feesTotal: Long,
+                  txsSize: Long,
+                  bestChain: Boolean)
 
 object Header {
 
-  import org.encryfoundation.explorer.db.tables.BlocksTable._
+  import io.circe.Encoder
+  import io.circe.syntax._
 
-  val fieldsFragment: Fragment = Fragment.const(fields.mkString(", "))
-
-  def select(id: String): Query0[Header] = (fr"SELECT" ++ fieldsFragment ++ fr"FROM node_headers WHERE id = $id;").query[Header]
-
-  def selectByParentId(parentId: String): Query0[Header] =
-    (fr"SELECT" ++ fieldsFragment ++ fr"FROM node_headers WHERE parent_id = $parentId").query[Header]
+  implicit val jsonEncoder: Encoder[Header] = (h: Header) => Map(
+    "id" -> h.id.asJson,
+    "parentId" -> h.parentId.asJson,
+    "version" -> h.version.asJson,
+    "height" -> h.height.asJson,
+    "adProofsRoot" -> h.adProofsRoot.asJson,
+    "stateRoot" -> h.stateRoot.asJson,
+    "transactionsRoot" -> h.transactionsRoot.asJson,
+    "timestamp" -> h.timestamp.asJson,
+    "difficulty" -> h.difficulty.asJson,
+    "blockSize" -> h.blockSize.asJson,
+    "equihashSolutions" -> h.equihashSolutions.asJson,
+    "adProofsOpt" -> h.adProofsOpt.map(Base16.encode).asJson,
+    "txsQty" -> h.txsQty.asJson,
+    "minerAddress" -> h.minerAddress.asJson,
+    "minerReward" -> h.minerReward.asJson,
+    "feesTotal" -> h.feesTotal.asJson,
+    "txsSize" -> h.txsSize.asJson,
+    "bestChain" -> h.bestChain.asJson
+  ).asJson
 }

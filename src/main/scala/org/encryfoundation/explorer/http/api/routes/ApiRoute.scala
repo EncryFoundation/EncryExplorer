@@ -7,10 +7,11 @@ import akka.http.scaladsl.unmarshalling.PredefinedFromEntityUnmarshallers
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Json
+import org.encryfoundation.explorer.Address
 import org.encryfoundation.explorer.http.api.ApiDirectives
-import org.encryfoundation.explorer.{Address, ModifierId}
+import org.encryfoundation.explorer.protocol.crypto.Base58Check
 import scorex.crypto.authds.ADKey
-import scorex.crypto.encode.Base58
+import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.Success
@@ -43,22 +44,22 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
 
   val paging: Directive[(Int, Int)] = parameters("offset".as[Int] ? 0, "limit".as[Int] ? 50)
 
-  val modifierId: Directive1[ModifierId] = pathPrefix(Segment).flatMap { h =>
-    Base58.decode(h) match {
-      case Success(header) => provide(ModifierId @@ header)
+  val modifierId: Directive1[String] = pathPrefix(Segment).flatMap { h =>
+    Base16.decode(h) match {
+      case Success(_) => provide(h)
       case _ => reject
     }
   }
 
   val accountAddress: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
-    Base58.decode(addr) match {
+    Base58Check.decode(addr) match {
       case Success(_) => provide(Address @@ addr)
       case _ => reject
     }
   }
 
   val boxId: Directive1[ADKey] = pathPrefix(Segment).flatMap { key =>
-    Base58.decode(key) match {
+    Base16.decode(key) match {
       case Success(k) => provide(ADKey @@ k)
       case _ => reject
     }
