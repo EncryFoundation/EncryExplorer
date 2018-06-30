@@ -51,6 +51,11 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
     }
   }
 
+  val height: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
+    val h: Int = hs.toInt
+    if (h > 0) provide(h) else reject
+  }
+
   val accountAddress: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
     Base58Check.decode(addr) match {
       case Success(_) => provide(Address @@ addr)

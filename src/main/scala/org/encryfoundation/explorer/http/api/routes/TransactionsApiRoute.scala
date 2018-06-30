@@ -8,7 +8,8 @@ import org.encryfoundation.explorer.db.services.TransactionService
 import org.encryfoundation.explorer.protocol.AccountLockedContract
 import org.encryfoundation.explorer.settings.RESTApiSettings
 
-case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTApiSettings)(implicit val context: ActorRefFactory) extends ApiRoute {
+case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTApiSettings)
+                               (implicit val context: ActorRefFactory) extends ApiRoute {
 
   override val route: Route = pathPrefix("transaction") {
     getOutputR ~ getOutputsByAddressR

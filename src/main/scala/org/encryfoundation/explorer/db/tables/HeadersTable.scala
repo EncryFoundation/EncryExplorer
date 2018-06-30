@@ -1,7 +1,7 @@
 package org.encryfoundation.explorer.db.tables
 
-object BlocksTable extends Table {
-  val name: String = "blocks"
+object HeadersTable extends Table {
+  val name: String = "headers"
   val fields: Seq[String] = Seq(
     "id",
     "parent_id",

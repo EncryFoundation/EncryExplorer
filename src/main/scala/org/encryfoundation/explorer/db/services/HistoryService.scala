@@ -12,8 +12,18 @@ import scala.concurrent.ExecutionContext
 
 case class HistoryService[F[_]](tr: Transactor[F], ec: ExecutionContext)(implicit f: Monad[F], a: Async[F]) {
 
-  def getHeader(id: String): F[Header] = for {
+  def getHeaderById(id: String): F[Header] = for {
     _   <- Async.shift[F](ec)
     res <- HeadersDao.getById(id).transact[F](tr)
+  } yield res
+
+  def getHeadersAtHeight(h: Int): F[List[Header]] = for {
+    _   <- Async.shift[F](ec)
+    res <- HeadersDao.getByHeight(h).transact[F](tr)
+  } yield res
+
+  def getBestHeaderAtHeight(h: Int): F[Header] = for {
+    _   <- Async.shift[F](ec)
+    res <- HeadersDao.getBestByHeight(h).transact[F](tr)
   } yield res
 }

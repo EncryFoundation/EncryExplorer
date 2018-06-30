@@ -26,10 +26,10 @@ object ExplorerApp extends App {
   val transactor: HikariTransactor[IO] = HikariTransactor
     .newHikariTransactor[IO](
       driverClassName = "org.postgresql.Driver",
-      url = settings.postgres.host,
+      url  = settings.postgres.host,
       user = settings.postgres.user,
       pass = settings.postgres.password
-    ).map { tr => tr.configure(_ => IO(())); tr }
+    ).map { ht => ht.configure(_ => IO(())); ht }
     .unsafeRunSync()
 
   val bindAddress: InetSocketAddress = settings.restApi.bindAddress
