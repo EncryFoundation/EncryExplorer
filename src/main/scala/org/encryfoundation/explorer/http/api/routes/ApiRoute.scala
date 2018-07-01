@@ -9,6 +9,7 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Json
 import org.encryfoundation.explorer.Address
 import org.encryfoundation.explorer.http.api.ApiDirectives
+import org.encryfoundation.explorer.protocol.AccountLockedContract
 import org.encryfoundation.explorer.protocol.crypto.Base58Check
 import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16
@@ -53,10 +54,15 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
 
   val height: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
     val h: Int = hs.toInt
+    if (h >= 0) provide(h) else reject
+  }
+
+  val qty: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
+    val h: Int = hs.toInt
     if (h > 0) provide(h) else reject
   }
 
-  val accountAddress: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
+  val address: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
     Base58Check.decode(addr) match {
       case Success(_) => provide(Address @@ addr)
       case _ => reject

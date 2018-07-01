@@ -26,4 +26,9 @@ case class HistoryService[F[_]](tr: Transactor[F], ec: ExecutionContext)(implici
     _   <- Async.shift[F](ec)
     res <- HeadersDao.getBestByHeight(h).transact[F](tr)
   } yield res
+
+  def getLastHeaders(gty: Int): F[List[Header]] = for {
+    _   <- Async.shift[F](ec)
+    res <- HeadersDao.getLast(gty).transact[F](tr)
+  } yield res
 }

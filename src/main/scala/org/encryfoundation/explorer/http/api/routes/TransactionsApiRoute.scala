@@ -19,9 +19,9 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
     toJsonResponse(service.getOutput(id).unsafeToFuture().map(_.asJson))
   }
 
-  def getOutputsByAddressR: Route = (accountAddress & pathPrefix("outputs") & get) { addr =>
+  def getOutputsByAddressR: Route = (address & pathPrefix("outputs") & get) { addr =>
     toJsonResponse(service.getOutputByContractHash(contractHashByAddress(addr)).unsafeToFuture().map(_.asJson))
   }
 
-  private def contractHashByAddress(addr: String): String = AccountLockedContract(addr).contractHashHex
+  private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
 }
