@@ -14,7 +14,7 @@ import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
-import scala.util.{Success, Try}
+import scala.util.Try
 
 trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFromEntityUnmarshallers {
 
@@ -50,8 +50,7 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
   }
 
   val qty: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
-    val h: Int = hs.toInt
-    if (h > 0) provide(h) else reject
+    Try(hs.toInt).filter(_ > 0).map(provide).getOrElse(reject)
   }
 
   val address: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
