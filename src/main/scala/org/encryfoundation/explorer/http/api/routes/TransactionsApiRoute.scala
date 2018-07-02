@@ -12,10 +12,16 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
                                (implicit val context: ActorRefFactory) extends ApiRoute {
 
   override val route: Route = pathPrefix("transactions") {
-    getOutputR ~ getOutputsByAddressR
+    getOutputR ~
+      getOutputsByAddressR ~
+      getUnspentOutputsByAddressR ~
+      getOutputsByTxIdR ~
+      getUnspentOutputsByTxIdR ~
+      getInputR ~
+      getInputsByTxIdR
   }
 
-  def getOutputR: Route = (modifierId & pathPrefix("output") & get) { id =>
+  def getOutputR: Route = (pathPrefix("output") & modifierId & get) { id =>
     toJsonResponse(service.getOutput(id).unsafeToFuture().map(_.asJson))
   }
 
@@ -25,6 +31,22 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
 
   def getUnspentOutputsByAddressR: Route = (address & pathPrefix("outputs" / "unspent") & get) { addr =>
     toJsonResponse(service.getUnspentOutputByContractHash(contractHashByAddress(addr)).unsafeToFuture().map(_.asJson))
+  }
+
+  def getOutputsByTxIdR: Route = (pathPrefix("tx") & modifierId & pathPrefix("outputs") & get) { id =>
+    toJsonResponse(service.getOutputByTxId(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getUnspentOutputsByTxIdR: Route = (pathPrefix("tx") & modifierId & pathPrefix("outputs" / "unspent") & get) { id =>
+    toJsonResponse(service.getUnspentOutputByTxId(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getInputR: Route = (pathPrefix("input") & modifierId & get) { id =>
+    toJsonResponse(service.getInput(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getInputsByTxIdR: Route = (pathPrefix("tx") & modifierId & pathPrefix("inputs") & get) { id =>
+    toJsonResponse(service.getInputByTxId(id).unsafeToFuture().map(_.asJson))
   }
 
   private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex

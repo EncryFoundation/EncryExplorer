@@ -17,6 +17,10 @@ object OutputsDao extends Dao {
 
   def findUnspentByContractHash(ch: String): ConnectionIO[List[Output]] = selectUnspentByContractHash(ch).to[List]
 
+  def findByTxId(ch: String): ConnectionIO[List[Output]] = selectByTxId(ch).to[List]
+
+  def findUnspentByTxId(ch: String): ConnectionIO[List[Output]] = selectUnspentByTxId(ch).to[List]
+
   private def selectById(id: String): Query0[Output] =
     (fr"SELECT" ++ fieldsF ++ fr"FROM" ++ tableF ++ fr"WHERE id = $id;").query[Output]
 
@@ -25,4 +29,10 @@ object OutputsDao extends Dao {
 
   private def selectUnspentByContractHash(ch: String): Query0[Output] =
     (fr"SELECT" ++ fieldsF ++ fr"FROM" ++ tableF ++ fr"WHERE contract_hash = $ch AND id NOT IN (SELECT id FROM inputs);").query[Output]
+
+  private def selectByTxId(ch: String): Query0[Output] =
+    (fr"SELECT" ++ fieldsF ++ fr"FROM" ++ tableF ++ fr"WHERE tx_id = $ch;").query[Output]
+
+  private def selectUnspentByTxId(ch: String): Query0[Output] =
+    (fr"SELECT" ++ fieldsF ++ fr"FROM" ++ tableF ++ fr"WHERE tx_id = $ch AND id NOT IN (SELECT id FROM inputs);").query[Output]
 }

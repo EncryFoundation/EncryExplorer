@@ -12,23 +12,15 @@ import scala.concurrent.ExecutionContext
 
 case class HistoryService[F[_]](tr: Transactor[F], ec: ExecutionContext)(implicit f: Monad[F], a: Async[F]) {
 
-  def getHeaderById(id: String): F[Header] = for {
-    _   <- Async.shift[F](ec)
-    res <- HeadersDao.getById(id).transact[F](tr)
-  } yield res
+  def getHeaderById(id: String): F[Header] = Async.shift[F](ec)
+    .flatMap(_ => HeadersDao.getById(id).transact[F](tr))
 
-  def getHeadersAtHeight(h: Int): F[List[Header]] = for {
-    _   <- Async.shift[F](ec)
-    res <- HeadersDao.getByHeight(h).transact[F](tr)
-  } yield res
+  def getHeadersAtHeight(h: Int): F[List[Header]] = Async.shift[F](ec)
+    .flatMap(_ => HeadersDao.getByHeight(h).transact[F](tr))
 
-  def getBestHeaderAtHeight(h: Int): F[Header] = for {
-    _   <- Async.shift[F](ec)
-    res <- HeadersDao.getBestByHeight(h).transact[F](tr)
-  } yield res
+  def getBestHeaderAtHeight(h: Int): F[Header] = Async.shift[F](ec)
+    .flatMap(_ => HeadersDao.getBestByHeight(h).transact[F](tr))
 
-  def getLastHeaders(gty: Int): F[List[Header]] = for {
-    _   <- Async.shift[F](ec)
-    res <- HeadersDao.getLast(gty).transact[F](tr)
-  } yield res
+  def getLastHeaders(qty: Int): F[List[Header]] = Async.shift[F](ec)
+    .flatMap(_ => HeadersDao.getLast(qty).transact[F](tr))
 }

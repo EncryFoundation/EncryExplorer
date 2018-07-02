@@ -9,7 +9,6 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Json
 import org.encryfoundation.explorer.Address
 import org.encryfoundation.explorer.http.api.ApiDirectives
-import org.encryfoundation.explorer.protocol.AccountLockedContract
 import org.encryfoundation.explorer.protocol.crypto.Base58Check
 import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16
@@ -36,11 +35,9 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
 
   protected def toJsonResponse(fn: Future[Json]): Route = onSuccess(fn) { toJsonResponse }
 
-  protected def toJsonOptionalResponse(fn: Future[Option[Json]]): Route = {
-    onSuccess(fn) {
-      case Some(v) => toJsonResponse(v)
-      case None => withCors(complete(StatusCodes.NotFound))
-    }
+  protected def toJsonOptionalResponse(fn: Future[Option[Json]]): Route = onSuccess(fn) {
+    case Some(v) => toJsonResponse(v)
+    case None => withCors(complete(StatusCodes.NotFound))
   }
 
   val paging: Directive[(Int, Int)] = parameters("offset".as[Int] ? 0, "limit".as[Int] ? 50)
