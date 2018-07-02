@@ -5,8 +5,8 @@ import cats.effect.Async
 import cats.implicits._
 import doobie.implicits._
 import doobie.util.transactor.Transactor
-import org.encryfoundation.explorer.db.dao.{InputsDao, OutputsDao}
-import org.encryfoundation.explorer.db.models.{Input, Output}
+import org.encryfoundation.explorer.db.dao.{InputsDao, OutputsDao, TransactionsDao}
+import org.encryfoundation.explorer.db.models.{Input, Output, Transaction}
 
 import scala.concurrent.ExecutionContext
 
@@ -32,4 +32,10 @@ case class TransactionService[F[_]](tr: Transactor[F], ec: ExecutionContext)(imp
 
   def getInputByTxId(id: String): F[List[Input]] = Async.shift[F](ec)
     .flatMap(_ => InputsDao.findByTxId(id).transact[F](tr))
+
+  def getTransaction(id: String): F[Transaction] = Async.shift[F](ec)
+    .flatMap(_ => TransactionsDao.getById(id).transact[F](tr))
+
+  def getTransactionByBlockId(id: String): F[List[Transaction]] = Async.shift[F](ec)
+    .flatMap(_ => TransactionsDao.getByBlockId(id).transact[F](tr))
 }
