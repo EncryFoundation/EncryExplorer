@@ -29,7 +29,7 @@ object ExplorerApp extends App {
       url  = settings.postgres.host,
       user = settings.postgres.user,
       pass = settings.postgres.password
-    ).map { ht => ht.configure(_ => IO(())); ht }
+    ).map { ht => ht.configure(c => IO { c.setAutoCommit(false) }); ht }
     .unsafeRunSync()
 
   val bindAddress: InetSocketAddress = settings.restApi.bindAddress

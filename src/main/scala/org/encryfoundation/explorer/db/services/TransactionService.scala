@@ -21,4 +21,9 @@ case class TransactionService[F[_]](tr: Transactor[F], ec: ExecutionContext)(imp
     _   <- Async.shift[F](ec)
     res <- OutputsDao.findByContractHash(ch).transact[F](tr)
   } yield res
+
+  def getUnspentOutputByContractHash(ch: String): F[List[Output]] = for {
+    _   <- Async.shift[F](ec)
+    res <- OutputsDao.findUnspentByContractHash(ch).transact[F](tr)
+  } yield res
 }
