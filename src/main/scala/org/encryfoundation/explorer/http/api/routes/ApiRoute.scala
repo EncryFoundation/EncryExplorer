@@ -42,7 +42,7 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
   val paging: Directive[(Int, Int)] = parameters("offset".as[Int] ? 0, "limit".as[Int] ? 50)
 
   val modifierId: Directive1[String] = pathPrefix(Segment).flatMap { h =>
-    if(Base16.decode(h).isSuccess) provide(h) else reject
+    if (Base16.decode(h).isSuccess) provide(h) else reject
   }
 
   val height: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
