@@ -4,9 +4,9 @@ import cats.implicits._
 import doobie._
 import doobie.implicits._
 
-trait Dao {
+trait Dao[M] {
 
-  def perform[T](query: Query0[T], failureMsg: String): ConnectionIO[T] =
+  def perform(query: Query0[M], failureMsg: String): ConnectionIO[M] =
     query.option.flatMap {
       case Some(h) => h.pure[ConnectionIO]
       case None => doobie.free.connection.raiseError(

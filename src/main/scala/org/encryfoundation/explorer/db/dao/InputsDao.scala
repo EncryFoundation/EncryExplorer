@@ -2,7 +2,7 @@ package org.encryfoundation.explorer.db.dao
 
 import org.encryfoundation.explorer.db.models.Input
 
-object InputsDao extends Dao {
+object InputsDao extends Dao[Input] {
 
   import doobie._
   import doobie.implicits._
@@ -11,7 +11,7 @@ object InputsDao extends Dao {
   val fieldsF: Fragment = Fragment.const(fields.mkString(", "))
   val tableF: Fragment = Fragment.const(name)
 
-  def getById(id: String): ConnectionIO[Input] = perform[Input](selectById(id), s"Cannot find output with id = $id")
+  def getById(id: String): ConnectionIO[Input] = perform(selectById(id), s"Cannot find output with id = $id")
 
   def findByTxId(ch: String): ConnectionIO[List[Input]] = selectByTxId(ch).to[List]
 

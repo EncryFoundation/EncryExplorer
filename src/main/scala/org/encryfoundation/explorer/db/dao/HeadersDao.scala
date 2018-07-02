@@ -2,7 +2,7 @@ package org.encryfoundation.explorer.db.dao
 
 import org.encryfoundation.explorer.db.models.Header
 
-object HeadersDao extends Dao {
+object HeadersDao extends Dao[Header] {
 
   import doobie._
   import doobie.implicits._
@@ -11,11 +11,11 @@ object HeadersDao extends Dao {
   val fieldsF: Fragment = Fragment.const(fields.mkString(", "))
   val tableF: Fragment = Fragment.const(name)
 
-  def getById(id: String): ConnectionIO[Header] = perform[Header](selectById(id), s"Cannot find header with id = $id")
+  def getById(id: String): ConnectionIO[Header] = perform(selectById(id), s"Cannot find header with id = $id")
 
-  def getByParentId(id: String): ConnectionIO[Header] = perform[Header](selectByParentId(id), s"Cannot find header with id = $id")
+  def getByParentId(id: String): ConnectionIO[Header] = perform(selectByParentId(id), s"Cannot find header with id = $id")
 
-  def getBestByHeight(height: Int): ConnectionIO[Header] = perform[Header](selectBestAtHeight(height), s"Cannot find header with height = $height")
+  def getBestByHeight(height: Int): ConnectionIO[Header] = perform(selectBestAtHeight(height), s"Cannot find header with height = $height")
 
   def getByHeight(height: Int): ConnectionIO[List[Header]] = selectByHeight(height).to[List]
 
