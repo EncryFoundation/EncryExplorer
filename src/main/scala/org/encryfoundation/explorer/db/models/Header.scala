@@ -1,7 +1,5 @@
 package org.encryfoundation.explorer.db.models
 
-import scorex.crypto.encode.Base16
-
 case class Header(id: String,
                   parentId: String,
                   version: Short,
@@ -13,7 +11,7 @@ case class Header(id: String,
                   difficulty: Long,
                   blockSize: Long,
                   equihashSolutions: String,
-                  adProofsOpt: Option[Array[Byte]],
+                  adProofsOpt: Option[String],
                   txsQty: Long,
                   minerAddress: String,
                   minerReward: Long,
@@ -38,7 +36,7 @@ object Header {
     "difficulty" -> h.difficulty.asJson,
     "blockSize" -> h.blockSize.asJson,
     "equihashSolutions" -> h.equihashSolutions.asJson,
-    "adProofsOpt" -> h.adProofsOpt.map(Base16.encode).asJson,
+    "adProofsOpt" -> h.adProofsOpt.asJson,
     "txsQty" -> h.txsQty.asJson,
     "minerAddress" -> h.minerAddress.asJson,
     "minerReward" -> h.minerReward.asJson,
