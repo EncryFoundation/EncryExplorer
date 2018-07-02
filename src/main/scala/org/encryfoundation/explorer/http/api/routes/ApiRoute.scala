@@ -14,7 +14,7 @@ import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
-import scala.util.Success
+import scala.util.{Success, Try}
 
 trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFromEntityUnmarshallers {
 
@@ -35,23 +35,18 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
 
   protected def toJsonResponse(fn: Future[Json]): Route = onSuccess(fn) { toJsonResponse }
 
-  protected def toJsonOptionalResponse(fn: Future[Option[Json]]): Route = onSuccess(fn) {
-    case Some(v) => toJsonResponse(v)
-    case None => withCors(complete(StatusCodes.NotFound))
+  protected def toJsonOptionalResponse(fn: Future[Option[Json]]): Route = onSuccess(fn)  {
+    _.map(toJsonResponse).getOrElse(withCors(complete(StatusCodes.NotFound)))
   }
 
   val paging: Directive[(Int, Int)] = parameters("offset".as[Int] ? 0, "limit".as[Int] ? 50)
 
   val modifierId: Directive1[String] = pathPrefix(Segment).flatMap { h =>
-    Base16.decode(h) match {
-      case Success(_) => provide(h)
-      case _ => reject
-    }
+    if(Base16.decode(h).isSuccess) provide(h) else reject
   }
 
   val height: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
-    val h: Int = hs.toInt
-    if (h >= 0) provide(h) else reject
+    Try(hs.toInt).filter(_ >= 0).map(provide).getOrElse(reject)
   }
 
   val qty: Directive1[Int] = pathPrefix(Segment).flatMap { hs =>
@@ -60,17 +55,11 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
   }
 
   val address: Directive1[Address] = pathPrefix(Segment).flatMap { addr =>
-    Base58Check.decode(addr) match {
-      case Success(_) => provide(Address @@ addr)
-      case _ => reject
-    }
+    if(Base58Check.decode(addr).isSuccess) provide(Address @@ addr) else reject
   }
 
   val boxId: Directive1[ADKey] = pathPrefix(Segment).flatMap { key =>
-    Base16.decode(key) match {
-      case Success(k) => provide(ADKey @@ k)
-      case _ => reject
-    }
+    Base16.decode(key).map(k => provide(ADKey @@ k)).getOrElse(reject)
   }
 
   implicit class OkJsonResp(fn: Future[Json]) {
