@@ -55,7 +55,7 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
     toJsonResponse(service.getTransaction(id).unsafeToFuture().map(_.asJson))
   }
 
-  def getTransactionsByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("transactions") & get) { id =>
+  def getTransactionsByBlockIdR: Route = (pathPrefix("block") & modifierId & get) { id =>
     toJsonResponse(service.getTransactionByBlockId(id).unsafeToFuture().map(_.asJson))
   }
 
