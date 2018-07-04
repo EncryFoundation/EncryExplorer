@@ -6,7 +6,7 @@ object TransactionsDao extends Dao[Transaction] {
 
   import doobie._
   import doobie.implicits._
-  import org.encryfoundation.explorer.db.tables.HeadersTable._
+  import org.encryfoundation.explorer.db.tables.TransactionsTable._
 
   val fieldsF: Fragment = Fragment.const(fields.mkString(", "))
   val tableF: Fragment = Fragment.const(name)
