@@ -24,14 +24,13 @@ object ExplorerApp extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
-//  implicit def apiExceptionHandler: ExceptionHandler =
-//    ExceptionHandler {
-//      case e: Exception =>
-//        extractUri { _ =>
-//          println(e)
-//          complete(HttpResponse(InternalServerError, entity = "Internal server error"))
-//        }
-//    }
+  implicit def apiExceptionHandler: ExceptionHandler =
+    ExceptionHandler {
+      case _: Exception =>
+        extractUri { _ =>
+          complete(HttpResponse(InternalServerError, entity = "Internal server error"))
+        }
+    }
 
   val settings: ExplorerAppSettings = ExplorerAppSettings.read
 
