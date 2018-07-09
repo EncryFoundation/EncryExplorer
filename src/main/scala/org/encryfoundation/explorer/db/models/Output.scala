@@ -1,5 +1,6 @@
 package org.encryfoundation.explorer.db.models
 
+
 case class Output(id: String,
                   txId: String,
                   monetaryValue: Long,
@@ -10,14 +11,16 @@ case class Output(id: String,
 object Output {
 
   import io.circe.Encoder
-  import io.circe.syntax._
+  import io.circe.generic.extras._
 
-  implicit val jsonEncoder: Encoder[Output] = (o: Output) => Map(
-    "id" -> o.id.asJson,
-    "parentId" -> o.txId.asJson,
-    "value" -> o.monetaryValue.asJson,
-    "coinId" -> o.coinId.asJson,
-    "contractHash" -> o.contractHash.asJson,
-    "data" -> o.data.asJson
-  ).asJson
+  private implicit val config: Configuration = Configuration.default.copy(
+    transformMemberNames = {
+      case "monetaryValue" => "value"
+      case "txId" => "parentId"
+      case other => other
+    }
+  )
+
+  implicit val jsonEncoder: Encoder[Output] = semiauto.deriveEncoder
+
 }
