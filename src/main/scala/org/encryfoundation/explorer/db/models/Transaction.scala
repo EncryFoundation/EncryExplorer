@@ -8,9 +8,9 @@ object Transaction {
   import io.circe.syntax._
 
   implicit val jsonEncoder: Encoder[Transaction] = (tx: Transaction) => Map(
-    "id" -> tx.id.asJson,
-    "blockId" -> tx.blockId.asJson,
+    "id"         -> tx.id.asJson,
+    "blockId"    -> tx.blockId.asJson,
     "isCoinbase" -> tx.isCoinbase.asJson,
-    "timestamp" -> tx.timestamp.asJson
+    "timestamp"  -> tx.timestamp.asJson
   ).asJson
 }

@@ -1,8 +1,8 @@
-package org.encryfoundation
+package org.encryfoundation.explorer
 
 import supertagged.TaggedType
 
-package object explorer {
+package object protocol {
 
   object ModifierId extends TaggedType[Array[Byte]]
   type ModifierId = ModifierId.Type
