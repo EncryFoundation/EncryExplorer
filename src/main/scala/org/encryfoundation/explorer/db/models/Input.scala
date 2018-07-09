@@ -8,8 +8,8 @@ object Input {
   import io.circe.syntax._
 
   implicit val jsonEncoder: Encoder[Input] = (i: Input) => Map(
-    "id" -> i.id.asJson,
+    "id"       -> i.id.asJson,
     "parentId" -> i.txId.asJson,
-    "proofs" -> i.proofs.asJson
+    "proofs"   -> i.proofs.asJson
   ).asJson
 }
