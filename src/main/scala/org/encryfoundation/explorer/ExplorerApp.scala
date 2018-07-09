@@ -4,8 +4,8 @@ import java.net.InetSocketAddress
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.stream.ActorMaterializer
 import cats.effect.IO
 import doobie.hikari.HikariTransactor
@@ -17,9 +17,21 @@ import scala.concurrent.ExecutionContextExecutor
 
 object ExplorerApp extends App {
 
+  import akka.http.scaladsl.model.StatusCodes._
+  import akka.http.scaladsl.server.Directives._
+
   implicit val system: ActorSystem = ActorSystem("encry")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val ec: ExecutionContextExecutor = system.dispatcher
+
+//  implicit def apiExceptionHandler: ExceptionHandler =
+//    ExceptionHandler {
+//      case e: Exception =>
+//        extractUri { _ =>
+//          println(e)
+//          complete(HttpResponse(InternalServerError, entity = "Internal server error"))
+//        }
+//    }
 
   val settings: ExplorerAppSettings = ExplorerAppSettings.read
 
