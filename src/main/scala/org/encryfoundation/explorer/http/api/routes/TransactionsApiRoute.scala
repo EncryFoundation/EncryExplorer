@@ -20,7 +20,11 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
       getInputR ~
       getInputsByTxIdR ~
       getTransactionR ~
-      getTransactionsByBlockIdR
+      getTransactionsByBlockIdR ~
+      getOutputByBlockIdR ~
+      getUnspentOutputByBlockIdR ~
+      getOutputByBlockHeightR ~
+      getUnspentOutputByBlockHeightR
   }
 
   def getOutputR: Route = (pathPrefix("output") & modifierId & get) { id =>
@@ -57,6 +61,22 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
 
   def getTransactionsByBlockIdR: Route = (pathPrefix("block") & modifierId & get) { id =>
     toJsonResponse(service.getTransactionByBlockId(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("output") & get) { h =>
+    toJsonResponse(service.getOutputByBlockHeight(h).unsafeToFuture().map(_.asJson))
+  }
+
+  def getUnspentOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("output" / "unspent") & get) { h =>
+    toJsonResponse(service.getUnspentOutputByBlockHeight(h).unsafeToFuture().map(_.asJson))
+  }
+
+  def getOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("output") & get) { id =>
+    toJsonResponse(service.getOutputByBlockId(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getUnspentOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("output" / "unspent") & get) { id =>
+    toJsonResponse(service.getUnspentOutputByBlockId(id).unsafeToFuture().map(_.asJson))
   }
 
   private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
