@@ -20,10 +20,10 @@ object HeadersDao extends Dao[Header] {
   def getLast(qty: Int): ConnectionIO[List[Header]] = selectLast(qty).to[List]
 
   private def selectById(id: String): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE id = $id;".query[Header]
+    s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Header]
 
   private def selectByParentId(parentId: String): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE parent_id = $parentId;".query[Header]
+    s"SELECT $fieldsF FROM $name WHERE parent_id = '$parentId';".query[Header]
 
   private def selectByHeight(height: Int): Query0[Header] =
     s"SELECT $fieldsF FROM $name WHERE height = $height;".query[Header]

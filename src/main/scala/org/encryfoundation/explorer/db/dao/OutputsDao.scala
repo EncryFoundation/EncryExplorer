@@ -28,19 +28,19 @@ object OutputsDao extends Dao[Output] {
   def findUnspentByBlockId(id: String): ConnectionIO[List[Output]] = selectByBlockId(id).to[List]
 
   private def selectById(id: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE id = $id;".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Output]
 
   private def selectByContractHash(ch: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE contract_hash = $ch;".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE contract_hash = '$ch';".query[Output]
 
   private def selectUnspentByContractHash(ch: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE contract_hash = $ch AND id NOT IN (SELECT id FROM inputs);".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE contract_hash = '$ch' AND id NOT IN (SELECT id FROM inputs);".query[Output]
 
   private def selectByTxId(id: String): Query0[Output] =
     s"SELECT $fieldsF FROM $name WHERE tx_id = '$id';".query[Output]
 
   private def selectUnspentByTxId(id: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE tx_id = $id AND id NOT IN (SELECT id FROM inputs);".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE tx_id = '$id' AND id NOT IN (SELECT id FROM inputs);".query[Output]
 
   private def selectByBlockHeight(height: Int): Query0[Output] =
     s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id IN (SELECT id FROM headers WHERE height = $height));".query[Output]
@@ -49,9 +49,9 @@ object OutputsDao extends Dao[Output] {
     s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id IN (SELECT id FROM headers WHERE height = $height)) AND id NOT IN (SELECT id FROM inputs);".query[Output]
 
   private def selectByBlockId(id: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id = $id);".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id = '$id');".query[Output]
 
   private def selectUnspentByBlockId(id: String): Query0[Output] =
-    s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id = $id) AND id NOT IN (SELECT id FROM inputs);".query[Output]
+    s"SELECT $fieldsF FROM $name WHERE tx_id IN (SELECT id FROM transactions WHERE block_id = '$id') AND id NOT IN (SELECT id FROM inputs);".query[Output]
 
 }

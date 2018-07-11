@@ -14,8 +14,9 @@ object TransactionsDao extends Dao[Transaction] {
   def getByBlockId(id: String): ConnectionIO[List[Transaction]] = selectByBlockId(id).to[List]
 
   private def selectById(id: String): Query0[Transaction] =
-    s"SELECT $fieldsF FROM $name WHERE id = $id;".query[Transaction]
+    s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Transaction]
 
   private def selectByBlockId(id: String): Query0[Transaction] =
-    s"SELECT $fieldsF FROM $name WHERE block_id = $id;".query[Transaction]
+    s"SELECT $fieldsF FROM $name WHERE block_id = '$id';".query[Transaction]
+
 }
