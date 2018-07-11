@@ -6,7 +6,6 @@ import org.encryfoundation.explorer.db.models.Header
 object HeadersDao extends Dao[Header] {
 
   val table: String = "headers"
-
   val columns: Seq[String] = Seq(
     "id",
     "parent_id",
@@ -28,7 +27,8 @@ object HeadersDao extends Dao[Header] {
     "best_chain"
   )
 
-  def getById(id: String): ConnectionIO[Header] = perform(selectById(id), s"Cannot find header with id = $id")
+  def getById(id: String): ConnectionIO[Header] =
+    perform(s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header], s"Cannot find header with id = $id")
 
   def getByParentId(id: String): ConnectionIO[Header] = perform(selectByParentId(id), s"Cannot find header with id = $id")
 
@@ -39,9 +39,6 @@ object HeadersDao extends Dao[Header] {
   def getLast(qty: Int): ConnectionIO[List[Header]] = selectLast(qty).to[List]
 
   def getByHeightRange(from: Int, to: Int): ConnectionIO[List[Header]] = selectByHeightRange(from, to).to[List]
-
-  private def selectById(id: String): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header]
 
   private def selectByParentId(parentId: String): Query0[Header] =
     s"SELECT $columnsForQuery FROM $table WHERE parent_id = '$parentId'".query[Header]
