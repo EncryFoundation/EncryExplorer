@@ -38,4 +38,20 @@ case class TransactionService[F[_]](tr: Transactor[F], ec: ExecutionContext)(imp
 
   def getTransactionByBlockId(id: String): F[List[Transaction]] = Async.shift[F](ec)
     .flatMap(_ => TransactionsDao.getByBlockId(id).transact[F](tr))
+
+  def getOutputByBlockHeight(h: Int): F[List[Output]] = Async.shift[F](ec)
+    .flatMap(_ => OutputsDao.findByBlockHeight(h).transact[F](tr))
+
+  def getUnspentOutputByBlockHeight(h: Int): F[List[Output]] = Async.shift[F](ec)
+    .flatMap(_ => OutputsDao.findUnspentByBlockHeight(h).transact[F](tr))
+
+  def getOutputByBlockId(id: String): F[List[Output]] = Async.shift[F](ec)
+    .flatMap(_ => OutputsDao.findByBlockId(id).transact[F](tr))
+
+  def getUnspentOutputByBlockId(id: String): F[List[Output]] = Async.shift[F](ec)
+    .flatMap(_ => OutputsDao.findUnspentByBlockId(id).transact[F](tr))
+
+  def getTransactionByBlockHeightRange(from: Int, to: Int): F[List[Transaction]] = Async.shift[F](ec)
+    .flatMap(_ => TransactionsDao.getByRange(from, to).transact[F](tr))
+
 }

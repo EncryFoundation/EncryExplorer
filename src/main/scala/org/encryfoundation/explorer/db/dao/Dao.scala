@@ -6,6 +6,11 @@ import doobie.implicits._
 
 trait Dao[M] {
 
+  val table: String
+  val columns: Seq[String]
+
+  def columnsForQuery: String = columns.mkString(", ")
+
   implicit def liftQueryString(s: String): Fragment = Fragment.const(s)
 
   def perform(query: Query0[M], failureMsg: String): ConnectionIO[M] =

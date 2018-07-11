@@ -14,7 +14,8 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
     getHeaderR ~
       getHeadersAtHeightR ~
       getBestHeaderAtHeightR ~
-      getLastHeadersR
+      getLastHeadersR ~
+      getHeadersByHeightRangeR
   }
 
   def getHeaderR: Route = (modifierId & pathPrefix("header") & get) { id =>
@@ -26,10 +27,15 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
   }
 
   def getBestHeaderAtHeightR: Route = (pathPrefix("bestHeaderAt") & height & get) { h =>
-    toJsonResponse(service.getHeadersAtHeight(h).unsafeToFuture().map(_.asJson))
+    toJsonResponse(service.getBestHeaderAtHeight(h).unsafeToFuture().map(_.asJson))
   }
 
   def getLastHeadersR: Route = (pathPrefix("lastHeaders") & qty & get) { q =>
     toJsonResponse(service.getLastHeaders(q).unsafeToFuture().map(_.asJson))
   }
+
+  def getHeadersByHeightRangeR: Route = (pathPrefix("headers" / "range") & height & height & get ) { (from, to) =>
+    toJsonResponse(service.getHeadersByHeightRange(from, to).unsafeToFuture().map(_.asJson))
+  }
+
 }
