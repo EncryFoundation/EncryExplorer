@@ -1,13 +1,13 @@
 package org.encryfoundation.explorer.db.dao
 
+import doobie._
 import org.encryfoundation.explorer.db.models.Output
 
 object OutputsDao extends Dao[Output] {
 
-  import doobie._
-  import org.encryfoundation.explorer.db.tables.OutputsTable._
+  val name: String = "outputs"
 
-  val fieldsF: String = fields.mkString(", ")
+  val fields: Seq[String] = Seq("id", "tx_id", "monetary_value", "coin_id", "contract_hash", "data")
 
   def getById(id: String): ConnectionIO[Output] = perform(selectById(id), s"Cannot find output with id = $id")
 

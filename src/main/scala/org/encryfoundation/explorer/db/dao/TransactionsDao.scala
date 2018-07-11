@@ -1,13 +1,13 @@
 package org.encryfoundation.explorer.db.dao
 
+import doobie._
 import org.encryfoundation.explorer.db.models.Transaction
 
 object TransactionsDao extends Dao[Transaction] {
 
-  import doobie._
-  import org.encryfoundation.explorer.db.tables.TransactionsTable._
+  val name: String = "transactions"
 
-  val fieldsF: String = fields.mkString(", ")
+  val fields: Seq[String] = Seq("id", "block_id", "is_coinbase", "ts")
 
   def getById(id: String): ConnectionIO[Transaction] = perform(selectById(id), s"Cannot find transaction with id = $id")
 

@@ -1,13 +1,32 @@
 package org.encryfoundation.explorer.db.dao
 
+import doobie._
 import org.encryfoundation.explorer.db.models.Header
 
 object HeadersDao extends Dao[Header] {
 
-  import doobie._
-  import org.encryfoundation.explorer.db.tables.HeadersTable._
+  val name: String = "headers"
 
-  val fieldsF: String = fields.mkString(", ")
+  val fields: Seq[String] = Seq(
+    "id",
+    "parent_id",
+    "version",
+    "height",
+    "ad_proofs_root",
+    "state_root",
+    "transactions_root",
+    "ts",
+    "difficulty",
+    "block_size",
+    "equihash_solution",
+    "ad_proofs",
+    "tx_qty",
+    "miner_address",
+    "miner_reward",
+    "fees_total",
+    "txs_size",
+    "best_chain"
+  )
 
   def getById(id: String): ConnectionIO[Header] = perform(selectById(id), s"Cannot find header with id = $id")
 

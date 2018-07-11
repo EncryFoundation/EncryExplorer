@@ -6,6 +6,12 @@ import doobie.implicits._
 
 trait Dao[M] {
 
+  def name: String
+
+  def fields: Seq[String]
+
+  lazy val fieldsF: String = fields.mkString(", ")
+
   implicit def liftQueryString(s: String): Fragment = Fragment.const(s)
 
   def perform(query: Query0[M], failureMsg: String): ConnectionIO[M] =
