@@ -19,6 +19,8 @@ object HeadersDao extends Dao[Header] {
 
   def getLast(qty: Int): ConnectionIO[List[Header]] = selectLast(qty).to[List]
 
+  def getByHeightRange(from: Int, to: Int): ConnectionIO[List[Header]] = selectByHeightRange(from, to).to[List]
+
   private def selectById(id: String): Query0[Header] =
     s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Header]
 
@@ -33,4 +35,8 @@ object HeadersDao extends Dao[Header] {
 
   private def selectLast(qty: Int): Query0[Header] =
     s"SELECT $fieldsF FROM $name WHERE best_chain = TRUE ORDER BY height DESC LIMIT $qty;".query[Header]
+
+  private def selectByHeightRange(from: Int, to: Int): Query0[Header] =
+    s"SELECT $fieldsF FROM $name WHERE height BETWEEN $from AND $to;".query[Header]
+
 }
