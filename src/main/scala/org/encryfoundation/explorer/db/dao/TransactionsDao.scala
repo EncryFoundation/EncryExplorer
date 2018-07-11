@@ -13,10 +13,15 @@ object TransactionsDao extends Dao[Transaction] {
 
   def getByBlockId(id: String): ConnectionIO[List[Transaction]] = selectByBlockId(id).to[List]
 
+  def getByRange(from: Int, to: Int): ConnectionIO[List[Transaction]] = selectByRange(from, to).to[List]
+
   private def selectById(id: String): Query0[Transaction] =
     s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Transaction]
 
   private def selectByBlockId(id: String): Query0[Transaction] =
     s"SELECT $fieldsF FROM $name WHERE block_id = '$id';".query[Transaction]
+
+  private def selectByRange(from: Int, to: Int): Query0[Transaction] =
+    s"SELECT $fieldsF FROM $name WHERE block_id IN (SELECT id FROM headers WHERE height BETWEEN $from AND $to);".query[Transaction]
 
 }

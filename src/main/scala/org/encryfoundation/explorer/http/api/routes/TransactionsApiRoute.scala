@@ -24,7 +24,8 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
       getUnspentOutputByBlockHeightR ~
       getOutputByBlockHeightR ~
       getTransactionR ~
-      getTransactionsByBlockIdR
+      getTransactionsByBlockIdR ~
+      getTransactionByBlockHeightRangeR
   }
 
   def getOutputR: Route = (pathPrefix("output") & modifierId & get) { id =>
@@ -77,6 +78,10 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
 
   def getUnspentOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("output" / "unspent") & get) { id =>
     toJsonResponse(service.getUnspentOutputByBlockId(id).unsafeToFuture().map(_.asJson))
+  }
+
+  def getTransactionByBlockHeightRangeR: Route = (pathPrefix("tx" / "range") & height & height & get) { (from, to) =>
+    toJsonResponse(service.getTransactionByBlockHeightRange(from, to).unsafeToFuture().map(_.asJson))
   }
 
   private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
