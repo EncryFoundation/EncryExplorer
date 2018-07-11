@@ -5,9 +5,9 @@ import org.encryfoundation.explorer.db.models.Header
 
 object HeadersDao extends Dao[Header] {
 
-  val name: String = "headers"
+  val table: String = "headers"
 
-  val fields: Seq[String] = Seq(
+  val columns: Seq[String] = Seq(
     "id",
     "parent_id",
     "version",
@@ -41,21 +41,21 @@ object HeadersDao extends Dao[Header] {
   def getByHeightRange(from: Int, to: Int): ConnectionIO[List[Header]] = selectByHeightRange(from, to).to[List]
 
   private def selectById(id: String): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE id = '$id'".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header]
 
   private def selectByParentId(parentId: String): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE parent_id = '$parentId'".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE parent_id = '$parentId'".query[Header]
 
   private def selectByHeight(height: Int): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE height = $height".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE height = $height".query[Header]
 
   private def selectBestAtHeight(height: Int): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE height = $height AND best_chain = TRUE".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE height = $height AND best_chain = TRUE".query[Header]
 
   private def selectLast(qty: Int): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE best_chain = TRUE ORDER BY height DESC LIMIT $qty".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE best_chain = TRUE ORDER BY height DESC LIMIT $qty".query[Header]
 
   private def selectByHeightRange(from: Int, to: Int): Query0[Header] =
-    s"SELECT $fieldsF FROM $name WHERE height BETWEEN $from AND $to".query[Header]
+    s"SELECT $columnsForQuery FROM $table WHERE height BETWEEN $from AND $to".query[Header]
 
 }

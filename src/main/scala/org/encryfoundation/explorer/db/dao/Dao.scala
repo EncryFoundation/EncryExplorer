@@ -6,11 +6,10 @@ import doobie.implicits._
 
 trait Dao[M] {
 
-  val name: String
+  val table: String
+  val columns: Seq[String]
 
-  val fields: Seq[String]
-
-  lazy val fieldsF: String = fields.mkString(", ")
+  def columnsForQuery: String = columns.mkString(", ")
 
   implicit def liftQueryString(s: String): Fragment = Fragment.const(s)
 
