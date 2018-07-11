@@ -6,9 +6,9 @@ import doobie.implicits._
 
 trait Dao[M] {
 
-  def name: String
+  val name: String
 
-  def fields: Seq[String]
+  val fields: Seq[String]
 
   lazy val fieldsF: String = fields.mkString(", ")
 
