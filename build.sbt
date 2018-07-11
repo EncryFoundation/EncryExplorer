@@ -6,7 +6,7 @@ scalaVersion := "2.12.6"
 
 organization := "org.encryfoundation"
 
-val akkaVersion = "10.0.9"
+val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"
 val doobieVersion = "0.5.2"
 
@@ -23,7 +23,7 @@ val apiDependencies = Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.swagger" %% "swagger-scala-module" % "1.0.3",
   "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.10.0",
-  "com.typesafe.akka" %% "akka-http" % akkaVersion
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 )
 
 val loggingDependencies = Seq(
@@ -34,7 +34,7 @@ val loggingDependencies = Seq(
 
 val testingDependencies = Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.4.+" % "test",
-  "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion % "test",
+  "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
   "org.scalacheck" %% "scalacheck" % "1.13.+" % "test"
 )
