@@ -19,12 +19,12 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
       getUnspentOutputsByTxIdR ~
       getInputR ~
       getInputsByTxIdR ~
-      getTransactionR ~
-      getTransactionsByBlockIdR ~
-      getOutputByBlockIdR ~
       getUnspentOutputByBlockIdR ~
+      getOutputByBlockIdR ~
+      getUnspentOutputByBlockHeightR ~
       getOutputByBlockHeightR ~
-      getUnspentOutputByBlockHeightR
+      getTransactionR ~
+      getTransactionsByBlockIdR
   }
 
   def getOutputR: Route = (pathPrefix("output") & modifierId & get) { id =>
