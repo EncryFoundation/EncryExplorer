@@ -64,19 +64,19 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
     toJsonResponse(service.getTransactionByBlockId(id).unsafeToFuture().map(_.asJson))
   }
 
-  def getOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("output") & get) { h =>
+  def getOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("outputs") & get) { h =>
     toJsonResponse(service.getOutputByBlockHeight(h).unsafeToFuture().map(_.asJson))
   }
 
-  def getUnspentOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("output" / "unspent") & get) { h =>
+  def getUnspentOutputByBlockHeightR: Route = (pathPrefix("block" / "height") & height & pathPrefix("outputs" / "unspent") & get) { h =>
     toJsonResponse(service.getUnspentOutputByBlockHeight(h).unsafeToFuture().map(_.asJson))
   }
 
-  def getOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("output") & get) { id =>
+  def getOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("outputs") & get) { id =>
     toJsonResponse(service.getOutputByBlockId(id).unsafeToFuture().map(_.asJson))
   }
 
-  def getUnspentOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("output" / "unspent") & get) { id =>
+  def getUnspentOutputByBlockIdR: Route = (pathPrefix("block") & modifierId & pathPrefix("outputs" / "unspent") & get) { id =>
     toJsonResponse(service.getUnspentOutputByBlockId(id).unsafeToFuture().map(_.asJson))
   }
 
