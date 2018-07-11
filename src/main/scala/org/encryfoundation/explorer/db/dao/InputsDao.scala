@@ -14,8 +14,8 @@ object InputsDao extends Dao[Input] {
   def findByTxId(ch: String): ConnectionIO[List[Input]] = selectByTxId(ch).to[List]
 
   private def selectById(id: String): Query0[Input] =
-    s"SELECT $fieldsF FROM $name WHERE id = '$id';".query[Input]
+    s"SELECT $fieldsF FROM $name WHERE id = '$id'".query[Input]
 
   private def selectByTxId(ch: String): Query0[Input] =
-    s"SELECT $fieldsF FROM $name WHERE tx_id = '$ch';".query[Input]
+    s"SELECT $fieldsF FROM $name WHERE tx_id = '$ch'".query[Input]
 }
