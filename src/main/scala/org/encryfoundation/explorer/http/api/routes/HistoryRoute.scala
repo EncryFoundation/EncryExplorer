@@ -48,7 +48,7 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
     response = classOf[Header],
     responseContainer = "List")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "height", value = "height of block", required = true, dataType = "integer", paramType = "path")
+    new ApiImplicitParam(name = "height", value = "Height of block", required = true, dataType = "integer", paramType = "path")
   ))
   def getHeadersAtHeightR: Route = (pathPrefix("headersAt") & height & get) { h =>
     toJsonResponse(service.getHeadersAtHeight(h).unsafeToFuture().map(_.asJson))
@@ -56,13 +56,13 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
 
   @Path("/bestHeaderAt/{height}")
   @ApiOperation(
-    value = "Finds block headers for given block height in best chain",
+    value = "Finds block headers for given block height in the best chain",
     notes = "Returns headers",
     httpMethod = "GET",
     response = classOf[Header],
     responseContainer = "List")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "height", value = "height of block", required = true, dataType = "integer", paramType = "path")
+    new ApiImplicitParam(name = "height", value = "Height of block", required = true, dataType = "integer", paramType = "path")
   ))
   def getBestHeaderAtHeightR: Route = (pathPrefix("bestHeaderAt") & height & get) { h =>
     toJsonResponse(service.getBestHeaderAtHeight(h).unsafeToFuture().map(_.asJson))
@@ -76,7 +76,7 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
     response = classOf[Header],
     responseContainer = "List")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "qty", value = "quantity of blocks to find", required = true, dataType = "integer", paramType = "path")
+    new ApiImplicitParam(name = "qty", value = "Quantity of block headers to find", required = true, dataType = "integer", paramType = "path")
   ))
   def getLastHeadersR: Route = (pathPrefix("lastHeaders") & qty & get) { q =>
     toJsonResponse(service.getLastHeaders(q).unsafeToFuture().map(_.asJson))
@@ -85,13 +85,13 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
   @Path("/headers/range/{from}/{to}")
   @ApiOperation(
     value = "Finds block headers with height in the given range",
-    notes = "Returns range inclusively",
+    notes = "Returns range of headers inclusively",
     httpMethod = "GET",
     response = classOf[Header],
     responseContainer = "List")
   @ApiImplicitParams(Array(
-    new ApiImplicitParam(name = "from", value = "height of block", required = true, dataType = "integer", paramType = "path"),
-    new ApiImplicitParam(name = "to", value = "height of block", required = true, dataType = "integer", paramType = "path")
+    new ApiImplicitParam(name = "from", value = "Height of block", required = true, dataType = "integer", paramType = "path"),
+    new ApiImplicitParam(name = "to", value = "Height of block", required = true, dataType = "integer", paramType = "path")
   ))
   def getHeadersByHeightRangeR: Route = (pathPrefix("headers" / "range") & height & height & get ) { (from, to) =>
     toJsonResponse(service.getHeadersByHeightRange(from, to).unsafeToFuture().map(_.asJson))

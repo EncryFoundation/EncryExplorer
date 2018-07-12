@@ -1,6 +1,13 @@
 package org.encryfoundation.explorer.db.models
 
-case class Input(id: String, txId: String, proofs: String)
+import io.swagger.annotations.{ApiModel, ApiModelProperty}
+
+import scala.annotation.meta.field
+
+@ApiModel(value="Input", description="Transaction input")
+case class Input(id: String,
+                 @(ApiModelProperty @field)(name = "parentId") txId: String,
+                 proofs: String)
 
 object Input {
 
