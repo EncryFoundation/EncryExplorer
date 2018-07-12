@@ -11,7 +11,7 @@ import cats.effect.IO
 import doobie.hikari.HikariTransactor
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
-import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
+import org.encryfoundation.explorer.http.api.routes._
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
 import scala.concurrent.ExecutionContextExecutor
 
@@ -44,9 +44,10 @@ object ExplorerApp extends App {
 
   val apiRoutes: Seq[ApiRoute] = Seq(
     HistoryRoute(HistoryService[IO](transactor, ec), settings.restApi),
-    TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi)
+    TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi),
+    SwaggerRoute(settings.restApi)
   )
 
-  val combinedRoute: Route = cors() (apiRoutes.map(_.route).reduce(_ ~ _))
+  val combinedRoute: Route = apiRoutes.map(_.route).reduce(_ ~ _)
   Http().bindAndHandle(combinedRoute, settings.restApi.bindAddress.getAddress.getHostAddress, settings.restApi.bindAddress.getPort)
 }
