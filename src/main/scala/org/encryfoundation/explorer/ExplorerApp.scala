@@ -9,7 +9,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import cats.effect.IO
 import doobie.hikari.HikariTransactor
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
 import org.encryfoundation.explorer.http.api.routes._
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
