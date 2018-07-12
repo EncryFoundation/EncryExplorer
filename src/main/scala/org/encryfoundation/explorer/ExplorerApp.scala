@@ -9,6 +9,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import cats.effect.IO
 import doobie.hikari.HikariTransactor
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
 import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
@@ -46,6 +47,6 @@ object ExplorerApp extends App {
     TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi)
   )
 
-  val combinedRoute: Route = apiRoutes.map(_.route).reduce(_ ~ _)
+  val combinedRoute: Route = cors() (apiRoutes.map(_.route).reduce(_ ~ _))
   Http().bindAndHandle(combinedRoute, settings.restApi.bindAddress.getAddress.getHostAddress, settings.restApi.bindAddress.getPort)
 }
