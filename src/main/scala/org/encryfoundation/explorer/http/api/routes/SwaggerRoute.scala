@@ -12,7 +12,7 @@ import org.encryfoundation.explorer.settings.RESTApiSettings
 case class SwaggerRoute(settings: RESTApiSettings)(implicit val context: ActorRefFactory) extends SwaggerHttpService with ApiRoute {
 
   override val apiClasses: Set[Class[_]] = Set(classOf[HistoryRoute], classOf[TransactionsApiRoute])
-  override val host: String = "localhost:9052"
+  override val host: String = settings.bindAddress.toString
   override val info: Info = Info(version = "0.1" )
   override val externalDocs: Option[ExternalDocs] = None
   override val securitySchemeDefinitions: Map[String, SecuritySchemeDefinition] = Map("basicAuth" -> new BasicAuthDefinition())
