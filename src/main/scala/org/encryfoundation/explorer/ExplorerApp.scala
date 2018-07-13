@@ -48,14 +48,12 @@ object ExplorerApp extends App with Logging {
     TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi)
   )
 
-  val withLogger: Directive0 = {
-    extractUri.flatMap { uri =>
+  val withLogger: Directive0 = extractUri.flatMap { uri =>
       extractMethod.flatMap { method =>
         logInfo(s"URI: $uri ($method)")
         pass
       }
     }
-  }
 
   val combinedRoute: Route = withLogger {
     apiRoutes.map(_.route).reduce(_ ~ _)
