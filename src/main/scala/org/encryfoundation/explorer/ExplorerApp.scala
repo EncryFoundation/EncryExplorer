@@ -13,7 +13,6 @@ import doobie.hikari.HikariTransactor
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
 import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
-
 import scala.concurrent.ExecutionContextExecutor
 
 object ExplorerApp extends App with StrictLogging {
