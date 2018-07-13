@@ -10,7 +10,7 @@ import org.encryfoundation.explorer.settings.RESTApiSettings
 case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
                        (implicit val context: ActorRefFactory) extends ApiRoute {
 
-  override val route: Route = (withLogger & pathPrefix("history")) {
+  override val route: Route = pathPrefix("history") {
     getHeaderR ~
       getHeadersAtHeightR ~
       getBestHeaderAtHeightR ~

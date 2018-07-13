@@ -11,7 +11,7 @@ import org.encryfoundation.explorer.settings.RESTApiSettings
 case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTApiSettings)
                                (implicit val context: ActorRefFactory) extends ApiRoute {
 
-  override val route: Route = (withLogger & pathPrefix("transactions")) {
+  override val route: Route = pathPrefix("transactions") {
     getOutputR ~
       getOutputsByAddressR ~
       getUnspentOutputsByAddressR ~

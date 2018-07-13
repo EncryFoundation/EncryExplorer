@@ -3,11 +3,9 @@ package org.encryfoundation.explorer.http.api
 import akka.http.scaladsl.model.headers.RawHeader
 import akka.http.scaladsl.server.{AuthorizationFailedRejection, Directive0, Directives}
 import org.encryfoundation.explorer.settings.RESTApiSettings
-import org.encryfoundation.explorer.utils.Logging
 import scorex.crypto.hash.Blake2b256
 
-
-trait ApiDirectives extends Directives with Logging {
+trait ApiDirectives extends Directives {
   val settings: RESTApiSettings
   val apiKeyHeaderName: String
 
@@ -20,14 +18,5 @@ trait ApiDirectives extends Directives with Logging {
     case Some(key) =>
       if (settings.apiKeyHash.exists(_.toCharArray.sameElements(Blake2b256(key)))) pass
       else reject(AuthorizationFailedRejection)
-  }
-
-  val withLogger: Directive0 = {
-    extractUri.flatMap { uri =>
-      extractMethod.flatMap { method =>
-        logInfo(s"URI: $uri ($method)")
-        pass
-      }
-    }
   }
 }
