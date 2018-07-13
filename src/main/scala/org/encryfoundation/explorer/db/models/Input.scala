@@ -1,6 +1,13 @@
 package org.encryfoundation.explorer.db.models
 
-case class Input(id: String, txId: String, proofs: String)
+import io.swagger.annotations.{ApiModel, ApiModelProperty}
+
+import scala.annotation.meta.field
+
+@ApiModel(value="Input", description="Transaction input")
+case class Input(id: String,
+                 txId: String,
+                 proofs: String)
 
 object Input {
 
@@ -8,8 +15,8 @@ object Input {
   import io.circe.syntax._
 
   implicit val jsonEncoder: Encoder[Input] = (i: Input) => Map(
-    "id"       -> i.id.asJson,
-    "parentId" -> i.txId.asJson,
-    "proofs"   -> i.proofs.asJson
+    "id"     -> i.id.asJson,
+    "txId"   -> i.txId.asJson,
+    "proofs" -> i.proofs.asJson
   ).asJson
 }

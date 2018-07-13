@@ -1,8 +1,13 @@
 package org.encryfoundation.explorer.db.models
 
+import io.swagger.annotations.{ApiModel, ApiModelProperty}
+
+import scala.annotation.meta.field
+
+@ApiModel(value="Output", description="Transaction output")
 case class Output(id: String,
                   txId: String,
-                  monetaryValue: Long,
+                  @(ApiModelProperty @field)(name = "value") monetaryValue: Long,
                   coinId: String,
                   contractHash: String,
                   data: String)
@@ -14,7 +19,7 @@ object Output {
 
   implicit val jsonEncoder: Encoder[Output] = (o: Output) => Map(
     "id"           -> o.id.asJson,
-    "parentId"     -> o.txId.asJson,
+    "txId"         -> o.txId.asJson,
     "value"        -> o.monetaryValue.asJson,
     "coinId"       -> o.coinId.asJson,
     "contractHash" -> o.contractHash.asJson,

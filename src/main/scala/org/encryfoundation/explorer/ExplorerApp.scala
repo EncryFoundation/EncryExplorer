@@ -11,7 +11,7 @@ import cats.effect.IO
 import com.typesafe.scalalogging.StrictLogging
 import doobie.hikari.HikariTransactor
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
-import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
+import org.encryfoundation.explorer.http.api.routes._
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
 import scala.concurrent.ExecutionContextExecutor
 
@@ -44,7 +44,8 @@ object ExplorerApp extends App with StrictLogging {
 
   val apiRoutes: Seq[ApiRoute] = Seq(
     HistoryRoute(HistoryService[IO](transactor, ec), settings.restApi),
-    TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi)
+    TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi),
+    SwaggerRoute(settings.restApi)
   )
 
   val withLogger: Directive0 = extractUri.flatMap { uri =>
