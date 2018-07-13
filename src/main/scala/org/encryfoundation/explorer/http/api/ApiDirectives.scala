@@ -6,6 +6,7 @@ import org.encryfoundation.explorer.settings.RESTApiSettings
 import org.encryfoundation.explorer.utils.Logging
 import scorex.crypto.hash.Blake2b256
 
+
 trait ApiDirectives extends Directives with Logging {
   val settings: RESTApiSettings
   val apiKeyHeaderName: String
