@@ -7,17 +7,16 @@ import akka.http.scaladsl.unmarshalling.PredefinedFromEntityUnmarshallers
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Json
-import org.encryfoundation.explorer.protocol.Address
 import org.encryfoundation.explorer.http.api.ApiDirectives
+import org.encryfoundation.explorer.protocol.Address
 import org.encryfoundation.explorer.protocol.crypto.Base58Check
-import org.encryfoundation.explorer.utils.Logging
 import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.Try
 
-trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFromEntityUnmarshallers with Logging{
+trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFromEntityUnmarshallers {
 
   def context: ActorRefFactory
 
@@ -31,7 +30,6 @@ trait ApiRoute extends ApiDirectives with FailFastCirceSupport with PredefinedFr
 
   protected def toJsonResponse(js: Json): Route = {
     val resp = complete(HttpEntity(ContentTypes.`application/json`, js.spaces2))
-    logInfo(s"${resp.toString} 34456789")
     withCors(resp)
   }
 

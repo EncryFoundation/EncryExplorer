@@ -22,5 +22,4 @@ object TransactionsDao extends Dao[Transaction] {
 
   private def selectByRange(from: Int, to: Int): Query0[Transaction] =
     s"SELECT $columnsForQuery FROM $table WHERE block_id IN (SELECT id FROM headers WHERE height BETWEEN $from AND $to)".query[Transaction]
-
 }

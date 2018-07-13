@@ -7,12 +7,11 @@ import io.circe.syntax._
 import org.encryfoundation.explorer.db.services.TransactionService
 import org.encryfoundation.explorer.protocol.AccountLockedContract
 import org.encryfoundation.explorer.settings.RESTApiSettings
-import org.encryfoundation.explorer.utils.Logging
 
 case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTApiSettings)
-                               (implicit val context: ActorRefFactory) extends ApiRoute with Logging {
+                               (implicit val context: ActorRefFactory) extends ApiRoute {
 
-  override val route: Route = pathPrefix("transactions") {
+  override val route: Route = (withLogger & pathPrefix("transactions")) {
     getOutputR ~
       getOutputsByAddressR ~
       getUnspentOutputsByAddressR ~
@@ -29,7 +28,6 @@ case class TransactionsApiRoute(service: TransactionService[IO], settings: RESTA
       getTransactionByBlockHeightRangeR
   }
 
-  logInfo(route.toString())
   def getOutputR: Route = (pathPrefix("output") & modifierId & get) { id =>
     toJsonResponse(service.getOutput(id).unsafeToFuture().map(_.asJson))
   }

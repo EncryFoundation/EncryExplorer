@@ -21,7 +21,12 @@ trait ApiDirectives extends Directives with Logging {
       else reject(AuthorizationFailedRejection)
   }
 
-
-
-
+  val withLogger: Directive0 = {
+    extractUri.flatMap { uri =>
+      extractMethod.flatMap { method =>
+        logInfo(s"URI: $uri ($method)")
+        pass
+      }
+    }
+  }
 }
