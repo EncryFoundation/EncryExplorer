@@ -6,7 +6,7 @@ import scala.annotation.meta.field
 
 @ApiModel(value="Output", description="Transaction output")
 case class Output(id: String,
-                  @(ApiModelProperty @field)(name = "parentId") txId: String,
+                  txId: String,
                   @(ApiModelProperty @field)(name = "value") monetaryValue: Long,
                   coinId: String,
                   contractHash: String,
@@ -19,7 +19,7 @@ object Output {
 
   implicit val jsonEncoder: Encoder[Output] = (o: Output) => Map(
     "id"           -> o.id.asJson,
-    "parentId"     -> o.txId.asJson,
+    "txId"         -> o.txId.asJson,
     "value"        -> o.monetaryValue.asJson,
     "coinId"       -> o.coinId.asJson,
     "contractHash" -> o.contractHash.asJson,
