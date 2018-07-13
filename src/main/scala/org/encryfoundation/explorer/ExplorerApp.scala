@@ -8,15 +8,15 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{Directive0, ExceptionHandler, Route}
 import akka.stream.ActorMaterializer
 import cats.effect.IO
+import com.typesafe.scalalogging.StrictLogging
 import doobie.hikari.HikariTransactor
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
 import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
-import org.encryfoundation.explorer.utils.Logging
 
 import scala.concurrent.ExecutionContextExecutor
 
-object ExplorerApp extends App with Logging {
+object ExplorerApp extends App with StrictLogging {
 
   implicit val system: ActorSystem = ActorSystem("encry")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -50,7 +50,7 @@ object ExplorerApp extends App with Logging {
 
   val withLogger: Directive0 = extractUri.flatMap { uri =>
       extractMethod.flatMap { method =>
-        logInfo(s"URI: $uri ($method)")
+        logger.info(s"URI: $uri ($method)")
         pass
       }
     }
