@@ -7,8 +7,8 @@ import akka.http.scaladsl.unmarshalling.PredefinedFromEntityUnmarshallers
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Json
-import org.encryfoundation.explorer.protocol.Address
 import org.encryfoundation.explorer.http.api.ApiDirectives
+import org.encryfoundation.explorer.protocol.Address
 import org.encryfoundation.explorer.protocol.crypto.Base58Check
 import scorex.crypto.authds.ADKey
 import scorex.crypto.encode.Base16

@@ -3,18 +3,19 @@ package org.encryfoundation.explorer
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.{Directive0, ExceptionHandler, Route}
 import akka.stream.ActorMaterializer
 import cats.effect.IO
+import com.typesafe.scalalogging.StrictLogging
 import doobie.hikari.HikariTransactor
 import org.encryfoundation.explorer.db.services.{HistoryService, TransactionService}
 import org.encryfoundation.explorer.http.api.routes.{ApiRoute, HistoryRoute, TransactionsApiRoute}
 import org.encryfoundation.explorer.settings.ExplorerAppSettings
 import scala.concurrent.ExecutionContextExecutor
 
-object ExplorerApp extends App {
+object ExplorerApp extends App with StrictLogging {
 
   implicit val system: ActorSystem = ActorSystem("encry")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -46,6 +47,16 @@ object ExplorerApp extends App {
     TransactionsApiRoute(TransactionService[IO](transactor, ec), settings.restApi)
   )
 
-  val combinedRoute: Route = apiRoutes.map(_.route).reduce(_ ~ _)
+  val withLogger: Directive0 = extractUri.flatMap { uri =>
+      extractMethod.flatMap { method =>
+        logger.info(s"URI: $uri ($method)")
+        pass
+      }
+    }
+
+  val combinedRoute: Route = withLogger {
+    apiRoutes.map(_.route).reduce(_ ~ _)
+  }
+
   Http().bindAndHandle(combinedRoute, settings.restApi.bindAddress.getAddress.getHostAddress, settings.restApi.bindAddress.getPort)
 }
