@@ -1,10 +1,12 @@
-name := "EncryExplorer"
+name := """Explorer"""
 
-version := "0.1"
+version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.12.6"
 
 organization := "org.encryfoundation"
+
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"
@@ -38,8 +40,10 @@ val testingDependencies = Seq(
   "org.scalacheck" %% "scalacheck" % "1.13.+" % "test"
 )
 
+libraryDependencies += guice
 libraryDependencies ++= Seq(
-  "javax.xml.bind" % "jaxb-api" % "2.+",
+  "javax.xml.bind" % "jaxb-api" % "2.1",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
   "com.iheart" %% "ficus" % "1.4.2",
   "org.slf4j" % "slf4j-api" % "1.7.+",
