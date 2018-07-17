@@ -55,7 +55,7 @@ object ExplorerApp extends App with StrictLogging {
       }
     }
 
-  val combinedRoute: Route = withLogger {
+  val combinedRoute: Route = withLogger{
     apiRoutes.map(_.route).reduce(_ ~ _)
   }
 
