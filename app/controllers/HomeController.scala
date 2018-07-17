@@ -1,15 +1,17 @@
 package controllers
 
-import com.typesafe.scalalogging.StrictLogging
 import javax.inject.{Inject, _}
+import play.api.Logger
 import play.api.mvc._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * This controller creates an `Action` to handle HTTP requests to the
   * application's home page.
   */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) with StrictLogging {
+class HomeController @Inject()(loggingAction: LoggingAction,cc: ControllerComponents) extends AbstractController(cc) with ControllerHelpers {
 
   /**
     * Create an Action to render an HTML page.
@@ -19,12 +21,18 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     * a path of `/`.
     */
 
-  def index() = Action { implicit request: Request[AnyContent] =>
-    logger.info(s"Method = ${request.method},  " +
+  def index() = loggingAction { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+  }
+}
+
+class LoggingAction @Inject() (parser: BodyParsers.Default)(implicit ec: ExecutionContext) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
+    Logger.info(s"Method = ${request.method},  " +
       s"URI = ${request.uri},  " +
       s"Remote-address = ${request.remoteAddress},  " +
       s"Domain = ${request.domain},  " +
       s"User-agent = [${request.headers.get("user-agent").getOrElse("N/A")}]")
-    Ok(views.html.index())
+    block(request)
   }
 }
