@@ -35,15 +35,7 @@ val testingDependencies = Seq(
 )
 
 libraryDependencies += guice
-val union = libraryDependencies ++= Seq(
+libraryDependencies ++= Seq(
   "javax.xml.bind" % "jaxb-api" % "2.1",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-  "com.google.guava" % "guava" % "21.+",
-  "com.iheart" %% "ficus" % "1.4.2",
-  "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
-  "org.whispersystems" % "curve25519-java" % "+",
-  "org.rudogma" %% "supertagged" % "1.+",
-  "org.scorexfoundation" %% "scrypto" % "2.1.1",
-  "com.github.oskin1" %% "prism" % "0.2.2",
-  "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ testingDependencies
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+)
