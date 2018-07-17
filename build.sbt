@@ -27,12 +27,6 @@ val apiDependencies = Seq(
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 )
 
-val loggingDependencies = Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.+",
-  "ch.qos.logback" % "logback-classic" % "1.+",
-  "ch.qos.logback" % "logback-core" % "1.+"
-)
-
 val testingDependencies = Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.4.+" % "test",
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
@@ -41,16 +35,15 @@ val testingDependencies = Seq(
 )
 
 libraryDependencies += guice
-libraryDependencies ++= Seq(
+val union = libraryDependencies ++= Seq(
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
   "com.iheart" %% "ficus" % "1.4.2",
-  "org.slf4j" % "slf4j-api" % "1.7.+",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "com.github.oskin1" %% "prism" % "0.2.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ loggingDependencies ++ testingDependencies
+) ++ databaseDependencies ++ apiDependencies ++ testingDependencies
