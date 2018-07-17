@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * application's home page.
   */
 @Singleton
-class HomeController @Inject()(loggingAction: LoggingAction,cc: ControllerComponents) extends AbstractController(cc) with ControllerHelpers {
+class HomeController @Inject() (loggingAction: LoggingAction, cc: ControllerComponents) extends AbstractController(cc) with ControllerHelpers {
 
   /**
     * Create an Action to render an HTML page.
@@ -26,7 +26,7 @@ class HomeController @Inject()(loggingAction: LoggingAction,cc: ControllerCompon
   }
 }
 
-class LoggingAction @Inject() (parser: BodyParsers.Default)(implicit ec: ExecutionContext) extends ActionBuilderImpl(parser) {
+class LoggingAction @Inject() (parser: BodyParsers.Default) (implicit ec: ExecutionContext) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
     Logger.info(s"Method = ${request.method},  " +
       s"URI = ${request.uri},  " +
