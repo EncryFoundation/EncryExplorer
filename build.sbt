@@ -35,7 +35,7 @@ val testingDependencies = Seq(
 )
 
 libraryDependencies += guice
-val union = libraryDependencies ++= Seq(
+libraryDependencies ++= (Seq(
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
@@ -46,4 +46,10 @@ val union = libraryDependencies ++= Seq(
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "com.github.oskin1" %% "prism" % "0.2.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ testingDependencies
+) ++ databaseDependencies ++ apiDependencies ++ testingDependencies) map ( _ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*") )
+
+
+libraryDependencies ++= Seq (
+  "org.slf4j" % "slf4j-api" % "1.7.25",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
+)
