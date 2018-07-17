@@ -9,12 +9,6 @@
     </encoder>
   </appender>
 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>[%thread] >> [%-5level] %logger{36} >> %d{HH:mm:ss} %msg%n</pattern>
-    </encoder>
-  </appender>
-
   <logger name="play" level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
