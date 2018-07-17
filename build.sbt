@@ -46,7 +46,7 @@ libraryDependencies ++= (Seq(
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "com.github.oskin1" %% "prism" % "0.2.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ testingDependencies) map ( _ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*") )
+) ++ databaseDependencies ++ apiDependencies ++ testingDependencies
 
 
 libraryDependencies ++= Seq (
