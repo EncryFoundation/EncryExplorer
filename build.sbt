@@ -13,10 +13,10 @@ val circeVersion = "0.9.3"
 val doobieVersion = "0.5.2"
 
 val databaseDependencies = Seq(
-  "org.tpolecat" %% "doobie-core"     % doobieVersion,
+  "org.tpolecat" %% "doobie-core" % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
-  "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
-  "org.tpolecat" %% "doobie-hikari"   % doobieVersion
+  "org.tpolecat" %% "doobie-specs2" % doobieVersion,
+  "org.tpolecat" %% "doobie-hikari" % doobieVersion
 )
 
 val apiDependencies = Seq(
