@@ -2,8 +2,9 @@ package controllers
 
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
-import play.api.test._
+import play.api.mvc.BodyParsers
 import play.api.test.Helpers._
+import play.api.test._
 
 /**
  * Add your spec here.
@@ -16,7 +17,9 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
   "HomeController GET" should {
 
     "render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents())
+
+      val logger = inject[BodyParsers.Default]
+      val controller = inject[HomeController]
       val home = controller.index().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK
