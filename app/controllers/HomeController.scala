@@ -3,7 +3,6 @@ package controllers
 import javax.inject.{Inject, _}
 import play.api.Logger
 import play.api.mvc._
-
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
