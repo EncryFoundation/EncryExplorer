@@ -1,9 +1,8 @@
 package controllers
 
+import LoggingSystem.LoggingAction
 import javax.inject.{Inject, _}
-import play.api.Logger
 import play.api.mvc._
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class HomeController @Inject()(loggingAction: LoggingAction, cc: ControllerComponents)
