@@ -12,11 +12,13 @@ val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"
 val doobieVersion = "0.5.2"
 
+libraryDependencies += jdbc
+libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1208"
 val databaseDependencies = Seq(
   "org.tpolecat" %% "doobie-core" % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
   "org.tpolecat" %% "doobie-specs2" % doobieVersion,
-  "org.tpolecat" %% "doobie-hikari" % doobieVersion
+  "org.tpolecat" %% "doobie-hikari" % doobieVersion,
 )
 
 val apiDependencies = Seq(
@@ -47,7 +49,6 @@ libraryDependencies ++= (Seq(
   "com.github.oskin1" %% "prism" % "0.2.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ) map ( _ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*") )
-
 
 libraryDependencies ++= Seq (
   "org.slf4j" % "slf4j-api" % "1.7.25",

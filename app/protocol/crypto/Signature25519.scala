@@ -1,4 +1,4 @@
-package crypto
+package protocol.crypto
 
 import io.circe.{Decoder, Encoder, HCursor}
 import io.circe.syntax._

@@ -1,15 +1,29 @@
 package controllers
 
-import loggingSystem.LoggingAction
 import javax.inject.{Inject, Singleton}
+import loggingSystem.LoggingAction
+import play.api.db.DBApi
+import play.api.libs.json.JsValue
 import play.api.mvc._
-import play.mvc.Action
 
 @Singleton
-class HistoryController @Inject() (loggingAction: LoggingAction, cc: ControllerComponents)
+class HistoryController @Inject() (dpApi: DBApi, loggingAction: LoggingAction, cc: ControllerComponents)
   extends AbstractController(cc) {
 
-  def getHeaderR: Action[AnyContent] = loggingAction { implicit request: Request[AnyContent] =>
+//  val postgresConnection = new
 
-  }
+//  val test = new DBHandler()
+
+  def getHeaderR(id: Long): Action[AnyContent] = loggingAction { implicit request: Request[AnyContent] =>
+    println(id)
+    val requestBody: Option[JsValue] = request.body.asJson
+    println(requestBody)
+    val requestBodyText = request.body.asText
+    println(requestBodyText)
+
+
+
+    Ok("good")
+//    requestBody.map { id =>
+    }
 }

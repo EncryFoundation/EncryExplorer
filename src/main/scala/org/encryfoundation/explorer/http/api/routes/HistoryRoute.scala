@@ -36,9 +36,24 @@ case class HistoryRoute(service: HistoryService[IO], settings: RESTApiSettings)
   @ApiResponses(Array(
     new ApiResponse(code = 404, message = "Header not found"),
     new ApiResponse(code = 200, message = "Header found")))
+
+
+
+
+
+
+
   def getHeaderR: Route = (modifierId & pathPrefix("header") & get) { id =>
     toJsonResponse(service.getHeaderById(id).unsafeToFuture().map(_.asJson))
   }
+
+
+
+
+
+
+
+
 
   @Path("/headersAt/{height}")
   @ApiOperation(

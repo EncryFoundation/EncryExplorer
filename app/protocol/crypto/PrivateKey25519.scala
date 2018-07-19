@@ -1,4 +1,4 @@
-package crypto
+package protocol.crypto
 
 import com.google.common.primitives.Bytes
 import scorex.crypto.signatures.{Curve25519, PrivateKey, PublicKey}

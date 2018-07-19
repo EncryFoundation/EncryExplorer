@@ -1,4 +1,4 @@
-package crypto
+package protocol.crypto
 
 import scorex.crypto.encode.Base58
 import scorex.crypto.signatures.{Curve25519, PublicKey}
