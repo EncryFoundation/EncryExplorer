@@ -1,6 +1,6 @@
 package controllers
 
-import LoggingSystem.LoggingAction
+import loggingSystem.LoggingAction
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import play.mvc.Action

@@ -1,6 +1,6 @@
 package controllers
 
-import LoggingSystem.LoggingAction
+import loggingSystem.LoggingAction
 import javax.inject.{Inject, _}
 import play.api.mvc._
 

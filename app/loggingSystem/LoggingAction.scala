@@ -1,4 +1,4 @@
-package LoggingSystem
+package loggingSystem
 
 import javax.inject.Inject
 import play.api.Logger
