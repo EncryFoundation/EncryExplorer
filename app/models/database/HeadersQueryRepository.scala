@@ -4,70 +4,16 @@ import doobie._
 import doobie.implicits._
 import models.Header
 
-object HeadersQueryRepository extends Dao[Header] {
+object HeadersQueryRepository {
 
-  val table: String = "headers"
-  val columns: Seq[String] = Seq(
-    "id",
-    "parent_id",
-    "version",
-    "height",
-    "ad_proofs_root",
-    "state_root",
-    "transactions_root",
-    "ts",
-    "difficulty",
-    "block_size",
-    "equihash_solution",
-    "ad_proofs",
-    "tx_qty",
-    "miner_address",
-    "miner_reward",
-    "fees_total",
-    "txs_size",
-    "best_chain"
-  )
+  def findByIdQuery(id: String): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
 
-  def findById(id: String): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
+  def findByHeightQuery(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height = $height".query[Header].to[List]
 
-  def findByHeight(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height = $height".query[Header].to[List]
+  def findBestByHeightQuery(height: Int): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE height = $height AND best_chain = TRUE".query[Header].to[List].map(_.headOption)
 
-  def findBestByHeight(height: Int): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE height = $height AND best_chain = TRUE".query[Header].to[List].map(_.headOption)
+  def findLastByHeightQuery(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE best_chain = TRUE ORDER BY height DESC LIMIT $height".query[Header].to[List]
 
-  def findLastByHeight(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE best_chain = TRUE ORDER BY height DESC LIMIT $height".query[Header].to[List]
-
-  def findByHeightRange(from:Int, to: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height BETWEEN $from AND $to".query[Header].to[List]
-
-
-
-
-  def getById(id: String): ConnectionIO[Header] =
-    perform(s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header], s"Cannot find header with id = $id")
-
-  def getByParentId(id: String): ConnectionIO[Header] = perform(selectByParentId(id), s"Cannot find header with id = $id")
-
-  def getBestByHeight(height: Int): ConnectionIO[Header] = perform(selectBestAtHeight(height), s"Cannot find header with height = $height")
-
-  def getByHeight(height: Int): ConnectionIO[List[Header]] = selectByHeight(height).to[List]
-
-  def getLast(qty: Int): ConnectionIO[List[Header]] = selectLast(qty).to[List]
-
-  def getByHeightRange(from: Int, to: Int): ConnectionIO[List[Header]] = selectByHeightRange(from, to).to[List]
-
-  private def selectByParentId(parentId: String): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE parent_id = '$parentId'".query[Header]
-
-  private def selectByHeight(height: Int): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE height = $height".query[Header]
-
-  private def selectBestAtHeight(height: Int): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE height = $height AND best_chain = TRUE".query[Header]
-
-  private def selectLast(qty: Int): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE best_chain = TRUE ORDER BY height DESC LIMIT $qty".query[Header]
-
-  private def selectByHeightRange(from: Int, to: Int): Query0[Header] =
-    s"SELECT $columnsForQuery FROM $table WHERE height BETWEEN $from AND $to".query[Header]
-
+  def findByHeightRangeQuery(from:Int, to: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height BETWEEN $from AND $to".query[Header].to[List]
 }
 

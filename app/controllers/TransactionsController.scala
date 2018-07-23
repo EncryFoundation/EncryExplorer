@@ -65,4 +65,31 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
+  def listByBlockId(blockId: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .listTransactionsByBlockId(blockId)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def outputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+    transactionsService
+      .listOutputsByBlockHeight(height)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def unspentOutputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+    transactionsService
+      .listOutputsByBlockHeightUnspent(height)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
 }

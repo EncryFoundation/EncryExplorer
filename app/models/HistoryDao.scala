@@ -7,14 +7,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) {
 
-  def findHeader(id: String): Future[Option[Header]] = dBService.runAsync(findById(id))
+  def findHeader(id: String): Future[Option[Header]] = dBService.runAsync(findByIdQuery(id))
 
-  def findHeadersAtHeight(height: Int): Future[List[Header]] = dBService.runAsync(findByHeight(height))
+  def findHeadersAtHeight(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightQuery(height))
 
-  def findBestHeadersAtHeight(height: Int): Future[Option[Header]] = dBService.runAsync(findBestByHeight(height))
+  def findBestHeadersAtHeight(height: Int): Future[Option[Header]] = dBService.runAsync(findBestByHeightQuery(height))
 
-  def findLastHeaders(height: Int): Future[List[Header]] = dBService.runAsync(findLastByHeight(height))
+  def findLastHeaders(height: Int): Future[List[Header]] = dBService.runAsync(findLastByHeightQuery(height))
 
-  def findByRange(from: Int, to: Int): Future[List[Header]] = dBService.runAsync(findByHeightRange(from, to))
+  def findByRange(from: Int, to: Int): Future[List[Header]] = dBService.runAsync(findByHeightRangeQuery(from, to))
 
 }

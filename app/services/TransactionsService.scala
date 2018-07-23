@@ -3,7 +3,6 @@ package services
 import javax.inject.Inject
 import models.{Input, Output, Transaction, TransactionsDao}
 import protocol.AccountLockedContract
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit ec: ExecutionContext) {
@@ -28,7 +27,17 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
     transactionsDao.findTransaction(id)
   }
 
+  def listTransactionsByBlockId(blockId: String): Future[List[Transaction]] = {
+    transactionsDao.listByBlockId(blockId)
+  }
 
+  def listOutputsByBlockHeight(height: Int): Future[List[Output]] = {
+    transactionsDao.listOutputsByBlockHeight(height)
+  }
+
+  def listOutputsByBlockHeightUnspent(height: Int): Future[List[Output]] = {
+    transactionsDao.listOutputsByBlockHeightUnspent(height)
+  }
 
   private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
 

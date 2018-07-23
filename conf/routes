@@ -20,9 +20,12 @@ GET        /history/lastHeaders/:qty               controllers.HistoryController
 
 GET        /history/headers/range/:from/:to        controllers.HistoryController.getHeadersByHeightRange(from: Int, to: Int)
 
-GET     /transactions/output/:modifierId        controllers.TransactionsController.findOutput(modifierId: String)
-GET     /transactions/:address/outputs          controllers.TransactionsController.listOutputsByAddress(address: String)
-GET     /transactions/:address/outputs/unspent  controllers.TransactionsController.listUnspentOutputsByAddress(address: String)
-GET     /transactions/input/:modifierId         controllers.TransactionsController.findInput(modifierId: String)
-GET     /transactions/tx/:id/inputs             controllers.TransactionsController.listInputsByTxId(id: String)
-GET     /transactions/:id                       controllers.TransactionsController.findTransaction(id: String)
+GET     /transactions/output/:modifierId                    controllers.TransactionsController.findOutput(modifierId: String)
+GET     /transactions/:address/outputs                      controllers.TransactionsController.listOutputsByAddress(address: String)
+GET     /transactions/:address/outputs/unspent              controllers.TransactionsController.listUnspentOutputsByAddress(address: String)
+GET     /transactions/input/:modifierId                     controllers.TransactionsController.findInput(modifierId: String)
+GET     /transactions/tx/:id/inputs                         controllers.TransactionsController.listInputsByTxId(id: String)
+GET     /transactions/:id                                   controllers.TransactionsController.findTransaction(id: String)
+GET     /transactions/block/:id                             controllers.TransactionsController.listByBlockId(id: String)
+GET     /transactions/block/height/:height/outputs          controllers.TransactionsController.outputsByBlockHeight(height: Int)
+GET     /transactions/block/height/:height/outputs/unspent  controllers.TransactionsController.unspentOutputsByBlockHeight(height: Int)

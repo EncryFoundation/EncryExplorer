@@ -17,7 +17,13 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
 
   def findInput(id: String): Future[Option[Input]] = dBService.runAsync(findInputQuery(id))
 
-  def listInputs(txId: String): Future[List[Input]] = dBService.runAsync(listInputsByTxId(txId))
+  def listInputs(txId: String): Future[List[Input]] = dBService.runAsync(listInputsByTxIdQuery(txId))
 
   def findTransaction(id: String): Future[Option[Transaction]] = dBService.runAsync(findTransactionQuery(id))
+
+  def listByBlockId(blockId: String): Future[List[Transaction]] = dBService.runAsync(listByBlockIdQuery(blockId))
+
+  def listOutputsByBlockHeight(height: Int): Future[List[Output]] = dBService.runAsync(listByBlockHeightQuery(height))
+
+  def listOutputsByBlockHeightUnspent(height: Int): Future[List[Output]] = dBService.runAsync(listByBlockHeightQueryUnspentQuery(height))
 }
