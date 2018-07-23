@@ -30,6 +30,17 @@ object HeadersQueryRepository extends Dao[Header] {
 
   def findById(id: String): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
 
+  def findByHeight(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height = $height".query[Header].to[List]
+
+  def findBestByHeight(height: Int): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE height = $height AND best_chain = TRUE".query[Header].to[List].map(_.headOption)
+
+  def findLastByHeight(height: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE best_chain = TRUE ORDER BY height DESC LIMIT $height".query[Header].to[List]
+
+  def findByHeightRange(from:Int, to: Int): ConnectionIO[List[Header]] = sql"SELECT * FROM headers WHERE height BETWEEN $from AND $to".query[Header].to[List]
+
+
+
+
   def getById(id: String): ConnectionIO[Header] =
     perform(s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header], s"Cannot find header with id = $id")
 
