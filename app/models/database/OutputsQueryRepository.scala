@@ -1,21 +1,22 @@
 package models.database
 
 import doobie._
+import doobie.implicits._
 import models.Output
 
-object OutputsDao extends Dao[Output] {
+object OutputsQueryRepository extends Dao[Output] {
 
   val table: String = "outputs"
   val columns: Seq[String] = Seq("id", "tx_id", "monetary_value", "coin_id", "contract_hash", "data")
 
-  def getById(id: String): ConnectionIO[Output] =
-    perform(s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Output], s"Cannot find output with id = $id")
+  def findOutputQuery(id: String): ConnectionIO[Option[Output]] =
+    sql"SELECT * FROM outputs WHERE id = $id".query[Output].to[List].map(_.headOption)
 
-  def findByContractHash(ch: String): ConnectionIO[List[Output]] =
-    s"SELECT $columnsForQuery FROM $table WHERE contract_hash = '$ch'".query[Output].to[List]
+  def listOutputsByContractHashQuery(contractHash: String): ConnectionIO[List[Output]] =
+    sql"SELECT * FROM outputs WHERE contract_hash = $contractHash".query[Output].to[List]
 
-  def findUnspentByContractHash(ch: String): ConnectionIO[List[Output]] =
-    s"SELECT $columnsForQuery FROM $table WHERE contract_hash = '$ch' AND id NOT IN (SELECT id FROM inputs)".query[Output].to[List]
+  def listUnspentOutputsByContractHashQuery(contractHash: String): ConnectionIO[List[Output]] =
+    sql"SELECT * FROM outputs WHERE contract_hash = $contractHash AND id NOT IN (SELECT id FROM inputs)".query[Output].to[List]
 
   def findByTxId(ch: String): ConnectionIO[List[Output]] = selectByTxId(ch).to[List]
 

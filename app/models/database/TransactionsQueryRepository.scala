@@ -1,14 +1,16 @@
 package models.database
 
 import doobie._
+import doobie.implicits._
 import models.Transaction
 
-object TransactionsDao extends Dao[Transaction] {
+object TransactionsQueryRepository extends Dao[Transaction] {
+
+  def findTransactionQuery(id: String): ConnectionIO[Option[Transaction]] =
+    sql"SELECT * FROM transactions WHERE id = $id".query[Transaction].to[List].map(_.headOption)
 
   val table: String = "transactions"
   val columns: Seq[String] = Seq("id", "block_id", "is_coinbase", "ts")
-
-  def getById(id: String): ConnectionIO[Transaction] = perform(selectById(id), s"Cannot find transaction with id = $id")
 
   def getByBlockId(id: String): ConnectionIO[List[Transaction]] = selectByBlockId(id).to[List]
 

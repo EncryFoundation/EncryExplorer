@@ -19,3 +19,10 @@ GET     /history/headers/:modifierId        controllers.HistoryController.getHea
 #GET     /history/lastHeaders/:qty   controllers.HistoryController.getLastHeadersR(qty: String)
 
 #GET     /history/headers/range/:from/:to
+
+GET     /transactions/output/:modifierId        controllers.TransactionsController.findOutput(modifierId: String)
+GET     /transactions/:address/outputs          controllers.TransactionsController.listOutputsByAddress(address: String)
+GET     /transactions/:address/outputs/unspent  controllers.TransactionsController.listUnspentOutputsByAddress(address: String)
+GET     /transactions/input/:modifierId         controllers.TransactionsController.findInput(modifierId: String)
+GET     /transactions/tx/:id/inputs             controllers.TransactionsController.listInputsByTxId(id: String)
+GET     /transactions/:id                       controllers.TransactionsController.findTransaction(id: String)
