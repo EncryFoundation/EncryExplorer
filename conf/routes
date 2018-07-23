@@ -12,4 +12,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 #clarify id's type
 GET     /history/headers/:modifierId        controllers.HistoryController.getHeaderR(modifierId: String)
 
-GET     /history/headersAt/:height          controllers.HistoryController.getHeadersAtHeightR(modifierId: String)
+GET     /history/headersAt/:height          controllers.HistoryController.getHeadersAtHeightR(height: String)
