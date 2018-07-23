@@ -1,29 +1,18 @@
 package controllers
 
+import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import loggingSystem.LoggingAction
-import play.api.db.DBApi
-import play.api.libs.json.JsValue
+import models.services.HistoryControllerService
+import play.api.libs.circe.Circe
 import play.api.mvc._
 
+import scala.concurrent.ExecutionContext
+
 @Singleton
-class HistoryController @Inject() (dpApi: DBApi, loggingAction: LoggingAction, cc: ControllerComponents)
-  extends AbstractController(cc) {
+class HistoryController @Inject()(cc: ControllerComponents, hcs: HistoryControllerService)(implicit ex: ExecutionContext)
+  extends AbstractController(cc) with Circe {
 
-//  val postgresConnection = new
-
-//  val test = new DBHandler()
-
-  def getHeaderR(id: Long): Action[AnyContent] = loggingAction { implicit request: Request[AnyContent] =>
-    println(id)
-    val requestBody: Option[JsValue] = request.body.asJson
-    println(requestBody)
-    val requestBodyText = request.body.asText
-    println(requestBodyText)
-
-
-
-    Ok("good")
-//    requestBody.map { id =>
-    }
+  def getHeaderR(id: String): Action[AnyContent] = Action.async {
+    hcs.getHeaderR(id).map ( a =>  Ok(a.asJson)).recover { case _ => BadRequest(s"Bad request") }
+  }
 }

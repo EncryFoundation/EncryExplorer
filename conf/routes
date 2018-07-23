@@ -10,4 +10,4 @@ GET     /                           controllers.HomeController.index
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #clarify id's type
-GET     /history/header/:modifierId          controllers.HistoryController.getHeaderR(modifierId: Long)
+GET     /history/headers/:modifierId        controllers.HistoryController.getHeaderR(modifierId: String)

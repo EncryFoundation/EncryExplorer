@@ -10,10 +10,10 @@ import models.dao.HeadersDao
 
 import scala.concurrent.ExecutionContext
 
-case class HistoryService[F[_]](tr: Transactor[F], ec: ExecutionContext)(implicit f: Monad[F], a: Async[F]) {
+case class HistoryService[F[_]](tr: Transactor[F], ec: ExecutionContext) (implicit f: Monad[F], a: Async[F]) {
 
   def getHeaderById(id: String): F[Header] = Async.shift[F](ec)
-    .flatMap(_ => HeadersDao.getById(id).transact[F](tr))
+    .flatMap(_ => {HeadersDao.getById(id).transact[F](tr)})
 
   def getHeadersAtHeight(h: Int): F[List[Header]] = Async.shift[F](ec)
     .flatMap(_ => HeadersDao.getByHeight(h).transact[F](tr))
