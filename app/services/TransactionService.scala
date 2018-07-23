@@ -1,11 +1,11 @@
-package models.services
+package services
 
 import cats.Monad
 import cats.effect.Async
 import cats.implicits._
 import doobie.implicits._
 import doobie.util.transactor.Transactor
-import models.dao.{InputsDao, OutputsDao, TransactionsDao}
+import models.database.{InputsDao, OutputsDao, TransactionsDao}
 import models.{Input, Output, Transaction}
 
 import scala.concurrent.ExecutionContext

@@ -10,12 +10,12 @@ GET     /                           controllers.HomeController.index
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #clarify id's type
-GET     /history/headers/:modifierId        controllers.HistoryController.getHeaderR(modifierId: String)
+GET     /history/headers/:modifierId        controllers.HistoryController.getHeader(modifierId: String)
 
-GET     /history/headersAt/:height          controllers.HistoryController.getHeadersAtHeightR(height: String)
+#GET     /history/headersAt/:height          controllers.HistoryController.getHeadersAtHeightR(height: String)
 
-GET     /history/bestHeaderAt/:height      controllers.HistoryController.getBestHeaderAtHeightR(height: String)
+#GET     /history/bestHeaderAt/:height      controllers.HistoryController.getBestHeaderAtHeightR(height: String)
 
-GET     /history/lastHeaders/:qty   controllers.HistoryController.getLastHeadersR(qty: String)
+#GET     /history/lastHeaders/:qty   controllers.HistoryController.getLastHeadersR(qty: String)
 
 #GET     /history/headers/range/:from/:to

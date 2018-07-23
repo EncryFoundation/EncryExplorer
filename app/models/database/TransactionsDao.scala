@@ -1,4 +1,4 @@
-package models.dao
+package models.database
 
 import doobie._
 import models.Transaction

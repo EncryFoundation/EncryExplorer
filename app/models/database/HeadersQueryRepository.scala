@@ -1,9 +1,10 @@
-package models.dao
+package models.database
 
 import doobie._
+import doobie.implicits._
 import models.Header
 
-object HeadersDao extends Dao[Header] {
+object HeadersQueryRepository extends Dao[Header] {
 
   val table: String = "headers"
   val columns: Seq[String] = Seq(
@@ -26,6 +27,8 @@ object HeadersDao extends Dao[Header] {
     "txs_size",
     "best_chain"
   )
+
+  def findById(id: String): ConnectionIO[Option[Header]] = sql"SELECT * FROM headers WHERE id = $id".query[Header].to[List].map(_.headOption)
 
   def getById(id: String): ConnectionIO[Header] =
     perform(s"SELECT $columnsForQuery FROM $table WHERE id = '$id'".query[Header], s"Cannot find header with id = $id")

@@ -1,4 +1,4 @@
-package models.dao
+package models.database
 
 import cats.implicits._
 import doobie._
