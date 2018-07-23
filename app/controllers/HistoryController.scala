@@ -15,4 +15,9 @@ class HistoryController @Inject()(cc: ControllerComponents, hcs: HistoryControll
   def getHeaderR(id: String): Action[AnyContent] = Action.async {
     hcs.getHeaderR(id).map ( a =>  Ok(a.asJson)).recover { case _ => BadRequest(s"Bad request") }
   }
+
+    def getHeadersAtHeightR(height: String) :Action[AnyContent] = Action.async {
+      hcs.getHeadersAtHeightR(height).map (a => Ok(a.asJson)).recover {case _ => BadRequest(s"Bad request")}
+  }
+
 }
