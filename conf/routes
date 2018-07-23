@@ -13,3 +13,9 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /history/headers/:modifierId        controllers.HistoryController.getHeaderR(modifierId: String)
 
 GET     /history/headersAt/:height          controllers.HistoryController.getHeadersAtHeightR(height: String)
+
+GET     /history/bestHeaderAt/:height      controllers.HistoryController.getBestHeaderAtHeightR(height: String)
+
+GET     /history/lastHeaders/:qty   controllers.HistoryController.getLastHeadersR(qty: String)
+
+#GET     /history/headers/range/:from/:to

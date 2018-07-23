@@ -19,4 +19,21 @@ class HistoryControllerService @Inject()(service: ServicesHandler)(implicit ec: 
     case Success(h) => service.hs.getHeadersAtHeight(h).unsafeToFuture()
     case Failure(t: Throwable) => Future.failed(new IllegalArgumentException)}
   }
+
+  def getBestHeaderAtHeightR(height: String): Future[Header] = {
+    Try(height.toInt).filter(_ >= 0) match {
+      case Success(h) => service.hs.getBestHeaderAtHeight(h).unsafeToFuture()
+      case Failure(t: Throwable) => Future.failed(new IllegalArgumentException)}
+  }
+
+  def getLastHeadersR(qty: String): Future[List[Header]] = {
+    Try(qty.toInt).filter(_ > 0) match {
+      case Success(h) => service.hs.getLastHeaders(h).unsafeToFuture()
+      case Failure(t: Throwable) => Future.failed(new IllegalArgumentException)}
+  }
+
+//  def getHeadersByHeightRangeR(from: String, to: String): Future[List[Header]] = {
+//
+//  }
+
 }
