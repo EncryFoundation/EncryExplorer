@@ -7,7 +7,6 @@ import org.scalatest.{FlatSpecLike, Matchers}
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.{eq => eq_}
 import org.scalatest.concurrent.ScalaFutures
-
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
