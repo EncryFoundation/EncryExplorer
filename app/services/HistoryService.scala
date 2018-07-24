@@ -23,6 +23,6 @@ class HistoryService @Inject()(historyDao: HistoryDao)(implicit ec: ExecutionCon
     if (qty >= 0) historyDao.findLastHeaders(qty) else Future.failed(new IllegalArgumentException)
 
   def getHeadersByHeightRange(from: Int, to: Int): Future[List[Header]] =
-    if (from >= 0 && to >= 0) historyDao.findByRange(from, to) else Future.failed(new IllegalArgumentException)
+    if (from >= 0 && to >= from) historyDao.findByRange(from, to) else Future.failed(new IllegalArgumentException)
 
 }

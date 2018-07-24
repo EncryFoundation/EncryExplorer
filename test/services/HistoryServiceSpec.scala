@@ -42,6 +42,58 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
     }
   }
 
+  "HistoryService#getBestHeaderAtHeight" should "find best header with given height" in new HistoryServiceSpecWiring {
+    when(historyDaoMock.findBestHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(Some(sampleHeader)))
+    whenReady(service.getBestHeaderAtHeight(sampleHeight)) { result =>
+      verify(historyDaoMock).findBestHeadersAtHeight(eq_(sampleHeight))
+      result shouldBe Some(sampleHeader)
+    }
+  }
+
+  "HistoryService#getBestHeaderAtHeight" should "validate height" in new HistoryServiceSpecWiring {
+    whenReady(service.getBestHeaderAtHeight(-1).failed) { ex =>
+      verify(historyDaoMock, never()).findBestHeadersAtHeight(eq_(sampleHeight))
+      ex shouldBe a[IllegalArgumentException]
+    }
+  }
+
+  "HistoryService#getLastHeaders" should "find last qty headers" in new HistoryServiceSpecWiring {
+    when(historyDaoMock.findLastHeaders(1)).thenReturn(Future.successful(List(sampleHeader)))
+    whenReady(service.getLastHeaders(1)) { result =>
+      verify(historyDaoMock).findLastHeaders(eq_(1))
+      result shouldBe List(sampleHeader)
+    }
+  }
+
+  "HistoryService#getLastHeaders" should "validate height" in new HistoryServiceSpecWiring {
+    whenReady(service.getLastHeaders(-1).failed) { ex =>
+      verify(historyDaoMock, never()).findLastHeaders(eq_(-1))
+      ex shouldBe a[IllegalArgumentException]
+    }
+  }
+
+  "HistoryService#getHeadersByHeightRange" should "find headers in given range" in new HistoryServiceSpecWiring {
+    when(historyDaoMock.findByRange(sampleHeight, sampleHeight + 1)).thenReturn(Future.successful(List(sampleHeader)))
+    whenReady(service.getHeadersByHeightRange(sampleHeight, sampleHeight + 1)) { result =>
+      verify(historyDaoMock).findByRange(eq_(sampleHeight), eq_(sampleHeight + 1))
+      result shouldBe List(sampleHeader)
+    }
+  }
+
+  "HistoryService#getHeadersByHeightRange" should "validate that both from and to are non-negative" in new HistoryServiceSpecWiring {
+    whenReady(service.getHeadersByHeightRange(-1,  1).failed) { ex =>
+      verify(historyDaoMock, never()).findByRange(eq_(-1), eq_(1))
+      ex shouldBe a[IllegalArgumentException]
+    }
+  }
+
+  "HistoryService#getHeadersByHeightRange" should "validate that both from is less or equal to \"to\"" in new HistoryServiceSpecWiring {
+    whenReady(service.getHeadersByHeightRange(3,  1).failed) { ex =>
+      verify(historyDaoMock, never()).findByRange(eq_(3), eq_(1))
+      ex shouldBe a[IllegalArgumentException]
+    }
+  }
+
   private trait HistoryServiceSpecWiring {
     val historyDaoMock: HistoryDao = mock[HistoryDao]
     val service = new HistoryService(historyDaoMock)
