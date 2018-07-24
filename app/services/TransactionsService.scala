@@ -3,13 +3,16 @@ package services
 import javax.inject.Inject
 import models.{Input, Output, Transaction, TransactionsDao}
 import protocol.AccountLockedContract
+import scorex.crypto.encode.Base16
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit ec: ExecutionContext) {
 
   def findOutput(id: String): Future[Option[Output]] = {
-    transactionsDao.findOutput(id)
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findOutput(id))
   }
 
   def listOutputsByAddress(address: String, unspentOnly: Boolean = false): Future[List[Output]] = {
@@ -33,31 +36,42 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
   }
 
   def findTransaction(id: String): Future[Option[Transaction]] = {
-    transactionsDao.findTransaction(id)
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findTransaction(id))
   }
 
   def listTransactionsByBlockId(blockId: String): Future[List[Transaction]] = {
-    transactionsDao.listByBlockId(blockId)
-  }
-
-  def findOutputByBlockId(id: String): Future[List[Output]] = {
-    transactionsDao.findOutputByBlockId(id)
-  }
-
-  def findUnspentOutputByBlockId(id: String): Future[List[Output]] = {
-    transactionsDao.findUnspentOutputByBlockId(id)
-  }
-
-  def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] = {
-    transactionsDao.findTransactionByBlockHeightRange(from, to)
+    Future
+      .fromTry(Base16.decode(blockId))
+      .flatMap(_ => transactionsDao.listByBlockId(blockId))
   }
 
   def listOutputsByBlockHeight(height: Int): Future[List[Output]] = {
-    transactionsDao.listOutputsByBlockHeight(height)
+    if (height >= 0) transactionsDao.listOutputsByBlockHeight(height)
+    else Future.failed(new IllegalArgumentException)
   }
 
   def listOutputsByBlockHeightUnspent(height: Int): Future[List[Output]] = {
-    transactionsDao.listOutputsByBlockHeightUnspent(height)
+    if (height >= 0) transactionsDao.listOutputsByBlockHeightUnspent(height)
+    else Future.failed(new IllegalArgumentException)
+  }
+
+  def findOutputByBlockId(id: String): Future[List[Output]] = {
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findOutputByBlockId(id))
+  }
+
+  def findUnspentOutputByBlockId(id: String): Future[List[Output]] = {
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findUnspentOutputByBlockId(id))
+  }
+
+  def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] = {
+    if (from >= 0 && to >= 0) transactionsDao.findTransactionByBlockHeightRange(from, to)
+    else Future.failed(new IllegalArgumentException)
   }
 
   private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex

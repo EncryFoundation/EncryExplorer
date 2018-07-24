@@ -5,7 +5,7 @@ import javax.inject.Inject
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
-import io.circe.syntax._
+
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
@@ -84,6 +84,32 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
+  def listByBlockId(blockId: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .listTransactionsByBlockId(blockId)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def outputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+    transactionsService
+      .listOutputsByBlockHeight(height)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def unspentOutputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+    transactionsService
+      .listOutputsByBlockHeightUnspent(height)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
 
   def findOutputByBlockId(id: String): Action[AnyContent] = Action.async {
     transactionsService
@@ -106,33 +132,6 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findTransactionByBlockHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
     transactionsService
       .findTransactionByBlockHeightRange(from, to)
-      .map(tx => Ok(tx.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
-  }
-
-  def listByBlockId(blockId: String): Action[AnyContent] = Action.async {
-    transactionsService
-      .listTransactionsByBlockId(blockId)
-      .map(tx => Ok(tx.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
-  }
-
-  def outputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
-    transactionsService
-      .listOutputsByBlockHeight(height)
-      .map(tx => Ok(tx.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
-  }
-
-  def unspentOutputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
-    transactionsService
-      .listOutputsByBlockHeightUnspent(height)
       .map(tx => Ok(tx.asJson))
       .recover {
         case NonFatal(_) => BadRequest

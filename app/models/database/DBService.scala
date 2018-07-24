@@ -17,9 +17,10 @@ class DBService {
       .unsafeToFuture()
 
   private val dataSource = new HikariDataSource
-  dataSource.setJdbcUrl("jdbc:postgresql://172.16.10.55:5432/encry_explorer") //todo сюда значения из конфига
-  dataSource.setUsername("db_admin")
-  dataSource.setPassword("Yb2e-oii8-T3bo-pT8Z")
+//  val postgresSettings: ExplorerAppSettings = ExplorerAppSettings.read
+  dataSource.setJdbcUrl("")
+  dataSource.setUsername("")
+  dataSource.setPassword("")
   dataSource.setMaximumPoolSize(5)
 
   private val pgTransactor: HikariTransactor[IO] = HikariTransactor[IO](dataSource)
