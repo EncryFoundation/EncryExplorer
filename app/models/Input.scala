@@ -1,11 +1,6 @@
 package models
 
-import io.swagger.annotations.ApiModel
-
-@ApiModel(value="Input", description="Transaction input")
-case class Input(id: String,
-                 txId: String,
-                 proofs: String)
+case class Input(id: String, txId: String, proofs: String)
 
 object Input {
 

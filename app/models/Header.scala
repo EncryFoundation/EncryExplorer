@@ -1,8 +1,5 @@
 package models
 
-import io.swagger.annotations.ApiModel
-
-@ApiModel(value="Header", description="Block header")
 case class Header(id: String,
                   parentId: String,
                   version: Short,

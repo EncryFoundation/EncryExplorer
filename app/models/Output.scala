@@ -1,13 +1,8 @@
 package models
 
-import io.swagger.annotations.{ApiModel, ApiModelProperty}
-
-import scala.annotation.meta.field
-
-@ApiModel(value="Output", description="Transaction output")
 case class Output(id: String,
                   txId: String,
-                  @(ApiModelProperty @field)(name = "value") monetaryValue: Long,
+                  monetaryValue: Long,
                   coinId: String,
                   contractHash: String,
                   data: String)

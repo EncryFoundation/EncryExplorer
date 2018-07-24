@@ -12,8 +12,6 @@ val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"
 val doobieVersion = "0.5.2"
 
-libraryDependencies += jdbc
-libraryDependencies += "org.postgresql" % "postgresql" % "9.4.1208"
 val databaseDependencies = Seq(
   "org.tpolecat" %% "doobie-core" % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
@@ -34,7 +32,8 @@ val testingDependencies = Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.4.+" % "test",
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
-  "org.scalacheck" %% "scalacheck" % "1.13.+" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.13.+" % "test",
+  "org.mockito" % "mockito-core" % "2.19.1" % Test,
 )
 
 libraryDependencies += guice

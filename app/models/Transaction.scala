@@ -1,8 +1,5 @@
 package models
 
-import io.swagger.annotations.ApiModel
-
-@ApiModel(value="Transaction", description="Block transaction")
 case class Transaction(id: String, blockId: String, isCoinbase: Boolean, timestamp: Long)
 
 object Transaction {
