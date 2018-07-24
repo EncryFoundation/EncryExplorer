@@ -27,6 +27,21 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
     }
   }
 
+  "HistoryService#getHeadersAtHeight" should "find headers with given height" in new HistoryServiceSpecWiring {
+    when(historyDaoMock.findHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
+    whenReady(service.getHeadersAtHeight(sampleHeight)) { result =>
+      verify(historyDaoMock).findHeadersAtHeight(eq_(sampleHeight))
+      result shouldBe List(sampleHeader)
+    }
+  }
+
+  "HistoryService#getHeadersAtHeight" should "validate height" in new HistoryServiceSpecWiring {
+    whenReady(service.getHeadersAtHeight(-1).failed) { ex =>
+      verify(historyDaoMock, never()).findHeadersAtHeight(eq_(sampleHeight))
+      ex shouldBe a[IllegalArgumentException]
+    }
+  }
+
   private trait HistoryServiceSpecWiring {
     val historyDaoMock: HistoryDao = mock[HistoryDao]
     val service = new HistoryService(historyDaoMock)
