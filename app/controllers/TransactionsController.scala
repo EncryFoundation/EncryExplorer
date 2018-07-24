@@ -1,5 +1,6 @@
 package controllers
 
+import io.circe.syntax._
 import javax.inject.Inject
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
@@ -38,6 +39,24 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
+  def findOutputsByTxId(id: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .findOutputsByTxId(id)
+      .map(outputs => Ok(outputs.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def findUnspentOutputsByTxId(id: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .findUnspentOutputsByTxId(id)
+      .map(outputs => Ok(outputs.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
   def findInput(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findInput(id)
@@ -59,6 +78,34 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findTransaction(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findTransaction(id)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+
+  def findOutputByBlockId(id: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .findOutputByBlockId(id)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def findUnspentOutputByBlockId(id: String): Action[AnyContent] = Action.async {
+    transactionsService
+      .findUnspentOutputByBlockId(id)
+      .map(tx => Ok(tx.asJson))
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
+  }
+
+  def findTransactionByBlockHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
+    transactionsService
+      .findTransactionByBlockHeightRange(from, to)
       .map(tx => Ok(tx.asJson))
       .recover {
         case NonFatal(_) => BadRequest

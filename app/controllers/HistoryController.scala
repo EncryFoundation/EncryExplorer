@@ -39,9 +39,9 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       }
   }
 
-  def getLastHeaders(height: Int): Action[AnyContent] = Action.async {
+  def getLastHeaders(qty: Int): Action[AnyContent] = Action.async {
     historyService
-      .getLastHeaders(height)
+      .getLastHeaders(qty)
       .map(header => Ok(header.asJson))
       .recover {
         case _ => BadRequest

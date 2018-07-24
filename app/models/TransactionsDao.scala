@@ -2,8 +2,8 @@ package models
 
 import javax.inject.Inject
 import models.database.DBService
-import models.database.OutputsQueryRepository._
 import models.database.InputsQueryRepository._
+import models.database.OutputsQueryRepository._
 import models.database.TransactionsQueryRepository._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -19,7 +19,17 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
 
   def listInputs(txId: String): Future[List[Input]] = dBService.runAsync(listInputsByTxIdQuery(txId))
 
+  def findOutputsByTxId(id: String): Future[List[Output]] = dBService.runAsync(findOutputsByTxIdQuery(id))
+
+  def findUnspentOutputsByTxId(id: String): Future[List[Output]] = dBService.runAsync(findOutputsByTxIdQuery(id))
+
   def findTransaction(id: String): Future[Option[Transaction]] = dBService.runAsync(findTransactionQuery(id))
+
+  def findOutputByBlockId(id: String): Future[List[Output]] = dBService.runAsync(findOutputByBlockIdQuery(id))
+
+  def findUnspentOutputByBlockId(id: String): Future[List[Output]] = dBService.runAsync(findUnspentOutputByBlockIdQuery(id))
+
+  def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] = dBService.runAsync(findTransactionByBlockHeightRangeQuery(from, to))
 
   def listByBlockId(blockId: String): Future[List[Transaction]] = dBService.runAsync(listByBlockIdQuery(blockId))
 
