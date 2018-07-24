@@ -3,6 +3,7 @@ package services
 import javax.inject.Inject
 import models.{Input, Output, Transaction, TransactionsDao}
 import protocol.AccountLockedContract
+import protocol.crypto.Base58Check
 import scorex.crypto.encode.Base16
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,7 +16,9 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
   }
 
   def listOutputsByAddress(address: String, unspentOnly: Boolean = false): Future[List[Output]] = {
-    transactionsDao.listOutputsByContractHash(contractHashByAddress(address), unspentOnly)
+    Future
+      .fromTry(Base58Check.decode(address))
+      .flatMap(_ =>transactionsDao.listOutputsByContractHash(contractHashByAddress(address), unspentOnly))
   }
 
   def findOutputsByTxId(id: String): Future[List[Output]] = {
@@ -77,7 +80,7 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
   }
 
   def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] = {
-    if (from >= 0 && to >= 0) transactionsDao.findTransactionByBlockHeightRange(from, to)
+    if (from >= 0 && to >= from) transactionsDao.findTransactionByBlockHeightRange(from, to)
     else Future.failed(new IllegalArgumentException)
   }
 
