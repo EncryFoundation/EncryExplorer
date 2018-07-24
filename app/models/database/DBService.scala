@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource
 import doobie.free.connection.ConnectionIO
 import doobie.hikari.HikariTransactor
 import doobie.implicits._
-
 import scala.concurrent.Future
 
 class DBService {

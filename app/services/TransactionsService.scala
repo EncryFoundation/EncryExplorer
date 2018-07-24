@@ -4,7 +4,6 @@ import javax.inject.Inject
 import models.{Input, Output, Transaction, TransactionsDao}
 import protocol.AccountLockedContract
 import scorex.crypto.encode.Base16
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit ec: ExecutionContext) {
@@ -19,20 +18,28 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
     transactionsDao.listOutputsByContractHash(contractHashByAddress(address), unspentOnly)
   }
 
-  def findInput(id: String): Future[Option[Input]] = {
-    transactionsDao.findInput(id)
-  }
-
-  def listInputs(txId: String): Future[List[Input]] = {
-    transactionsDao.listInputs(txId)
-  }
-
   def findOutputsByTxId(id: String): Future[List[Output]] = {
-    transactionsDao.findOutputsByTxId(id)
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findOutputsByTxId(id))
   }
 
   def findUnspentOutputsByTxId(id: String): Future[List[Output]] = {
-    transactionsDao.findUnspentOutputsByTxId(id)
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findUnspentOutputsByTxId(id))
+  }
+
+  def findInput(id: String): Future[Option[Input]] = {
+    Future
+      .fromTry(Base16.decode(id))
+      .flatMap(_ => transactionsDao.findInput(id))
+  }
+
+  def listInputs(txId: String): Future[List[Input]] = {
+    Future
+      .fromTry(Base16.decode(txId))
+      .flatMap(_ => transactionsDao.listInputs(txId))
   }
 
   def findTransaction(id: String): Future[Option[Transaction]] = {

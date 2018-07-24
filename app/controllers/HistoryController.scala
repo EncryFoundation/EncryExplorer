@@ -5,8 +5,8 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.HistoryService
-
 import scala.concurrent.ExecutionContext
+import scala.util.control.NonFatal
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
@@ -17,7 +17,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       .getHeader(id)
       .map(header => Ok(header.asJson))
       .recover {
-        case _ => BadRequest
+        case NonFatal(_) => BadRequest
       }
   }
 
@@ -26,7 +26,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       .getHeadersAtHeight(height)
       .map(header => Ok(header.asJson))
       .recover {
-        case _ => BadRequest
+        case NonFatal(_) => BadRequest
       }
   }
 
@@ -35,7 +35,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       .getBestHeaderAtHeight(height)
       .map(header => Ok(header.asJson))
       .recover {
-        case _ => BadRequest
+        case NonFatal(_) => BadRequest
       }
   }
 
@@ -44,7 +44,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       .getLastHeaders(qty)
       .map(header => Ok(header.asJson))
       .recover {
-        case _ => BadRequest
+        case NonFatal(_) => BadRequest
       }
   }
 
@@ -53,7 +53,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       .getHeadersByHeightRange(from, to)
       .map(header => Ok(header.asJson))
       .recover {
-        case _ => BadRequest
+        case NonFatal(_) => BadRequest
       }
   }
 

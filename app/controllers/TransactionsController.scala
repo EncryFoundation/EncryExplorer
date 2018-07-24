@@ -5,7 +5,6 @@ import javax.inject.Inject
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
-
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
