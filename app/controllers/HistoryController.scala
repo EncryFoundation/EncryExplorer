@@ -12,45 +12,45 @@ import scala.util.control.NonFatal
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
-  def getHeader(id: String): Action[AnyContent] = Action.async {
+  def findHeader(id: String): Action[AnyContent] = Action.async {
     historyService
-      .getHeader(id)
+      .findHeader(id)
       .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
   }
 
-  def getHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
+  def findHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
     historyService
-      .getHeadersAtHeight(height)
+      .listHeadersAtHeight(height)
       .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
   }
 
-  def getBestHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
+  def findBestHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
     historyService
-      .getBestHeaderAtHeight(height)
+      .findBestHeaderAtHeight(height)
       .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
   }
 
-  def getLastHeaders(qty: Int): Action[AnyContent] = Action.async {
+  def listLastHeaders(qty: Int): Action[AnyContent] = Action.async {
     historyService
-      .getLastHeaders(qty)
+      .listLastHeaders(qty)
       .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
   }
 
-  def getHeadersByHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
+  def listHeadersByHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
     historyService
-      .getHeadersByHeightRange(from, to)
+      .listHeadersByHeightRange(from, to)
       .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest

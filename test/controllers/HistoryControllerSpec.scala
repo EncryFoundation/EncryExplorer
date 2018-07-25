@@ -15,49 +15,49 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
 
-  "HistoryController#getHeader" should {
+  "HistoryController#findHeader" should {
 
     "process header requests by id" in new HistoryControllerSpecWiring {
-      when(historyServiceMock.getHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.getHeader(sampleHeaderId).apply(FakeRequest())
-      verify(historyServiceMock).getHeader(eq_(sampleHeaderId))
+      when(historyServiceMock.findHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
+      val result: Future[Result] = controller.findHeader(sampleHeaderId).apply(FakeRequest())
+      verify(historyServiceMock).findHeader(eq_(sampleHeaderId))
       status(result) shouldBe OK
     }
 
   }
 
-  "HistoryController#getHeaderAtHeight" should {
+  "HistoryController#findHeaderAtHeight" should {
     "return headers at given height" in new HistoryControllerSpecWiring {
-      when(historyServiceMock.getHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
-      val result: Future[Result] = controller.getHeaderAtHeight(sampleHeight).apply(FakeRequest())
-      verify(historyServiceMock).getHeadersAtHeight(eq_(sampleHeight))
+      when(historyServiceMock.listHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
+      val result: Future[Result] = controller.findHeaderAtHeight(sampleHeight).apply(FakeRequest())
+      verify(historyServiceMock).listHeadersAtHeight(eq_(sampleHeight))
       status(result) shouldBe OK
     }
   }
 
-  "HistoryController#getBestHeaderAtHeight" should {
+  "HistoryController#findBestHeaderAtHeight" should {
     "return header with \"bestChain\" equal true" in new HistoryControllerSpecWiring {
-      when(historyServiceMock.getBestHeaderAtHeight(sampleHeight)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.getBestHeaderAtHeight(sampleHeight).apply(FakeRequest())
-      verify(historyServiceMock).getBestHeaderAtHeight(eq_(sampleHeight))
+      when(historyServiceMock.findBestHeaderAtHeight(sampleHeight)).thenReturn(Future.successful(Some(sampleHeader)))
+      val result: Future[Result] = controller.findBestHeaderAtHeight(sampleHeight).apply(FakeRequest())
+      verify(historyServiceMock).findBestHeaderAtHeight(eq_(sampleHeight))
       status(result) shouldBe OK
     }
   }
 
-  "HistoryController#getLastHeaders" should {
+  "HistoryController#listLastHeaders" should {
     "return header with \"bestChain\" equal true and lowest height" in new HistoryControllerSpecWiring{
-      when(historyServiceMock.getLastHeaders(5)).thenReturn(Future.successful(List(oneLevelLowerHeader)))
-      val result: Future[Result] = controller.getLastHeaders(5).apply(FakeRequest())
-      verify(historyServiceMock).getLastHeaders(eq_(5))
+      when(historyServiceMock.listLastHeaders(5)).thenReturn(Future.successful(List(oneLevelLowerHeader)))
+      val result: Future[Result] = controller.listLastHeaders(5).apply(FakeRequest())
+      verify(historyServiceMock).listLastHeaders(eq_(5))
       status(result) shouldBe OK
     }
   }
 
-  "HistoryController#getHeadersByHeightRange" should {
+  "HistoryController#listHeadersByHeightRange" should {
     "return headers in given height range" in new HistoryControllerSpecWiring {
-      when(historyServiceMock.getHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight)).thenReturn(Future.successful(List(oneLevelLowerHeader, sampleHeader)))
-      val result: Future[Result] = controller.getHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
-      verify(historyServiceMock).getHeadersByHeightRange(eq_(oneLevelLowerHeader.height), eq_(sampleHeight))
+      when(historyServiceMock.listHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight)).thenReturn(Future.successful(List(oneLevelLowerHeader, sampleHeader)))
+      val result: Future[Result] = controller.listHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
+      verify(historyServiceMock).listHeadersByHeightRange(eq_(oneLevelLowerHeader.height), eq_(sampleHeight))
       status(result) shouldBe OK
     }
   }

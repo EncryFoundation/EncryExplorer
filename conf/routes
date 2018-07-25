@@ -1,11 +1,11 @@
 GET        /                                                         controllers.HomeController.index
 GET        /assets/*file                                             controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /history/headers/:modifierId                              controllers.HistoryController.getHeader(modifierId: String)
-GET        /history/headersAt/:height                                controllers.HistoryController.getHeaderAtHeight(height: Int)
-GET        /history/bestHeaderAt/:height                             controllers.HistoryController.getBestHeaderAtHeight(height: Int)
-GET        /history/lastHeaders/:qty                                 controllers.HistoryController.getLastHeaders(qty: Int)
-GET        /history/headers/range/:from/:to                          controllers.HistoryController.getHeadersByHeightRange(from: Int, to: Int)
+GET        /history/headers/:modifierId                              controllers.HistoryController.findHeader(modifierId: String)
+GET        /history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeight(height: Int)
+GET        /history/bestHeaderAt/:height                             controllers.HistoryController.findBestHeaderAtHeight(height: Int)
+GET        /history/lastHeaders/:qty                                 controllers.HistoryController.listLastHeaders(qty: Int)
+GET        /history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRange(from: Int, to: Int)
 
 GET        /transactions/output/:modifierId                          controllers.TransactionsController.findOutput(modifierId: String)
 GET        /transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddress(address: String)

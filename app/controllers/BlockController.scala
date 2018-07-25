@@ -6,7 +6,6 @@ import models.Block
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{HistoryService, TransactionsService}
-
 import scala.concurrent.ExecutionContext
 
 class BlockController @Inject()
@@ -14,7 +13,7 @@ class BlockController @Inject()
   extends AbstractController(cc) with Circe {
 
   def findBlock(id: String): Action[AnyContent] = Action.async {
-    val headerFuture = historyService.getHeader(id)
+    val headerFuture = historyService.findHeader(id)
     val payloadFuture = transactionsService.listTransactionsByBlockId(id)
     for {
       headerOpt <- headerFuture
