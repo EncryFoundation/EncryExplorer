@@ -23,6 +23,7 @@ val apiDependencies = Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
+  "com.dripower" %% "play-circe" % "2609.1" exclude("io.circe", "*"),
   "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.14.1",
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
 )
@@ -31,7 +32,13 @@ val testingDependencies = Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.4.+" % "test",
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
-  "org.scalacheck" %% "scalacheck" % "1.13.+" % "test"
+  "org.scalacheck" %% "scalacheck" % "1.13.+" % "test",
+  "org.mockito" % "mockito-core" % "2.19.1" % Test
+)
+
+val loggingDependencies = Seq(
+  "org.slf4j" % "slf4j-api" % "1.7.25",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
 
 libraryDependencies += guice
@@ -44,12 +51,8 @@ libraryDependencies ++= (Seq(
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
-  "com.github.oskin1" %% "prism" % "0.2.2",
+  "org.encry" %% "prism" % "0.2.3",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ) map ( _ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*") )
+) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
+  .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
 
-
-libraryDependencies ++= Seq (
-  "org.slf4j" % "slf4j-api" % "1.7.25",
-  "ch.qos.logback" % "logback-classic" % "1.2.3"
-)

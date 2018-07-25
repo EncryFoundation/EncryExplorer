@@ -1,10 +1,23 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# https://www.playframework.com/documentation/latest/ScalaRouting
-# ~~~~
+GET        /                                                         controllers.HomeController.index
+GET        /assets/*file                                             controllers.Assets.versioned(path="/public", file: Asset)
 
-# An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET        /history/headers/:modifierId                              controllers.HistoryController.getHeader(modifierId: String)
+GET        /history/headersAt/:height                                controllers.HistoryController.getHeaderAtHeight(height: Int)
+GET        /history/bestHeaderAt/:height                             controllers.HistoryController.getBestHeaderAtHeight(height: Int)
+GET        /history/lastHeaders/:qty                                 controllers.HistoryController.getLastHeaders(qty: Int)
+GET        /history/headers/range/:from/:to                          controllers.HistoryController.getHeadersByHeightRange(from: Int, to: Int)
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET        /transactions/output/:modifierId                          controllers.TransactionsController.findOutput(modifierId: String)
+GET        /transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddress(address: String)
+GET        /transactions/:address/outputs/unspent                    controllers.TransactionsController.listUnspentOutputsByAddress(address: String)
+GET        /transactions/tx/:modifierId/outputs                      controllers.TransactionsController.findOutputsByTxId(modifierId: String)
+GET        /transactions/input/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputsByTxId(modifierId: String)
+GET        /transactions/input/:modifierId                           controllers.TransactionsController.findInput(modifierId: String)
+GET        /transactions/tx/:id/inputs                               controllers.TransactionsController.listInputsByTxId(id: String)
+GET        /transactions/:id                                         controllers.TransactionsController.findTransaction(id: String)
+GET        /transactions/block/:id                                   controllers.TransactionsController.listByBlockId(id: String)
+GET        /transactions/block/height/:height/outputs                controllers.TransactionsController.outputsByBlockHeight(height: Int)
+GET        /transactions/block/height/:height/outputs/unspent        controllers.TransactionsController.unspentOutputsByBlockHeight(height: Int)
+GET        /transactions/block/:modifierId/outputs                   controllers.TransactionsController.findOutputByBlockId(modifierId: String)
+GET        /transactions/block/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputByBlockId(modifierId: String)
+GET        /transactions/tx/range/:from/:to                          controllers.TransactionsController.findTransactionByBlockHeightRange(from: Int, to: Int)
