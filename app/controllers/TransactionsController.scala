@@ -7,7 +7,6 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import services.TransactionsService
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
-import views.html.{getOutput => getOutputView}
 import views.html.getTransactions
 
 class TransactionsController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
@@ -16,7 +15,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findOutput(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findOutput(id)
-      .map(output => Ok(getOutputView(output.get)))
+      .map(output => Ok(output.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
