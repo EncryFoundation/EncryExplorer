@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar with ScalaFutures {
 
-  "HistoryService#getHeader" should "find header by is's id if exists" in new HistoryServiceSpecWiring {
+  "HistoryService#getBlock" should "find header by is's id if exists" in new HistoryServiceSpecWiring {
       when(historyDaoMock.findHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
       whenReady(service.findHeader(sampleHeaderId)) { result =>
         verify(historyDaoMock).findHeader(eq_(sampleHeaderId))

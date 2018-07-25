@@ -19,7 +19,7 @@ class BlockController @Inject()
       headerOpt <- headerFuture
       payload <- payloadFuture
     } yield headerOpt match {
-      case Some(header) => Ok(Block(header, payload).asJson)
+      case Some(header) => Ok(getBlockView(Block(header, payload)))
       case None => NotFound
     }
   }

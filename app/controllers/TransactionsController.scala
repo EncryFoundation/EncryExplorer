@@ -7,6 +7,8 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import services.TransactionsService
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
+import views.html.{getOutput => getOutputView}
+import views.html.getTransactions
 
 class TransactionsController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
@@ -14,7 +16,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findOutput(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findOutput(id)
-      .map(output => Ok(output.asJson))
+      .map(output => Ok(getOutputView(output.get)))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -77,7 +79,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findTransaction(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findTransaction(id)
-      .map(tx => Ok(tx.asJson))
+      .map(tx => Ok(getTransactions(tx.get)))
       .recover {
         case NonFatal(_) => BadRequest
       }
