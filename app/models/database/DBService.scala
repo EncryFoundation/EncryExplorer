@@ -11,8 +11,7 @@ import scala.concurrent.Future
 
 class DBService @Inject()(config: Configuration) {
 
-  def runAsync[T](io: ConnectionIO[T]): Future[T] =
-    io.transact(pgTransactor).unsafeToFuture()
+  def runAsync[T](io: ConnectionIO[T]): Future[T] = io.transact(pgTransactor).unsafeToFuture()
 
   private val dataSource = new HikariDataSource
   dataSource.setJdbcUrl(config.get[String]("encry.postgres.host"))
