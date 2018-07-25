@@ -12,7 +12,6 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
   def findOutput(id: String): Future[Option[Output]] = Future.fromTry(Base16.decode(id))
     .flatMap(_ => transactionsDao.findOutput(id))
 
-
   def listOutputsByAddress(address: String, unspentOnly: Boolean = false): Future[List[Output]] =
     Future.fromTry(Base58Check.decode(address))
       .flatMap(_ => transactionsDao.listOutputsByContractHash(contractHashByAddress(address), unspentOnly))
@@ -57,7 +56,6 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
   def findUnspentOutputByBlockId(id: String): Future[List[Output]] =
     Future.fromTry(Base16.decode(id))
       .flatMap(_ => transactionsDao.findUnspentOutputByBlockId(id))
-
 
   def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] =
     if (from >= 0 && to >= from) transactionsDao.findTransactionByBlockHeightRange(from, to)

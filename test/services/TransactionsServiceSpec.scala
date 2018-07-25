@@ -1,7 +1,6 @@
 package services
 
 import java.util.concurrent.ExecutionException
-
 import models.{Header, Output, TransactionsDao}
 import org.bouncycastle.util.encoders.DecoderException
 import org.scalatest.mockito.MockitoSugar

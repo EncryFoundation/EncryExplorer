@@ -7,7 +7,7 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 
 class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
-  def apply(nextFilter: RequestHeader => Future[Result]) (requestHeader: RequestHeader): Future[Result] =
+  def apply(nextFilter: RequestHeader => Future[Result])(requestHeader: RequestHeader): Future[Result] =
     if (requestHeader.uri.startsWith("/assets")) nextFilter(requestHeader)
     else {
       val startTime: Long = System.currentTimeMillis

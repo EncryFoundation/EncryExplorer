@@ -16,7 +16,7 @@ val databaseDependencies = Seq(
   "org.tpolecat" %% "doobie-core" % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
   "org.tpolecat" %% "doobie-specs2" % doobieVersion,
-  "org.tpolecat" %% "doobie-hikari" % doobieVersion,
+  "org.tpolecat" %% "doobie-hikari" % doobieVersion
 )
 
 val apiDependencies = Seq(
@@ -33,7 +33,12 @@ val testingDependencies = Seq(
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
   "org.scalacheck" %% "scalacheck" % "1.13.+" % "test",
-  "org.mockito" % "mockito-core" % "2.19.1" % Test,
+  "org.mockito" % "mockito-core" % "2.19.1" % Test
+)
+
+val loggingDependencies = Seq(
+  "org.slf4j" % "slf4j-api" % "1.7.25",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
 
 libraryDependencies += guice
@@ -48,9 +53,6 @@ libraryDependencies ++= (Seq(
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "org.encry" %% "prism" % "0.2.3",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
-) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ) map ( _ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*") )
+) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
+  .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
 
-libraryDependencies ++= Seq (
-  "org.slf4j" % "slf4j-api" % "1.7.25",
-  "ch.qos.logback" % "logback-classic" % "1.2.3"
-)
