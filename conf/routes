@@ -21,3 +21,5 @@ GET        /transactions/block/height/:height/outputs/unspent        controllers
 GET        /transactions/block/:modifierId/outputs                   controllers.TransactionsController.findOutputByBlockId(modifierId: String)
 GET        /transactions/block/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputByBlockId(modifierId: String)
 GET        /transactions/tx/range/:from/:to                          controllers.TransactionsController.findTransactionByBlockHeightRange(from: Int, to: Int)
+
+GET        /block/:id                                                controllers.BlockController.findBlock(id: String)
