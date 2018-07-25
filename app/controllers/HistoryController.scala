@@ -7,6 +7,7 @@ import play.api.mvc._
 import services.HistoryService
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
+import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
@@ -15,7 +16,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getHeader(id: String): Action[AnyContent] = Action.async {
     historyService
       .getHeader(id)
-      .map(header => Ok(header.asJson))
+      .map(header => Ok(getHeaderView(header.get)))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -24,7 +25,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
     historyService
       .getHeadersAtHeight(height)
-      .map(header => Ok(header.asJson))
+      .map(header => Ok(getHeaderListView(header)))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -33,7 +34,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getBestHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
     historyService
       .getBestHeaderAtHeight(height)
-      .map(header => Ok(header.asJson))
+      .map(header => Ok(getHeaderView(header.get)))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -42,7 +43,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getLastHeaders(qty: Int): Action[AnyContent] = Action.async {
     historyService
       .getLastHeaders(qty)
-      .map(header => Ok(header.asJson))
+      .map(header => Ok(getHeaderListView(header)))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -51,7 +52,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getHeadersByHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
     historyService
       .getHeadersByHeightRange(from, to)
-      .map(header => Ok(header.asJson))
+      .map(header => Ok(getHeaderListView(header)))
       .recover {
         case NonFatal(_) => BadRequest
       }
