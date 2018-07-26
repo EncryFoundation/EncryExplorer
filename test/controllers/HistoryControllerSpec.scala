@@ -19,7 +19,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
 
     "process header requests by id" in new HistoryControllerSpecWiring {
       when(historyServiceMock.getHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.getHeader(sampleHeaderId).apply(FakeRequest())
+      val result: Future[Result] = controller.findHeaderApi(sampleHeaderId).apply(FakeRequest())
       verify(historyServiceMock).getHeader(eq_(sampleHeaderId))
       status(result) shouldBe OK
     }
@@ -56,7 +56,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#getHeadersByHeightRange" should {
     "return headers in given height range" in new HistoryControllerSpecWiring {
       when(historyServiceMock.getHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight)).thenReturn(Future.successful(List(oneLevelLowerHeader, sampleHeader)))
-      val result: Future[Result] = controller.getHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.listHeadersByHeightRangeApi(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
       verify(historyServiceMock).getHeadersByHeightRange(eq_(oneLevelLowerHeader.height), eq_(sampleHeight))
       status(result) shouldBe OK
     }

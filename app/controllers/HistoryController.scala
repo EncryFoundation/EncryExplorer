@@ -2,9 +2,12 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
+import models.Header
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.HistoryService
+import views.html.{getHeader,getHeaderList}
+
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
@@ -12,13 +15,18 @@ import scala.util.control.NonFatal
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
-  def getHeader(id: String): Action[AnyContent] = Action.async {
-    historyService
-      .getHeader(id)
-      .map(header => Ok(header.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
+  def findHeaderView(id: String): Action[AnyContent] = Action.async {
+    historyService.getHeader(id).map {
+      case Some(header) => Ok(getHeader(header))
+      case None => NotFound
+    }
+  }
+
+  def findHeaderApi(id: String): Action[AnyContent] = Action.async {
+    historyService.getHeader(id).map {
+      case Some(header) => Ok(header.asJson)
+      case None => NotFound
+    }
   }
 
   def getHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
@@ -48,13 +56,18 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       }
   }
 
-  def getHeadersByHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
-    historyService
-      .getHeadersByHeightRange(from, to)
-      .map(header => Ok(header.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
+  def listHeadersByHeightRangeApi(from: Int, to: Int): Action[AnyContent] = Action.async {
+    historyService.getHeadersByHeightRange(from, to).map {
+      case Nil => NotFound
+      case list: List[Header] => Ok(list.asJson)
+    }
+  }
+
+  def listHeadersByHeightRangeView(from: Int, to: Int): Action[AnyContent] = Action.async {
+    historyService.getHeadersByHeightRange(from, to).map {
+      case Nil => NotFound
+      case list: List[Header] => Ok(getHeaderList(list))
+    }
   }
 
 }
