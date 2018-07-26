@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.HistoryService
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
