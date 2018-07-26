@@ -7,7 +7,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{HistoryService, TransactionsService}
 import scala.concurrent.ExecutionContext
-import views.html.getTransactions
 import views.html.{getBlock => getBlockView}
 
 

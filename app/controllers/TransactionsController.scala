@@ -5,9 +5,10 @@ import javax.inject.Inject
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
+import views.html.getTransactions
+
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
-import views.html.getTransactions
 
 class TransactionsController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
@@ -78,7 +79,10 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findTransaction(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findTransaction(id)
-      .map(tx => Ok(getTransactions(tx.get)))
+      .map {
+        case Some(tx) => Ok(getTransactions(tx))
+        case None => NotFound
+      }
       .recover {
         case NonFatal(_) => BadRequest
       }
