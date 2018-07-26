@@ -15,10 +15,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getHeader(id: String): Action[AnyContent] = Action.async {
     historyService
       .getHeader(id)
-      .map {
-        case Some(header) => Ok(header.asJson)
-        case None => NotFound
-      }
+      .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -36,10 +33,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def getBestHeaderAtHeight(height: Int): Action[AnyContent] = Action.async {
     historyService
       .getBestHeaderAtHeight(height)
-      .map {
-        case Some(header) => Ok(header.asJson)
-        case None => NotFound
-      }
+      .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
