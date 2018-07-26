@@ -26,11 +26,11 @@
             <tr><td>feesTotal: @requestBlock.header.feesTotal</td></tr>
             <tr><td>txsSize: @requestBlock.header.txsSize</td></tr>
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
-            <tr><td>@for(transaction <- requestBlock.payload) {
-                <a href ="@routes.TransactionsController.listByBlockIdApi(transaction.id)">@transaction.id</a>
-                isCoinbase: @transaction.isCoinbase
-                blockId: @transaction.blockId
-            }</td>
+            <tr><td><ul>@for(transaction <- requestBlock.payload) {
+                <li><a href ="@routes.TransactionsController.findTransactionView(transaction.id)">@transaction.id</a>
+                    isCoinbase: @transaction.isCoinbase
+                    </li>
+            }</ul> </td>
             </tr>
         </table>
         </center>
