@@ -7,7 +7,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.HistoryService
 import views.html.{getHeader,getHeaderList}
-
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
