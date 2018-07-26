@@ -27,7 +27,7 @@
             <tr><td>txsSize: @requestBlock.header.txsSize</td></tr>
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
             <tr><td>@for(transaction <- requestBlock.payload) {
-                <a href ="@routes.TransactionsController.findTransaction(transaction.id)">@transaction.id</a>
+                <a href ="@routes.TransactionsController.listByBlockIdApi(transaction.id)">@transaction.id</a>
                 isCoinbase: @transaction.isCoinbase
                 blockId: @transaction.blockId
             }</td>

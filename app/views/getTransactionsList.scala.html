@@ -1,0 +1,17 @@
+@(transactions: List[Transaction])
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>get transactions</title>
+    </head>
+    <body>
+        <center> <table width="50%" border="1">
+            @for(transaction <- transactions) {
+                <tr><td>id: @transaction.id</td></tr>
+                <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
+                <tr><td>blockId: @transaction.blockId</td></tr>
+            }
+        </table>
+        </center>
+    </body>
+</html>

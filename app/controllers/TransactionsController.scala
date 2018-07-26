@@ -2,10 +2,12 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.Inject
+import models.Transaction
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
-import views.html.getTransactions
+import views.html.{getTransactions, getTransactionsList}
+
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
@@ -75,22 +77,32 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findTransaction(id: String): Action[AnyContent] = Action.async {
-    transactionsService
-      .findTransaction(id)
-      .map (tx => Ok(tx.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
+  def findTransactionApi(id: String): Action[AnyContent] = Action.async {
+    transactionsService.findTransaction(id).map {
+      case Some(transaction) => Ok(transaction.asJson)
+      case None => NotFound
+    }
   }
 
-  def listByBlockId(blockId: String): Action[AnyContent] = Action.async {
-    transactionsService
-      .listTransactionsByBlockId(blockId)
-      .map(tx => Ok(tx.asJson))
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
+  def findTransactionView(id: String): Action[AnyContent] = Action.async {
+    transactionsService.findTransaction(id).map {
+      case Some(transaction) => Ok(getTransactions(transaction))
+      case None => NotFound
+    }
+  }
+
+  def listByBlockIdApi(blockId: String): Action[AnyContent] = Action.async {
+    transactionsService.listTransactionsByBlockId(blockId).map {
+      case Nil => NotFound
+      case list: List[Transaction] => Ok(list.asJson)
+    }
+  }
+
+  def listByBlockIdView(blockId: String): Action[AnyContent] = Action.async {
+    transactionsService.listTransactionsByBlockId(blockId).map {
+      case Nil => NotFound
+      case list: List[Transaction] => Ok(getTransactionsList(list))
+    }
   }
 
   def outputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
