@@ -76,7 +76,7 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
       false,
       1532036033902L
     )
-    val transactions = List(sampleTransaction2, sampleTransaction1)
+    val transactions: List[Transaction] = List(sampleTransaction2, sampleTransaction1)
   }
 
 }
