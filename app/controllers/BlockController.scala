@@ -6,23 +6,39 @@ import models.Block
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{HistoryService, TransactionsService}
-import scala.concurrent.ExecutionContext
+import views.html.getBlock
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class BlockController @Inject()
 (cc: ControllerComponents, historyService: HistoryService, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
-  def findBlock(id: String): Action[AnyContent] = Action.async {
+  def findBlockView(id: String): Action[AnyContent] = Action.async {
+    findBlock(id).map {
+      case Some(block) => Ok(getBlock(block))
+      case None => NotFound
+    }
+  }
+
+  def findBlockApi(id: String): Action[AnyContent] = Action.async {
+    findBlock(id).map {
+      case Some(block) => Ok(block.asJson)
+      case None => NotFound
+    }
+  }
+
+  def findBlock(id: String): Future[Option[Block]] = {
     val headerFuture = historyService.findHeader(id)
     val payloadFuture = transactionsService.listTransactionsByBlockId(id)
     for {
       headerOpt <- headerFuture
       payload <- payloadFuture
     } yield headerOpt match {
-      case Some(header) => Ok(Block(header, payload).asJson)
-      case None => NotFound
+      case Some(header) => Some(Block(header, payload))
+      case None => None
     }
   }
+
 
 }

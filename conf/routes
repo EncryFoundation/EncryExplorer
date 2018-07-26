@@ -1,11 +1,16 @@
 GET        /                                                         controllers.HomeController.index
 GET        /assets/*file                                             controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /history/headers/:modifierId                              controllers.HistoryController.findHeader(modifierId: String)
-GET        /history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeight(height: Int)
-GET        /history/bestHeaderAt/:height                             controllers.HistoryController.findBestHeaderAtHeight(height: Int)
-GET        /history/lastHeaders/:qty                                 controllers.HistoryController.listLastHeaders(qty: Int)
-GET        /history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRange(from: Int, to: Int)
+GET        /api/history/headers/:modifierId                          controllers.HistoryController.findHeaderApi(modifierId: String)
+GET        /history/headers/:modifierId                              controllers.HistoryController.findHeaderView(modifierId: String)
+GET        /api/history/headersAt/:height                            controllers.HistoryController.findHeaderAtHeightApi(height: Int)
+GET        /history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeightView(height: Int)
+GET        /api/history/bestHeaderAt/:height                         controllers.HistoryController.findBestHeaderAtHeightApi(height: Int)
+GET        /history/bestHeaderAt/:height                             controllers.HistoryController.findBestHeaderAtHeightView(height: Int)
+GET        /api/history/lastHeaders/:qty                             controllers.HistoryController.listLastHeadersApi(qty: Int)
+GET        /history/lastHeaders/:qty                                 controllers.HistoryController.listLastHeadersView(qty: Int)
+GET        /api/history/headers/range/:from/:to                      controllers.HistoryController.listHeadersByHeightRangeApi(from: Int, to: Int)
+GET        /history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
 
 GET        /transactions/output/:modifierId                          controllers.TransactionsController.findOutput(modifierId: String)
 GET        /transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddress(address: String)
@@ -22,4 +27,5 @@ GET        /transactions/block/:modifierId/outputs                   controllers
 GET        /transactions/block/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputByBlockId(modifierId: String)
 GET        /transactions/tx/range/:from/:to                          controllers.TransactionsController.findTransactionByBlockHeightRange(from: Int, to: Int)
 
-GET        /block/:id                                                controllers.BlockController.findBlock(id: String)
+GET        /api/block/:id                                            controllers.BlockController.findBlockApi(id: String)
+GET        /block/:id                                                controllers.BlockController.findBlockView(id: String)
