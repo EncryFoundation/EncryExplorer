@@ -19,7 +19,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
 
     "process header requests by id" in new HistoryControllerSpecWiring {
       when(historyServiceMock.findHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.findHeader(sampleHeaderId).apply(FakeRequest())
+      val result: Future[Result] = controller.findHeaderApi(sampleHeaderId).apply(FakeRequest())
       verify(historyServiceMock).findHeader(eq_(sampleHeaderId))
       status(result) shouldBe OK
     }
@@ -29,7 +29,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#findHeaderAtHeight" should {
     "return headers at given height" in new HistoryControllerSpecWiring {
       when(historyServiceMock.listHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
-      val result: Future[Result] = controller.findHeaderAtHeight(sampleHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.findHeaderAtHeightApi(sampleHeight).apply(FakeRequest())
       verify(historyServiceMock).listHeadersAtHeight(eq_(sampleHeight))
       status(result) shouldBe OK
     }
@@ -38,7 +38,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#findBestHeaderAtHeight" should {
     "return header with \"bestChain\" equal true" in new HistoryControllerSpecWiring {
       when(historyServiceMock.findBestHeaderAtHeight(sampleHeight)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.findBestHeaderAtHeight(sampleHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.findBestHeaderAtHeightApi(sampleHeight).apply(FakeRequest())
       verify(historyServiceMock).findBestHeaderAtHeight(eq_(sampleHeight))
       status(result) shouldBe OK
     }
@@ -47,7 +47,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#listLastHeaders" should {
     "return header with \"bestChain\" equal true and lowest height" in new HistoryControllerSpecWiring{
       when(historyServiceMock.listLastHeaders(5)).thenReturn(Future.successful(List(oneLevelLowerHeader)))
-      val result: Future[Result] = controller.listLastHeaders(5).apply(FakeRequest())
+      val result: Future[Result] = controller.listLastHeadersApi(5).apply(FakeRequest())
       verify(historyServiceMock).listLastHeaders(eq_(5))
       status(result) shouldBe OK
     }
@@ -56,7 +56,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#listHeadersByHeightRange" should {
     "return headers in given height range" in new HistoryControllerSpecWiring {
       when(historyServiceMock.listHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight)).thenReturn(Future.successful(List(oneLevelLowerHeader, sampleHeader)))
-      val result: Future[Result] = controller.listHeadersByHeightRange(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.listHeadersByHeightRangeApi(oneLevelLowerHeader.height, sampleHeight).apply(FakeRequest())
       verify(historyServiceMock).listHeadersByHeightRange(eq_(oneLevelLowerHeader.height), eq_(sampleHeight))
       status(result) shouldBe OK
     }

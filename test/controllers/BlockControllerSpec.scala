@@ -16,11 +16,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
 
-  "BlockController#findBlock" should {
+  "BlockController#findBlockApi" should {
     "find block by id if exists" in new BlockControllerSpecWiring {
       when(transactionsServiceMock.listTransactionsByBlockId(sampleBlockId)).thenReturn(Future.successful(transactions))
       when(historyServiceMock.findHeader(sampleBlockId)).thenReturn(Future.successful(Some(sampleHeader)))
-      val result: Future[Result] = controller.findBlock(sampleBlockId).apply(FakeRequest())
+      val result: Future[Result] = controller.findBlockApi(sampleBlockId).apply(FakeRequest())
       verify(transactionsServiceMock).listTransactionsByBlockId(eq_(sampleBlockId))
       verify(historyServiceMock).findHeader(eq_(sampleBlockId))
       status(result) shouldBe OK
@@ -29,7 +29,7 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
     "return 404 if block not found" in new BlockControllerSpecWiring {
       when(transactionsServiceMock.listTransactionsByBlockId(sampleBlockId)).thenReturn(Future.successful(List[Transaction]()))
       when(historyServiceMock.findHeader(sampleBlockId)).thenReturn(Future.successful(None))
-      val result: Future[Result] = controller.findBlock(sampleBlockId).apply(FakeRequest())
+      val result: Future[Result] = controller.findBlockApi(sampleBlockId).apply(FakeRequest())
       verify(transactionsServiceMock).listTransactionsByBlockId(eq_(sampleBlockId))
       verify(historyServiceMock).findHeader(eq_(sampleBlockId))
       status(result) shouldBe 404
