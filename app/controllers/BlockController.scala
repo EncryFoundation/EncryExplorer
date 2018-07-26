@@ -2,7 +2,7 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import models.Block
+import models.{Block, Header, Transaction}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{HistoryService, TransactionsService}
@@ -29,8 +29,8 @@ class BlockController @Inject()
   }
 
   def findBlock(id: String): Future[Option[Block]] = {
-    val headerFuture = historyService.findHeader(id)
-    val payloadFuture = transactionsService.listTransactionsByBlockId(id)
+    val headerFuture: Future[Option[Header]] = historyService.findHeader(id)
+    val payloadFuture: Future[List[Transaction]] = transactionsService.listTransactionsByBlockId(id)
     for {
       headerOpt <- headerFuture
       payload <- payloadFuture
@@ -39,6 +39,5 @@ class BlockController @Inject()
       case None => None
     }
   }
-
 
 }

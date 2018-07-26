@@ -7,7 +7,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
 import views.html.{getTransactions, getTransactionsList}
-
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 
