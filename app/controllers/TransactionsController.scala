@@ -5,9 +5,9 @@ import javax.inject.Inject
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.TransactionsService
+import views.html.getTransactions
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
-import views.html.getTransactions
 
 class TransactionsController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
