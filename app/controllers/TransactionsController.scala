@@ -78,10 +78,8 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
   def findTransaction(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findTransaction(id)
-      .map {
-        case Some(tx) => Ok(getTransactions(tx))
-        case None => NotFound
-      }.recover {
+      .map (tx => Ok(tx.asJson))
+      .recover {
         case NonFatal(_) => BadRequest
       }
   }

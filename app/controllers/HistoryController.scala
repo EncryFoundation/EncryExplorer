@@ -7,7 +7,6 @@ import play.api.mvc._
 import services.HistoryService
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
-import views.html.{getBlock => getHeaderView, getHeaderList => getHeaderListView}
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
@@ -52,7 +51,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def listHeadersByHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
     historyService
       .listHeadersByHeightRange(from, to)
-      .map(header => Ok(getHeaderListView(header)))
+      .map(header => Ok(header.asJson))
       .recover {
         case NonFatal(_) => BadRequest
       }
