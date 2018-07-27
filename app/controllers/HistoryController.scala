@@ -1,7 +1,7 @@
 package controllers
 
 import java.text.SimpleDateFormat
-import java.util.Date
+import fs2.internal.NonFatal
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
 import models.Header
@@ -9,7 +9,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.HistoryService
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
@@ -102,20 +103,26 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   }
 
   def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
-    val parsedDate: Date = sdf.parse(date)
-    val epoch: Long = parsedDate.getTime
-    historyService.findHeadersByDate(epoch, count).map {
+    Future.fromTry(
+      Try(sdf.parse(date))).flatMap {
+      date => historyService.findHeadersByDate(date.getTime, count)
+    }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
-    val parsedDate: Date = sdf.parse(date)
-    val epoch: Long = parsedDate.getTime
-    historyService.findHeadersByDate(epoch, count).map {
+    Future.fromTry(
+      Try(sdf.parse(date))).flatMap {
+      date => historyService.findHeadersByDate(date.getTime, count)
+    }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
