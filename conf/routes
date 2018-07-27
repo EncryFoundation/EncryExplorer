@@ -8,6 +8,8 @@ GET        /history/bestHeaderAt/:height                             controllers
 GET        /history/lastHeaders/:qty                                 controllers.HistoryController.getLastHeaders(qty: Int)
 GET        /api/history/headers/range/:from/:to                      controllers.HistoryController.listHeadersByHeightRangeApi(from: Int, to: Int)
 GET        /history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
+GET        /history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
+GET        /api/history/headers/findByCount/:from/:count             controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
 
 GET        /transactions/output/:modifierId                          controllers.TransactionsController.findOutput(modifierId: String)
 GET        /transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddress(address: String)

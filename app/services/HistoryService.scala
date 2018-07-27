@@ -27,4 +27,8 @@ class HistoryService @Inject()(historyDao: HistoryDao)(implicit ec: ExecutionCon
     if (from >= 0 && to >= from) historyDao.findByRange(from, to)
     else Future.failed(new IllegalArgumentException)
 
+  def findHeadersByCount(from: Int, count: Int): Future[List[Header]] =
+    if (from >= 0 && count >= 0) historyDao.findByCount(from, count)
+    else Future.failed(new IllegalArgumentException)
+
 }
