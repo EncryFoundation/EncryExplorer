@@ -1,7 +1,7 @@
 package controllers
 
 import java.text.SimpleDateFormat
-import fs2.internal.NonFatal
+import scala.util.control.NonFatal
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
 import models.Header
@@ -104,8 +104,9 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date))).flatMap {
-      date => historyService.findHeadersByDate(date.getTime, count)
+      Try(sdf.parse(date)))
+      .flatMap { date =>
+        historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
@@ -116,8 +117,9 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date))).flatMap {
-      date => historyService.findHeadersByDate(date.getTime, count)
+      Try(sdf.parse(date)))
+      .flatMap { date =>
+        historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
