@@ -30,7 +30,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def findHeadersByCountView(from: Int, count: Int): Action[AnyContent] = Action.async {
     historyService.findHeadersByCount(from, count).map {
       case Nil => NotFound
-      case list: List[Header] => Ok(getHeaderList(list))
+      case list: List[Header] => Ok(getHeaderListView(list))
     }
   }
 
@@ -39,7 +39,8 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
     }
-    
+  }
+
   def findHeaderAtHeightView(height: Int): Action[AnyContent] = Action.async {
     historyService.listHeadersAtHeight(height).map {
       case Nil => NotFound
