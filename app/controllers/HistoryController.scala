@@ -104,8 +104,8 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date)))
-      .flatMap { date =>
+      Try(sdf.parse(date))
+    ).flatMap { date =>
         historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
@@ -117,8 +117,8 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date)))
-      .flatMap { date =>
+      Try(sdf.parse(date))
+    ).flatMap { date =>
         historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
