@@ -13,7 +13,7 @@ import scala.util.control.NonFatal
 class TransactionsController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
-  def findOutput(id: String): Action[AnyContent] = Action.async {
+  def findOutputApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findOutput(id)
       .map(output => Ok(output.asJson))
@@ -22,7 +22,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def listOutputsByAddress(address: String): Action[AnyContent] = Action.async {
+  def listOutputsByAddressApi(address: String): Action[AnyContent] = Action.async {
     transactionsService
       .listOutputsByAddress(address)
       .map(outputs => Ok(outputs.asJson))
@@ -31,7 +31,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def listUnspentOutputsByAddress(address: String): Action[AnyContent] = Action.async {
+  def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = Action.async {
     transactionsService
       .listOutputsByAddress(address, unspentOnly = true)
       .map(outputs => Ok(outputs.asJson))
@@ -40,7 +40,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findOutputsByTxId(id: String): Action[AnyContent] = Action.async {
+  def findOutputsByTxIdApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findOutputsByTxId(id)
       .map(outputs => Ok(outputs.asJson))
@@ -49,7 +49,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findUnspentOutputsByTxId(id: String): Action[AnyContent] = Action.async {
+  def findUnspentOutputsByTxIdApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findUnspentOutputsByTxId(id)
       .map(outputs => Ok(outputs.asJson))
@@ -58,7 +58,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findInput(id: String): Action[AnyContent] = Action.async {
+  def findInputApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findInput(id)
       .map(inputs => Ok(inputs.asJson))
@@ -67,7 +67,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def listInputsByTxId(txId: String): Action[AnyContent] = Action.async {
+  def listInputsByTxIdApi(txId: String): Action[AnyContent] = Action.async {
     transactionsService
       .listInputs(txId)
       .map(inputs => Ok(inputs.asJson))
@@ -104,7 +104,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
     }
   }
 
-  def outputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+  def outputsByBlockHeightApi(height: Int): Action[AnyContent] = Action.async {
     transactionsService
       .listOutputsByBlockHeight(height)
       .map(tx => Ok(tx.asJson))
@@ -113,7 +113,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def unspentOutputsByBlockHeight(height: Int): Action[AnyContent] = Action.async {
+  def unspentOutputsByBlockHeightApi(height: Int): Action[AnyContent] = Action.async {
     transactionsService
       .listOutputsByBlockHeightUnspent(height)
       .map(tx => Ok(tx.asJson))
@@ -122,7 +122,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findOutputByBlockId(id: String): Action[AnyContent] = Action.async {
+  def findOutputByBlockIdApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findOutputByBlockId(id)
       .map(tx => Ok(tx.asJson))
@@ -131,7 +131,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findUnspentOutputByBlockId(id: String): Action[AnyContent] = Action.async {
+  def findUnspentOutputByBlockIdApi(id: String): Action[AnyContent] = Action.async {
     transactionsService
       .findUnspentOutputByBlockId(id)
       .map(tx => Ok(tx.asJson))
@@ -140,7 +140,7 @@ class TransactionsController @Inject()(cc: ControllerComponents, transactionsSer
       }
   }
 
-  def findTransactionByBlockHeightRange(from: Int, to: Int): Action[AnyContent] = Action.async {
+  def findTransactionByBlockHeightRangeApi(from: Int, to: Int): Action[AnyContent] = Action.async {
     transactionsService
       .findTransactionByBlockHeightRange(from, to)
       .map(tx => Ok(tx.asJson))
