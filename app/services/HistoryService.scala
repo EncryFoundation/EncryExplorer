@@ -31,4 +31,5 @@ class HistoryService @Inject()(historyDao: HistoryDao)(implicit ec: ExecutionCon
     if (from >= 0 && count >= 0) historyDao.findByCount(from, count)
     else Future.failed(new IllegalArgumentException)
 
+  def findHeadersByDate(time: Long, count: Int) = historyDao.findHeadersByDate(time, count)
 }

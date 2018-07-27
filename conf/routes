@@ -1,8 +1,8 @@
 GET        /                                                             controllers.HomeController.index
 GET        /assets/*file                                                 controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
-GET        /api/history/headers/findByCount/:from/:count             controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
+GET        /history/headers/findByCount/:from/:count                     controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
+GET        /api/history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
 GET        /api/history/headers/:modifierId                              controllers.HistoryController.findHeaderApi(modifierId: String)
 GET        /history/headers/:modifierId                                  controllers.HistoryController.findHeaderView(modifierId: String)
 GET        /api/history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeightApi(height: Int)
@@ -33,3 +33,4 @@ GET        /api/transactions/tx/range/:from/:to                          control
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)
+GET        /findHeadersByDate/:date/:count                                            controllers.HistoryController.findHeadersByDate(date: String, count: Int)

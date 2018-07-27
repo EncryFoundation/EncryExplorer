@@ -1,5 +1,7 @@
 package controllers
 
+import java.text.SimpleDateFormat
+import java.util.Date
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
 import models.Header
@@ -51,7 +53,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def findHeaderAtHeightApi(height: Int): Action[AnyContent] = Action.async {
     historyService.listHeadersAtHeight(height).map {
       case Nil => NotFound
-      case list: List[Header]  => Ok(list.asJson)
+      case list: List[Header] => Ok(list.asJson)
     }
   }
 
@@ -72,7 +74,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   def listLastHeadersApi(qty: Int): Action[AnyContent] = Action.async {
     historyService.listLastHeaders(qty).map {
       case Nil => NotFound
-      case list: List[Header]  => Ok(list.asJson)
+      case list: List[Header] => Ok(list.asJson)
     }
   }
 
@@ -92,6 +94,16 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def listHeadersByHeightRangeView(from: Int, to: Int): Action[AnyContent] = Action.async {
     historyService.listHeadersByHeightRange(from, to).map {
+      case Nil => NotFound
+      case list: List[Header] => Ok(getHeaderListView(list))
+    }
+  }
+
+  def findHeadersByDate(date: String, count: Int): Action[AnyContent] = Action.async {
+    val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    val parsedDate: Date = sdf.parse(date)
+    val epoch: Long = parsedDate.getTime
+    historyService.findHeadersByDate(epoch, count).map{
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
     }
