@@ -101,12 +101,21 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
     }
   }
 
-  def findHeadersByDate(date: String, count: Int): Action[AnyContent] = Action.async {
+  def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
     val parsedDate: Date = sdf.parse(date)
     val epoch: Long = parsedDate.getTime
-    historyService.findHeadersByDate(epoch, count).map{
+    historyService.findHeadersByDate(epoch, count).map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }
+  }
+
+  def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
+    val parsedDate: Date = sdf.parse(date)
+    val epoch: Long = parsedDate.getTime
+    historyService.findHeadersByDate(epoch, count).map {
+      case Nil => NotFound
+      case list: List[Header] => Ok(list.asJson)
     }
   }
 
