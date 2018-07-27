@@ -12,16 +12,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar with ScalaFutures {
 
-  "HistoryService#getHeader" should "find header by is's id if exists" in new HistoryServiceSpecWiring {
+  "HistoryService#getBlock" should "find header by is's id if exists" in new HistoryServiceSpecWiring {
       when(historyDaoMock.findHeader(sampleHeaderId)).thenReturn(Future.successful(Some(sampleHeader)))
-      whenReady(service.getHeader(sampleHeaderId)) { result =>
+      whenReady(service.findHeader(sampleHeaderId)) { result =>
         verify(historyDaoMock).findHeader(eq_(sampleHeaderId))
         result shouldBe Some(sampleHeader)
       }
     }
 
   it should "validate that header id is valid" in new HistoryServiceSpecWiring {
-    whenReady(service.getHeader(incorrectHeaderId).failed) { ex =>
+    whenReady(service.findHeader(incorrectHeaderId).failed) { ex =>
       verify(historyDaoMock, never()).findHeader(eq_(sampleHeaderId))
       ex shouldBe a[DecoderException]
     }
@@ -29,14 +29,14 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
 
   "HistoryService#getHeadersAtHeight" should "find headers with given height" in new HistoryServiceSpecWiring {
     when(historyDaoMock.findHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
-    whenReady(service.getHeadersAtHeight(sampleHeight)) { result =>
+    whenReady(service.listHeadersAtHeight(sampleHeight)) { result =>
       verify(historyDaoMock).findHeadersAtHeight(eq_(sampleHeight))
       result shouldBe List(sampleHeader)
     }
   }
 
   "HistoryService#getHeadersAtHeight" should "validate height" in new HistoryServiceSpecWiring {
-    whenReady(service.getHeadersAtHeight(-1).failed) { ex =>
+    whenReady(service.listHeadersAtHeight(-1).failed) { ex =>
       verify(historyDaoMock, never()).findHeadersAtHeight(eq_(sampleHeight))
       ex shouldBe a[IllegalArgumentException]
     }
@@ -44,14 +44,14 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
 
   "HistoryService#getBestHeaderAtHeight" should "find best header with given height" in new HistoryServiceSpecWiring {
     when(historyDaoMock.findBestHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(Some(sampleHeader)))
-    whenReady(service.getBestHeaderAtHeight(sampleHeight)) { result =>
+    whenReady(service.findBestHeaderAtHeight(sampleHeight)) { result =>
       verify(historyDaoMock).findBestHeadersAtHeight(eq_(sampleHeight))
       result shouldBe Some(sampleHeader)
     }
   }
 
   "HistoryService#getBestHeaderAtHeight" should "validate height" in new HistoryServiceSpecWiring {
-    whenReady(service.getBestHeaderAtHeight(-1).failed) { ex =>
+    whenReady(service.findBestHeaderAtHeight(-1).failed) { ex =>
       verify(historyDaoMock, never()).findBestHeadersAtHeight(eq_(sampleHeight))
       ex shouldBe a[IllegalArgumentException]
     }
@@ -59,14 +59,14 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
 
   "HistoryService#getLastHeaders" should "find last qty headers" in new HistoryServiceSpecWiring {
     when(historyDaoMock.findLastHeaders(1)).thenReturn(Future.successful(List(sampleHeader)))
-    whenReady(service.getLastHeaders(1)) { result =>
+    whenReady(service.listLastHeaders(1)) { result =>
       verify(historyDaoMock).findLastHeaders(eq_(1))
       result shouldBe List(sampleHeader)
     }
   }
 
   "HistoryService#getLastHeaders" should "validate height" in new HistoryServiceSpecWiring {
-    whenReady(service.getLastHeaders(-1).failed) { ex =>
+    whenReady(service.listLastHeaders(-1).failed) { ex =>
       verify(historyDaoMock, never()).findLastHeaders(eq_(-1))
       ex shouldBe a[IllegalArgumentException]
     }
@@ -74,21 +74,21 @@ class HistoryServiceSpec extends FlatSpecLike with Matchers with MockitoSugar wi
 
   "HistoryService#getHeadersByHeightRange" should "find headers in given range" in new HistoryServiceSpecWiring {
     when(historyDaoMock.findByRange(sampleHeight, sampleHeight + 1)).thenReturn(Future.successful(List(sampleHeader)))
-    whenReady(service.getHeadersByHeightRange(sampleHeight, sampleHeight + 1)) { result =>
+    whenReady(service.listHeadersByHeightRange(sampleHeight, sampleHeight + 1)) { result =>
       verify(historyDaoMock).findByRange(eq_(sampleHeight), eq_(sampleHeight + 1))
       result shouldBe List(sampleHeader)
     }
   }
 
   "HistoryService#getHeadersByHeightRange" should "validate that both from and to are non-negative" in new HistoryServiceSpecWiring {
-    whenReady(service.getHeadersByHeightRange(-1,  1).failed) { ex =>
+    whenReady(service.listHeadersByHeightRange(-1,  1).failed) { ex =>
       verify(historyDaoMock, never()).findByRange(eq_(-1), eq_(1))
       ex shouldBe a[IllegalArgumentException]
     }
   }
 
   "HistoryService#getHeadersByHeightRange" should "validate that both from is less or equal to \"to\"" in new HistoryServiceSpecWiring {
-    whenReady(service.getHeadersByHeightRange(3,  1).failed) { ex =>
+    whenReady(service.listHeadersByHeightRange(3,  1).failed) { ex =>
       verify(historyDaoMock, never()).findByRange(eq_(3), eq_(1))
       ex shouldBe a[IllegalArgumentException]
     }

@@ -32,7 +32,6 @@ class TransactionsService @Inject()(transactionsDao: TransactionsDao)(implicit e
     Future.fromTry(Base16.decode(txId))
       .flatMap(_ => transactionsDao.listInputs(txId))
 
-
   def findTransaction(id: String): Future[Option[Transaction]] =
     Future.fromTry(Base16.decode(id))
       .flatMap(_ => transactionsDao.findTransaction(id))
