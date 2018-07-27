@@ -33,4 +33,4 @@ GET        /api/transactions/tx/range/:from/:to                          control
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)
-GET        /findHeadersByDate/:date/:count                                            controllers.HistoryController.findHeadersByDate(date: String, count: Int)
+GET        /findHeadersByDate/:date/:count                               controllers.HistoryController.findHeadersByDate(date: String, count: Int)

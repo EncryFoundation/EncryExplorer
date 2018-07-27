@@ -15,6 +15,8 @@ import scala.concurrent.ExecutionContext
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
+  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+
   def findHeaderView(id: String): Action[AnyContent] = Action.async {
     historyService.findHeader(id).map {
       case Some(header) => Ok(getHeaderView(header))
@@ -100,7 +102,6 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
   }
 
   def findHeadersByDate(date: String, count: Int): Action[AnyContent] = Action.async {
-    val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
     val parsedDate: Date = sdf.parse(date)
     val epoch: Long = parsedDate.getTime
     historyService.findHeadersByDate(epoch, count).map{
