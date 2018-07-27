@@ -22,6 +22,6 @@ object HeadersQueryRepository {
     sql"SELECT * FROM headers WHERE height BETWEEN $from AND $to".query[Header].to[List]
 
   def findByCountQuery(from:Int, count: Int): ConnectionIO[List[Header]] =
-    sql"SELECT * FROM headers WHERE height BETWEEN $from AND ($from + $count - 1)".query[Header].to[List]
+    sql"SELECT * FROM headers WHERE height >= $from LIMIT $count".query[Header].to[List]
 }
 
