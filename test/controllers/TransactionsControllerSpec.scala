@@ -19,7 +19,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findOutput" should {
     "find output by it's id if exists" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findOutput(sampleOutputId)).thenReturn(Future.successful(Some(sampleOutput)))
-      val result: Future[Result] = controller.findOutput(sampleOutputId).apply(FakeRequest())
+      val result: Future[Result] = controller.findOutputApi(sampleOutputId).apply(FakeRequest())
       verify(transactionsServiceMock).findOutput(eq_(sampleOutputId))
       status(result) shouldBe OK
     }
@@ -28,7 +28,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#listOutputsByAddress" should {
     "return all outputs w given address" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listOutputsByAddress(sampleAddress, false)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.listOutputsByAddress(sampleAddress).apply(FakeRequest())
+      val result: Future[Result] = controller.listOutputsByAddressApi(sampleAddress).apply(FakeRequest())
       verify(transactionsServiceMock).listOutputsByAddress(eq_(sampleAddress), eq_(false))
       status(result) shouldBe OK
     }
@@ -37,7 +37,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#listUnspentOutputsByAddress" should {
     "return all unspent outputs w given address" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listOutputsByAddress(sampleAddress, true)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.listUnspentOutputsByAddress(sampleAddress).apply(FakeRequest())
+      val result: Future[Result] = controller.listUnspentOutputsByAddressApi(sampleAddress).apply(FakeRequest())
       verify(transactionsServiceMock).listOutputsByAddress(eq_(sampleAddress), eq_(true))
       status(result) shouldBe OK
     }
@@ -46,7 +46,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findOutputsByTxId" should {
     "return all outputs w given transaction id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findOutputsByTxId(sampleTxId)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.findOutputsByTxId(sampleTxId).apply(FakeRequest())
+      val result: Future[Result] = controller.findOutputsByTxIdApi(sampleTxId).apply(FakeRequest())
       verify(transactionsServiceMock).findOutputsByTxId(eq_(sampleTxId))
       status(result) shouldBe OK
     }
@@ -55,7 +55,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findUnspentOutputsByTxId" should {
     "return all unspent outputs w given transaction id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findUnspentOutputsByTxId(sampleTxId)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.findUnspentOutputsByTxId(sampleTxId).apply(FakeRequest())
+      val result: Future[Result] = controller.findUnspentOutputsByTxIdApi(sampleTxId).apply(FakeRequest())
       verify(transactionsServiceMock).findUnspentOutputsByTxId(eq_(sampleTxId))
       status(result) shouldBe OK
     }
@@ -64,7 +64,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findInput" should {
     "find input by it's id if exists" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findInput(sampleInputId)).thenReturn(Future.successful(Some(sampleInput)))
-      val result: Future[Result] = controller.findInput(sampleInputId).apply(FakeRequest())
+      val result: Future[Result] = controller.findInputApi(sampleInputId).apply(FakeRequest())
       verify(transactionsServiceMock).findInput(eq_(sampleInputId))
       status(result) shouldBe OK
     }
@@ -73,7 +73,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#listInputsByTxId" should {
     "return all inputs w given transaction id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listInputs(sampleTxId)).thenReturn(Future.successful(List(sampleInput)))
-      val result: Future[Result] = controller.listInputsByTxId(sampleTxId).apply(FakeRequest())
+      val result: Future[Result] = controller.listInputsByTxIdApi(sampleTxId).apply(FakeRequest())
       verify(transactionsServiceMock).listInputs(eq_(sampleTxId))
       status(result) shouldBe OK
     }
@@ -82,7 +82,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findTransaction" should {
     "find transactions by it's id if exists" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findTransaction(sampleTxId)).thenReturn(Future.successful(Some(sampleTransaction)))
-      val result: Future[Result] = controller.findTransaction(sampleTxId).apply(FakeRequest())
+      val result: Future[Result] = controller.findTransactionApi(sampleTxId).apply(FakeRequest())
       verify(transactionsServiceMock).findTransaction(eq_(sampleTxId))
       status(result) shouldBe OK
     }
@@ -91,7 +91,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#listByBlockId" should {
     "find transactions from block with given id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listTransactionsByBlockId(sampleBlockId)).thenReturn(Future.successful(List(sampleTransaction)))
-      val result: Future[Result] = controller.listByBlockId(sampleBlockId).apply(FakeRequest())
+      val result: Future[Result] = controller.listByBlockIdApi(sampleBlockId).apply(FakeRequest())
       verify(transactionsServiceMock).listTransactionsByBlockId(eq_(sampleBlockId))
       status(result) shouldBe OK
     }
@@ -100,7 +100,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#outputsByBlockHeight" should {
     "find outputs from blocks on given height" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listOutputsByBlockHeight(sampleBlockHeight)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.outputsByBlockHeight(sampleBlockHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.outputsByBlockHeightApi(sampleBlockHeight).apply(FakeRequest())
       verify(transactionsServiceMock).listOutputsByBlockHeight(eq_(sampleBlockHeight))
       status(result) shouldBe OK
     }
@@ -109,7 +109,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#unspentOutputsByBlockHeight" should {
     "find unspent outputs from blocks on given height" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.listOutputsByBlockHeightUnspent(sampleBlockHeight)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.unspentOutputsByBlockHeight(sampleBlockHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.unspentOutputsByBlockHeightApi(sampleBlockHeight).apply(FakeRequest())
       verify(transactionsServiceMock).listOutputsByBlockHeightUnspent(eq_(sampleBlockHeight))
       status(result) shouldBe OK
     }
@@ -118,7 +118,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findOutputByBlockId" should {
     "find outputs from block with given id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findOutputByBlockId(sampleBlockId)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.findOutputByBlockId(sampleBlockId).apply(FakeRequest())
+      val result: Future[Result] = controller.findOutputByBlockIdApi(sampleBlockId).apply(FakeRequest())
       verify(transactionsServiceMock).findOutputByBlockId(eq_(sampleBlockId))
       status(result) shouldBe OK
     }
@@ -127,7 +127,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findUnspentOutputByBlockId" should {
     "find unspent outputs from block with given id" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findUnspentOutputByBlockId(sampleBlockId)).thenReturn(Future.successful(List(sampleOutput)))
-      val result: Future[Result] = controller.findUnspentOutputByBlockId(sampleBlockId).apply(FakeRequest())
+      val result: Future[Result] = controller.findUnspentOutputByBlockIdApi(sampleBlockId).apply(FakeRequest())
       verify(transactionsServiceMock).findUnspentOutputByBlockId(eq_(sampleBlockId))
       status(result) shouldBe OK
     }
@@ -136,7 +136,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   "TransactionsController#findTransactionByBlockHeightRange" should {
     "find transactions from blocks in given height range" in new TransactionControllerSpecWiring {
       when(transactionsServiceMock.findTransactionByBlockHeightRange(sampleBlockHeight, sampleBlockHeight + 1)).thenReturn(Future.successful(List(sampleTransaction)))
-      val result: Future[Result] = controller.findTransactionByBlockHeightRange(sampleBlockHeight, sampleBlockHeight + 1).apply(FakeRequest())
+      val result: Future[Result] = controller.findTransactionByBlockHeightRangeApi(sampleBlockHeight, sampleBlockHeight + 1).apply(FakeRequest())
       verify(transactionsServiceMock).findTransactionByBlockHeightRange(eq_(sampleBlockHeight), eq_(sampleBlockHeight + 1))
       status(result) shouldBe OK
     }
