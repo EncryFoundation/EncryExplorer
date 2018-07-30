@@ -16,7 +16,7 @@ import scala.util.Try
 class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
   extends AbstractController(cc) with Circe {
 
-  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
   def findHeaderView(id: String): Action[AnyContent] = Action.async {
     historyService.findHeader(id).map {
@@ -104,7 +104,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date))
+      Try(sdf.parse(date + " 23:59:59"))
     ).flatMap { date =>
         historyService.findHeadersByDate(date.getTime, count)
     }.map {
@@ -117,7 +117,7 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date))
+      Try(sdf.parse(date + " 23:59:59"))
     ).flatMap { date =>
         historyService.findHeadersByDate(date.getTime, count)
     }.map {
