@@ -1,8 +1,8 @@
 GET        /                                                             controllers.HomeController.index
 GET        /assets/*file                                                 controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
-GET        /api/history/headers/findByCount/:from/:count             controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
+GET        /history/headers/findByCount/:from/:count                     controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
+GET        /api/history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
 GET        /api/history/headers/:modifierId                              controllers.HistoryController.findHeaderApi(modifierId: String)
 GET        /history/headers/:modifierId                                  controllers.HistoryController.findHeaderView(modifierId: String)
 GET        /api/history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeightApi(height: Int)
@@ -13,6 +13,8 @@ GET        /api/history/lastHeaders/:qty                                 control
 GET        /history/lastHeaders/:qty                                     controllers.HistoryController.listLastHeadersView(qty: Int)
 GET        /api/history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRangeApi(from: Int, to: Int)
 GET        /history/headers/range/:from/:to                              controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
+GET        /history/headers/findByDateFromTo/:from/:to                   controllers.HistoryController.listHeadersByDateFromToView(from: String, to: String)
+GET        /api/history/headers/findByDateFromTo/:from/:to               controllers.HistoryController.listHeadersByDateFromToApi(from: String, to: String)
 
 GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
 GET        /api/transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddressApi(address: String)
