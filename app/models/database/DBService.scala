@@ -25,12 +25,4 @@ class DBService @Inject()(config: Configuration) {
   private val user: String = config.get[String]("encry.postgres.username")
   private val pass: String = config.get[String]("encry.postgres.password")
 
-  private val dataSource = new HikariDataSource
-  dataSource.setJdbcUrl(config.get[String]("encry.postgres.host"))
-  dataSource.setUsername(config.get[String]("encry.postgres.username"))
-  dataSource.setPassword(config.get[String]("encry.postgres.password"))
-  dataSource.setMaximumPoolSize(5)
-
-  private val pgTransactor: HikariTransactor[IO] = HikariTransactor[IO](dataSource)
-
 }
