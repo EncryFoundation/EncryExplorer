@@ -2,25 +2,56 @@ package services
 
 import javax.inject.Inject
 import scorex.crypto.encode.Base16
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.concurrent.Future.{successful => resolve}
 import play.api.mvc._
 
-class CheckAction(modifierId: String) extends ActionBuilder[Request] {
 
-  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
-    println(request.headers)
-    println(request.uri)
-    println(modifierId)
-
-    if (Base16.decode(modifierId).isSuccess) block(request) else resolve(Results.Forbidden)
-  }
+class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (Base16.decode(modifierId).isSuccess) block(request) else resolve(Results.BadRequest)
 }
 
-class CheckActionFactory {
-  def apply(modifierId: String): CheckAction = new CheckAction(modifierId)
+class Base16CheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(modifierId: String): Base16CheckAction = new Base16CheckAction(parser, modifierId)
 }
+
+class HeightCheckAction(parser: BodyParsers.Default, height: Int) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (height >= 0) block(request) else resolve(Results.BadRequest)
+}
+
+class HeightCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(height: Int): HeightCheckAction = new HeightCheckAction(parser, height)
+}
+
+class QtyCheckAction(parser: BodyParsers.Default, qty: Int) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (qty > 0) block(request) else resolve(Results.BadRequest)
+}
+
+class QtyCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(qty: Int): QtyCheckAction = new QtyCheckAction(parser, qty)
+}
+
+class FromToCheckAction(parser: BodyParsers.Default, from: Int, to: Int) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (from >= 0 && to >= from) block(request) else resolve(Results.BadRequest)
+}
+
+class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(from: Int, to: Int): FromToCheckAction = new FromToCheckAction(parser, from, to)
+}
+
+class FromCountCheckAction(parser: BodyParsers.Default, from: Int, count: Int) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (from >= 0 && count >= 0) block(request) else resolve(Results.BadRequest)
+}
+
+class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(from: Int, count: Int): FromToCheckAction = new FromToCheckAction(parser, from, count)
+}
+
 
 

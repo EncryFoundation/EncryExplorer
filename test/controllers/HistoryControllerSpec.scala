@@ -7,10 +7,10 @@ import org.mockito.ArgumentMatchers.{eq => eq_}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
-import services.HistoryService
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
