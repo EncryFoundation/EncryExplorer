@@ -15,5 +15,4 @@ object TransactionsQueryRepository {
   def findTransactionByBlockHeightRangeQuery(from: Int, to: Int): ConnectionIO[List[Transaction]] =
     sql"SELECT * FROM transactions WHERE block_id IN (SELECT id FROM headers WHERE height BETWEEN $from AND $to)"
       .query[Transaction].to[List]
-
 }

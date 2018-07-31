@@ -1,5 +1,6 @@
 package controllers
 
+import java.text.SimpleDateFormat
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
 import models.{Header, HistoryDao}
@@ -7,7 +8,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services._
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
-
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -18,8 +18,11 @@ class HistoryController @Inject()(cc: ControllerComponents,
                                   fromToCheck: FromToCheckActionFactory,
                                   qtyCheck: QtyCheckActionFactory,
                                   fromCountCheck: FromCountCheckActionFactory,
+                                  dateFromCount: DateFromCountActionFactory,
                                  )
                                  (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
+
+  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
   def findHeaderView(id: String): Action[AnyContent] = base16Check(id).async {
     historyDao.findHeader(id).map {
@@ -105,4 +108,19 @@ class HistoryController @Inject()(cc: ControllerComponents,
     }
   }
 
+  def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
+    historyDao.findHeadersByDate(sdf.parse(date + " 23:59:59").getTime, count)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(getHeaderListView(list))
+      }
+  }
+
+  def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
+    historyDao.findHeadersByDate(sdf.parse(date + " 23:59:59").getTime, count)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(list.asJson)
+      }
+  }
 }

@@ -1,12 +1,14 @@
 package services
 
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 import scorex.crypto.encode.Base16
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{successful => resolve}
 import play.api.mvc._
-
+import scala.util.Try
 
 class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
@@ -46,11 +48,24 @@ class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class FromCountCheckAction(parser: BodyParsers.Default, from: Int, count: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (from >= 0 && count >= 0) block(request) else resolve(Results.BadRequest)
+    if (from >= 0 && count > 0) block(request) else resolve(Results.BadRequest)
 }
 
 class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(from: Int, count: Int): FromToCheckAction = new FromToCheckAction(parser, from, count)
+}
+
+class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int) extends ActionBuilderImpl(parser) {
+  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
+    val parsedDate: Try[Date] = Try(sdf.parse(date + " 23:59:59"))
+    if (parsedDate.isSuccess && count > 0) block(request) else resolve(Results.BadRequest)
+  }
+}
+
+class DateFromCountActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(date: String, count: Int): DateFromCountAction = new DateFromCountAction(parser, date, count)
 }
 
 
