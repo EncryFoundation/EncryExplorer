@@ -26,5 +26,9 @@ object HeadersQueryRepository {
 
   def findHeadersByFromToDateQuery(from: Long, to: Long): ConnectionIO[List[Header]] =
     sql"select * from headers where ts >= $from AND ts <= $to ORDER BY height DESC".query[Header].to[List]
+
+  def findHeadersByDateQuery(time: Long, count: Int): ConnectionIO[List[Header]] =
+    sql"select * from headers where ts >= $time ORDER BY height DESC LIMIT $count".query[Header].to[List]
+
 }
 

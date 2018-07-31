@@ -34,5 +34,9 @@ class HistoryService @Inject()(historyDao: HistoryDao)(implicit ec: ExecutionCon
   def findHeadersByFromToDate(from: Long, to: Long): Future[List[Header]] =
     if (from >= 0 && to >= from) historyDao.findHeadersByFromToDate(from, to)
     else Future.failed(new IllegalArgumentException)
+  
+  def findHeadersByDate(time: Long, count: Int): Future[List[Header]] =
+    if (time >= 0 && count > 0) historyDao.findHeadersByDate(time, count)
+    else Future.failed(new IllegalArgumentException)
 
 }

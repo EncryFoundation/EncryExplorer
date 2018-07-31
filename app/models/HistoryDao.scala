@@ -21,4 +21,6 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def findHeadersByFromToDate(from: Long, to: Long): Future[List[Header]] = dBService.runAsync(findHeadersByFromToDateQuery(from, to))
 
+  def findHeadersByDate(time: Long, count: Int): Future[List[Header]] = dBService.runAsync(findHeadersByDateQuery(time, count))
+
 }
