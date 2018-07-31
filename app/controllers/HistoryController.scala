@@ -102,9 +102,9 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
     }
   }
 
-  def listHeadersByDateFromToView(date1: String, date2: String): Action[AnyContent] = Action.async {
+  def listHeadersByDateFromToView(fromDate: String, toDate: String): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date1 + " 23:59:59").getTime, sdf.parse(date2 + " 23:59:59").getTime)
+      Try(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
     ).flatMap { date =>
       historyService.findHeadersByFromToDate(date._1, date._2)
     }.map {
@@ -115,9 +115,9 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
     }
   }
 
-  def listHeadersByDateFromToApi(date1: String, date2: String): Action[AnyContent] = Action.async {
+  def listHeadersByDateFromToApi(fromDate: String, toDate: String): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(date1 + " 23:59:59").getTime, sdf.parse(date2 + " 23:59:59").getTime)
+      Try(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
     ).flatMap { date =>
       historyService.findHeadersByFromToDate(date._1, date._2)
     }.map {
