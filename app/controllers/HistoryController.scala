@@ -115,11 +115,24 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
     }
   }
 
+  def listHeadersByDateFromToApi(fromDate: String, toDate: String): Action[AnyContent] = Action.async {
+    Future.fromTry(
+      Try(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
+    ).flatMap { date => 
+      historyService.findHeadersByFromToDate(date._1, date._2)
+    }.map {
+      case Nil => NotFound
+      case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
+    }
+  }
+
   def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
       Try(sdf.parse(date + " 23:59:59"))
     ).flatMap { date =>
-        historyService.findHeadersByDate(date.getTime, count)
+      historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
@@ -128,11 +141,11 @@ class HistoryController @Inject()(cc: ControllerComponents, historyService: Hist
     }
   }
 
-  def listHeadersByDateFromToApi(fromDate: String, toDate: String): Action[AnyContent] = Action.async {
+  def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = Action.async {
     Future.fromTry(
-      Try(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
-    ).flatMap { date => 
-      historyService.findHeadersByFromToDate(date._1, date._2)
+      Try(sdf.parse(date + " 23:59:59"))
+    ).flatMap { date =>
+      historyService.findHeadersByDate(date.getTime, count)
     }.map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)

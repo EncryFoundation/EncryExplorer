@@ -15,6 +15,8 @@ GET        /api/history/headers/range/:from/:to                          control
 GET        /history/headers/range/:from/:to                              controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
 GET        /history/headers/findByDateFromTo/:from/:to                   controllers.HistoryController.listHeadersByDateFromToView(from: String, to: String)
 GET        /api/history/headers/findByDateFromTo/:from/:to               controllers.HistoryController.listHeadersByDateFromToApi(from: String, to: String)
+GET        /findHeadersByDate/:date/:count                               controllers.HistoryController.findHeadersByDateView(date: String, count: Int)
+GET        /api/findHeadersByDate/:date/:count                           controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)
 
 GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
 GET        /api/transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddressApi(address: String)
