@@ -8,8 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class HistoryService @Inject()(historyDao: HistoryDao)(implicit ec: ExecutionContext) {
 
   def findHeader(id: String): Future[Option[Header]] =
-    Future.fromTry(Base16.decode(id))
-      .flatMap(_ => historyDao.findHeader(id))
+     historyDao.findHeader(id)
 
   def listHeadersAtHeight(height: Int): Future[List[Header]] =
     if (height >= 0) historyDao.findHeadersAtHeight(height)

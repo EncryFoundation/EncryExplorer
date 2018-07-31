@@ -5,15 +5,16 @@ import javax.inject.{Inject, Singleton}
 import models.Header
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.HistoryService
+import services.{CheckAction, HistoryService}
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService)(implicit ex: ExecutionContext)
-  extends AbstractController(cc) with Circe {
+class HistoryController @Inject()(cc: ControllerComponents, historyService: HistoryService, checkAction: CheckAction)
+                                 (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def findHeaderView(id: String): Action[AnyContent] = Action.async {
+  def findHeaderView(id: String): Action[AnyContent] = checkAction(id) {
     historyService.findHeader(id).map {
       case Some(header) => Ok(getHeaderView(header))
       case None => NotFound
