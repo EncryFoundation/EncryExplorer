@@ -2,15 +2,14 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import models.{Block, Header, HistoryDao, Transaction}
+import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import services.TransactionsService
 import views.html.getBlock
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BlockController @Inject()(cc: ControllerComponents, transactionsService: TransactionsService, historyDao: HistoryDao)
+class BlockController @Inject()(cc: ControllerComponents, historyDao: HistoryDao, transactionsDao: TransactionsDao)
                                (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def findBlockView(id: String): Action[AnyContent] = Action.async {
@@ -29,7 +28,7 @@ class BlockController @Inject()(cc: ControllerComponents, transactionsService: T
 
   def findBlock(id: String): Future[Option[Block]] = {
     val headerFuture: Future[Option[Header]] = historyDao.findHeader(id)
-    val payloadFuture: Future[List[Transaction]] = transactionsService.listTransactionsByBlockId(id)
+    val payloadFuture: Future[List[Transaction]] = transactionsDao.listByBlockId(id)
     for {
       headerOpt <- headerFuture
       payload <- payloadFuture

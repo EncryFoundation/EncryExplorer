@@ -1,13 +1,13 @@
-package services
+package utils
 
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
-import scorex.crypto.encode.Base16
+import play.api.mvc._
+import scorex.crypto.encode.{Base16, Base58}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{successful => resolve}
-import play.api.mvc._
 import scala.util.Try
 
 class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
@@ -66,6 +66,15 @@ class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int)
 
 class DateFromCountActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(date: String, count: Int): DateFromCountAction = new DateFromCountAction(parser, date, count)
+}
+
+class Base58CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (Base58.decode(modifierId).isSuccess) block(request) else resolve(Results.BadRequest)
+}
+
+class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(modifierId: String): Base58CheckAction = new Base58CheckAction(parser, modifierId)
 }
 
 

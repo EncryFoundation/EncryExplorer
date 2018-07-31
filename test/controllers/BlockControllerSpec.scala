@@ -3,7 +3,6 @@ package controllers
 import models.{Header, Transaction}
 import org.mockito.Mockito.{verify, when}
 import play.api.test.Helpers.{status, stubControllerComponents}
-import services.TransactionsService
 import org.scalatestplus.play.PlaySpec
 import org.mockito.ArgumentMatchers.{eq => eq_}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest

@@ -7,7 +7,6 @@ import org.mockito.ArgumentMatchers.{eq => eq_}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
-import services.TransactionsService
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result

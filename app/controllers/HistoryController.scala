@@ -6,9 +6,10 @@ import javax.inject.{Inject, Singleton}
 import models.{Header, HistoryDao}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services._
+import utils._
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
 import scala.concurrent.ExecutionContext
+import scala.util.control.NonFatal
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents,
@@ -28,6 +29,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.findHeader(id).map {
       case Some(header) => Ok(getHeaderView(header))
       case None => NotFound
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -35,6 +38,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.findHeader(id).map {
       case Some(header) => Ok(header.asJson)
       case None => NotFound
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -42,6 +47,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersAtHeight(height).map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -49,6 +56,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersAtHeight(height).map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -56,6 +65,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.findBestHeaderAtHeight(height).map {
       case Some(header) => Ok(header.asJson)
       case None => NotFound
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -63,6 +74,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.findBestHeaderAtHeight(height).map {
       case Some(header) => Ok(getHeaderView(header))
       case None => NotFound
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -70,6 +83,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listLastHeaders(qty).map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -77,6 +92,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listLastHeaders(qty).map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -84,6 +101,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersByCount(from, count).map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -91,6 +110,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersByCount(from, count).map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -98,6 +119,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersByHeightRange(from, to).map {
       case Nil => NotFound
       case list: List[Header] => Ok(list.asJson)
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -105,6 +128,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
     historyDao.listHeadersByHeightRange(from, to).map {
       case Nil => NotFound
       case list: List[Header] => Ok(getHeaderListView(list))
+    }.recover {
+      case NonFatal(_) => BadRequest
     }
   }
 
@@ -113,7 +138,9 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
-      }
+      }.recover {
+      case NonFatal(_) => BadRequest
+    }
   }
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
@@ -121,6 +148,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
-      }
+      }.recover {
+      case NonFatal(_) => BadRequest
+    }
   }
 }
