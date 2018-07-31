@@ -1,6 +1,6 @@
 package controllers
 
-import models.Header
+import models.{Header, HistoryDao}
 import org.mockito.Mockito._
 import org.scalatestplus.play.PlaySpec
 import org.mockito.ArgumentMatchers.{eq => eq_}
@@ -10,7 +10,7 @@ import play.api.test.Helpers._
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-
+import utils.{Base16CheckActionFactory, _}
 import scala.concurrent.{ExecutionContext, Future}
 
 class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
@@ -29,7 +29,7 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   "HistoryController#findHeaderAtHeight" should {
     "return headers at given height" in new HistoryControllerSpecWiring {
       when(historyServiceMock.listHeadersAtHeight(sampleHeight)).thenReturn(Future.successful(List(sampleHeader)))
-      val result: Future[Result] = controller.findHeaderAtHeightApi(sampleHeight).apply(FakeRequest())
+      val result: Future[Result] = controller.listHeadersAtHeightApi(sampleHeight).apply(FakeRequest())
       verify(historyServiceMock).listHeadersAtHeight(eq_(sampleHeight))
       status(result) shouldBe OK
     }
@@ -63,8 +63,11 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
   }
 
   private trait HistoryControllerSpecWiring {
-    val historyServiceMock: HistoryService = mock[HistoryService]
-    val controller: HistoryController = new HistoryController(stubControllerComponents(), historyServiceMock)(inject[ExecutionContext])
+    val historyServiceMock: HistoryDao = mock[HistoryDao]
+    val controller: HistoryController = new HistoryController(stubControllerComponents(), historyServiceMock,
+      inject[Base16CheckActionFactory],inject[HeightCheckActionFactory],
+      inject[FromToCheckActionFactory],inject[QtyCheckActionFactory],
+      inject[FromCountCheckActionFactory],inject[DateFromCountActionFactory])(inject[ExecutionContext])
     val sampleHeaderId: String = "000097b22265ddb9197a49ff3ed21ce8dc21dc0fa51cb0f2ba2fbe326bbe175a"
     val sampleHeight: Int = 2134
     val sampleHeader: Header = Header(
