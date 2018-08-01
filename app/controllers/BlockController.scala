@@ -13,17 +13,19 @@ class BlockController @Inject()(cc: ControllerComponents, historyDao: HistoryDao
                                (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def findBlockView(id: String): Action[AnyContent] = Action.async {
-    findBlock(id).map {
-      case Some(block) => Ok(getBlock(block))
-      case None => NotFound
-    }
+    findBlock(id)
+      .map {
+        case Some(block) => Ok(getBlock(block))
+        case None => NotFound
+      }
   }
 
   def findBlockApi(id: String): Action[AnyContent] = Action.async {
-    findBlock(id).map {
-      case Some(block) => Ok(block.asJson)
-      case None => NotFound
-    }
+    findBlock(id)
+      .map {
+        case Some(block) => Ok(block.asJson)
+        case None => NotFound
+      }
   }
 
   def findBlock(id: String): Future[Option[Block]] = {

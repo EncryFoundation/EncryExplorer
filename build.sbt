@@ -40,9 +40,9 @@ val loggingDependencies = Seq(
   "org.slf4j" % "slf4j-api" % "1.7.25",
   "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
-
 libraryDependencies += guice
 libraryDependencies ++= (Seq(
+  "net.codingwell" %% "scala-guice" % "4.2.1",
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",

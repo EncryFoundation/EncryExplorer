@@ -13,7 +13,7 @@ import scala.util.Try
 
 class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (Base16.decode(modifierId).isSuccess) block(request) else resolve(Results.BadRequest)
+    if (Base16.decode(modifierId).isSuccess) block(request) else resolve(Results.Forbidden)
 }
 
 class Base16CheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -22,7 +22,7 @@ class Base16CheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class HeightCheckAction(parser: BodyParsers.Default, height: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (height >= 0) block(request) else resolve(Results.BadRequest)
+    if (height >= 0) block(request) else resolve(Results.Forbidden)
 }
 
 class HeightCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -31,7 +31,7 @@ class HeightCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class QtyCheckAction(parser: BodyParsers.Default, qty: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (qty > 0) block(request) else resolve(Results.BadRequest)
+    if (qty > 0) block(request) else resolve(Results.Forbidden)
 }
 
 class QtyCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -40,7 +40,7 @@ class QtyCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class FromToCheckAction(parser: BodyParsers.Default, from: Int, to: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (from >= 0 && to >= from) block(request) else resolve(Results.BadRequest)
+    if (from >= 0 && to >= from) block(request) else resolve(Results.Forbidden)
 }
 
 class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -49,7 +49,7 @@ class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class FromCountCheckAction(parser: BodyParsers.Default, from: Int, count: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (from >= 0 && count > 0) block(request) else resolve(Results.BadRequest)
+    if (from >= 0 && count > 0) block(request) else resolve(Results.Forbidden)
 }
 
 class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -61,7 +61,7 @@ class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val parsedDate: Try[Date] = Try(sdf.parse(date + " 23:59:59"))
-    if (parsedDate.isSuccess && count > 0) block(request) else resolve(Results.BadRequest)
+    if (parsedDate.isSuccess && count > 0) block(request) else resolve(Results.Forbidden)
   }
 }
 

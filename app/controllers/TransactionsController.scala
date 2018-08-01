@@ -34,7 +34,8 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
       .map {
         case Nil => NotFound
-        case list: List[Output] => Ok(list.asJson)}
+        case list: List[Output] => Ok(list.asJson)
+      }
       .recover {
         case NonFatal(_) => BadRequest
       }
@@ -89,42 +90,50 @@ class TransactionsController @Inject()(cc: ControllerComponents,
 
   def findTransactionApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
-      .findTransaction(id).map {
-      case Some(transaction) => Ok(transaction.asJson)
-      case None => NotFound
-    }.recover {
-      case NonFatal(_) => BadRequest
-    }
+      .findTransaction(id)
+      .map {
+        case Some(transaction) => Ok(transaction.asJson)
+        case None => NotFound
+      }
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
   }
 
   def findTransactionView(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
-      .findTransaction(id).map {
-      case Some(transaction) => Ok(getTransactions(transaction))
-      case None => NotFound
-    }.recover {
-      case NonFatal(_) => BadRequest
-    }
+      .findTransaction(id)
+      .map {
+        case Some(transaction) => Ok(getTransactions(transaction))
+        case None => NotFound
+      }
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
   }
 
   def listByBlockIdApi(blockId: String): Action[AnyContent] = base16Check(blockId).async {
     transactionsDao
-      .listByBlockId(blockId).map {
-      case Nil => NotFound
-      case list: List[Transaction] => Ok(list.asJson)
-    }.recover {
-      case NonFatal(_) => BadRequest
-    }
+      .listByBlockId(blockId)
+      .map {
+        case Nil => NotFound
+        case list: List[Transaction] => Ok(list.asJson)
+      }
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
   }
 
   def listByBlockIdView(blockId: String): Action[AnyContent] = base16Check(blockId).async {
     transactionsDao
-      .listByBlockId(blockId).map {
-      case Nil => NotFound
-      case list: List[Transaction] => Ok(getTransactionsList(list))
-    }.recover {
-      case NonFatal(_) => BadRequest
-    }
+      .listByBlockId(blockId)
+      .map {
+        case Nil => NotFound
+        case list: List[Transaction] => Ok(getTransactionsList(list))
+      }
+      .recover {
+        case NonFatal(_) => BadRequest
+      }
   }
 
   def outputsByBlockHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
