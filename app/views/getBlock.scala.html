@@ -29,11 +29,12 @@
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
             <tr><td><ul>@for(transaction <- requestBlock.payload) {
                 <li><a href ="@routes.TransactionsController.findTransactionView(transaction.id)">@transaction.id</a>
-                    <br>isCoinbase: @transaction.isCoinbase
-                         @{
-                            new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                    <br>@{
+                        new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                    }
+                        @{
+                            if(transaction.isCoinbase) "Coinbase" else None
                         }
-                    </br>
                 </li>
             }</ul> </td>
             </tr>
