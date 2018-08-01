@@ -17,6 +17,9 @@
             <tr><td>adProofsRoot: @requestBlock.header.adProofsRoot</td></tr>
             <tr><td>stateRoot: @requestBlock.header.stateRoot</td></tr>
             <tr><td>transactionsRoot: @requestBlock.header.transactionsRoot</td></tr>
+            <tr><td>timestamp: @{
+                new Date(requestBlock.header.timestamp).format("yyyy-MM-dd HH:mm:ss")
+            }</td></tr>
             <tr><td>timestamp: @requestBlock.header.timestamp</td></tr>
             <tr><td>difficulty: @requestBlock.header.difficulty</td></tr>
             <tr><td>blockSize: @requestBlock.header.blockSize</td></tr>

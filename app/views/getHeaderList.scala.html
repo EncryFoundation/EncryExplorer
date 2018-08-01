@@ -1,4 +1,5 @@
 @(requestBlocks: List[Header])
+@import java.util.Date
 
 <html lang="en">
     <head>
@@ -23,7 +24,9 @@
                     <tbody>
                         <tr>
                             <th>@requestBlock.height</th>
-                            <td>@requestBlock.timestamp</td>
+                            <td>@{
+                                new Date(requestBlock.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                            }</td>
                             <td>@requestBlock.txsSize</td>
                             <td>@requestBlock.blockSize</td>
 
