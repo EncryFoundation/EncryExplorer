@@ -1,4 +1,6 @@
 @(transactions: List[Transaction])
+@import java.util.Date
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -6,11 +8,15 @@
     </head>
     <body>
         <center> <table width="50%" border="1">
-            @for(transaction <- transactions) {
-                <tr><td>id: @transaction.id</td></tr>
-                <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
-                <tr><td>blockId: @transaction.blockId</td></tr>
-            }
+        @for(transaction <- transactions) {
+            <tr><td>id: @transaction.id</td></tr>
+            <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
+            <tr><td>blockId: @transaction.blockId</td></tr>
+            <tr><td>@{
+                new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+            }</td>
+            </tr>
+        }
         </table>
         </center>
     </body>

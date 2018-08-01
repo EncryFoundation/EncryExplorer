@@ -1,4 +1,5 @@
 @(requestBlock: Block)
+@import java.util.Date
 
 <html lang="en">
     <head>
@@ -28,8 +29,12 @@
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
             <tr><td><ul>@for(transaction <- requestBlock.payload) {
                 <li><a href ="@routes.TransactionsController.findTransactionView(transaction.id)">@transaction.id</a>
-                    isCoinbase: @transaction.isCoinbase
-                    </li>
+                    <br>isCoinbase: @transaction.isCoinbase
+                         @{
+                            new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                        }
+                    </br>
+                </li>
             }</ul> </td>
             </tr>
         </table>

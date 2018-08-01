@@ -2,7 +2,7 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.Inject
-import models.{Transaction, TransactionsDao}
+import models.{Output, Transaction, TransactionsDao}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import protocol.AccountLockedContract
@@ -32,7 +32,9 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def listOutputsByAddressApi(address: String): Action[AnyContent] = base58Check(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
-      .map(outputs => Ok(outputs.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)}
       .recover {
         case NonFatal(_) => BadRequest
       }

@@ -2,7 +2,6 @@ package utils
 
 import java.text.SimpleDateFormat
 import java.util.Date
-
 import javax.inject.Inject
 import play.api.mvc._
 import protocol.crypto.Base58Check

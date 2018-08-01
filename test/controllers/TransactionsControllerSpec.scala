@@ -11,7 +11,6 @@ import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
 import utils._
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
@@ -21,6 +20,24 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
       when(transactionsServiceMock.findOutput(sampleOutputId)).thenReturn(Future.successful(Some(sampleOutput)))
       val result: Future[Result] = controller.findOutputApi(sampleOutputId).apply(FakeRequest())
       verify(transactionsServiceMock).findOutput(eq_(sampleOutputId))
+      status(result) shouldBe OK
+    }
+  }
+
+  "TransactionsController#listOutputsByAddress" should {
+    "return all outputs w given address" in new TransactionControllerSpecWiring {
+      when(transactionsServiceMock.listOutputsByContractHash(sampleAddress, false)).thenReturn(Future.successful(List(sampleOutput)))
+      val result: Future[Result] = controller.listOutputsByAddressApi(sampleAddress).apply(FakeRequest())
+      verify(transactionsServiceMock).listOutputsByContractHash(eq_(sampleAddress), eq_(false))
+      status(result) shouldBe OK
+    }
+  }
+
+  "TransactionsController#listUnspentOutputsByAddress" should {
+    "return all unspent outputs w given address" in new TransactionControllerSpecWiring {
+      when(transactionsServiceMock.listOutputsByContractHash(sampleAddress, true)).thenReturn(Future.successful(List(sampleOutput)))
+      val result: Future[Result] = controller.listUnspentOutputsByAddressApi(sampleAddress).apply(FakeRequest())
+      verify(transactionsServiceMock).listOutputsByContractHash(eq_(sampleAddress), eq_(true))
       status(result) shouldBe OK
     }
   }
@@ -131,7 +148,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
         inject[Base16CheckActionFactory], inject[HeightCheckActionFactory],
         inject[FromToCheckActionFactory], inject[Base58CheckActionFactory])(inject[ExecutionContext])
     val sampleOutputId: String = "010000691b35d6eaae31a43a2327f58a78f47293a03715821cf83399e4e3a0b0"
-    val sampleAddress: String = "3jSD9fwHEHJwHq99ARqhnNhqGXeKnkJMyX4FZjHV6L3PjbCmjG"
+    val sampleAddress: String = Array.fill(32)(0).mkString
     val sampleContractHash: String = sampleAddress
     val sampleTxId: String = "0b6df74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleOutput: Output = Output(

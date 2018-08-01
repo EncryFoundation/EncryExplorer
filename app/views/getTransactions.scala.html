@@ -1,4 +1,6 @@
 @(transaction: Transaction)
+@import java.util.Date
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -9,6 +11,12 @@
             <tr><td>id: @transaction.id</td></tr>
             <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
             <tr><td>blockId: @transaction.blockId</td></tr>
+            <tr><td>
+                timestamp:
+                    @{
+                        new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                    }
+            </td></tr>
         </table>
         </center>
     </body>
