@@ -7,7 +7,7 @@
         <title>get transactions</title>
     </head>
     <body>
-        <center> <table width="50%" border="1">
+        <center> <table width="50%" border="1" rules="all">
         @for(transaction <- transactions) {
             <tr><td>id: @transaction.id</td></tr>
             <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>

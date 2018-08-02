@@ -12,11 +12,7 @@ import settings.ExplorerSettings._
 class MainModule extends AbstractModule with ScalaModule {
 
   @Provides
-  def provideExplorerAppSettings(configuration: Configuration): ExplorerSettings = {
-
-    val settings: ExplorerSettings = ConfigFactory.load("local.conf")
+  def provideExplorerAppSettings(configuration: Configuration): ExplorerSettings =
+    ConfigFactory.load("local.conf")
       .withFallback(configuration.underlying).as[ExplorerSettings]("encry")
-
-    settings
-  }
 }
