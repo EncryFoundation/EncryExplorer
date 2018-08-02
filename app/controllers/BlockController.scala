@@ -5,14 +5,18 @@ import javax.inject.{Inject, Singleton}
 import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import utils.Base16CheckActionFactory
 import views.html.getBlock
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BlockController @Inject()(cc: ControllerComponents, historyDao: HistoryDao, transactionsDao: TransactionsDao)
+class BlockController @Inject()(cc: ControllerComponents,
+                                historyDao: HistoryDao,
+                                transactionsDao: TransactionsDao,
+                                base16Check: Base16CheckActionFactory)
                                (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def findBlockView(id: String): Action[AnyContent] = Action.async {
+  def findBlockView(id: String): Action[AnyContent] = base16Check(id).async {
     findBlock(id)
       .map {
         case Some(block) => Ok(getBlock(block))
@@ -20,7 +24,7 @@ class BlockController @Inject()(cc: ControllerComponents, historyDao: HistoryDao
       }
   }
 
-  def findBlockApi(id: String): Action[AnyContent] = Action.async {
+  def findBlockApi(id: String): Action[AnyContent] = base16Check(id).async {
     findBlock(id)
       .map {
         case Some(block) => Ok(block.asJson)
