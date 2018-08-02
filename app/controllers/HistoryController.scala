@@ -9,7 +9,6 @@ import play.api.mvc._
 import utils._
 import views.html.{getHeader => getHeaderView, getHeaderList => getHeaderListView}
 import scala.concurrent.ExecutionContext
-import scala.util.control.NonFatal
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents,
@@ -31,9 +30,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Some(header) => Ok(getHeaderView(header))
         case None => NotFound
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def findHeaderApi(id: String): Action[AnyContent] = base16Check(id).async {
@@ -42,9 +38,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Some(header) => Ok(header.asJson)
         case None => NotFound
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -55,9 +48,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def listHeadersAtHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
@@ -66,9 +56,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -79,9 +66,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Some(header) => Ok(header.asJson)
         case None => NotFound
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def findBestHeaderAtHeightView(height: Int): Action[AnyContent] = heightCheck(height).async {
@@ -90,9 +74,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Some(header) => Ok(getHeaderView(header))
         case None => NotFound
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -103,9 +84,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def listLastHeadersView(qty: Int): Action[AnyContent] = qtyCheck(qty).async {
@@ -114,9 +92,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -127,9 +102,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def listHeadersByCountApi(from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
@@ -138,9 +110,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -151,9 +120,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def listHeadersByHeightRangeView(from: Int, to: Int): Action[AnyContent] = fromToCheck(from, to).async {
@@ -162,9 +128,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 
@@ -175,9 +138,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
       }
-      .recover {
-        case NonFatal(_) => BadRequest
-      }
   }
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
@@ -186,9 +146,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
-      }
-      .recover {
-        case NonFatal(_) => BadRequest
       }
   }
 }

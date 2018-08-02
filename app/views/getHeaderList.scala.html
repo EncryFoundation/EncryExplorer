@@ -18,6 +18,7 @@
                         <th scope="col">txsSize</th>
                         <th scope="col">blockSize</th>
                         <th scope="col">id</th>
+                        <th scope="col">txs</th>
                     </tr>
                 </thead>
                 @for(requestBlock <- requestBlocks) {
@@ -29,8 +30,8 @@
                             }</td>
                             <td>@requestBlock.txsSize</td>
                             <td>@requestBlock.blockSize</td>
-
                             <td><a href="@routes.BlockController.findBlockView(requestBlock.id)">@requestBlock.id</a></td>
+                            <td>@requestBlock.txsQty</td>
                         </tr>
                     </tbody>
                 }
