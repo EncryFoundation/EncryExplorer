@@ -1,18 +1,20 @@
 GET        /                                                             controllers.HomeController.index
 GET        /assets/*file                                                 controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /history/headers/findByCount/:from/:count                     controllers.HistoryController.findHeadersByCountView(from: Int, count: Int)
-GET        /api/history/headers/findByCount/:from/:count                 controllers.HistoryController.findHeadersByCountApi(from: Int, count: Int)
+GET        /history/headers/findByCount/:from/:count                     controllers.HistoryController.listHeadersByCountView(from: Int, count: Int)
+GET        /api/history/headers/findByCount/:from/:count                 controllers.HistoryController.listHeadersByCountApi(from: Int, count: Int)
 GET        /api/history/headers/:modifierId                              controllers.HistoryController.findHeaderApi(modifierId: String)
 GET        /history/headers/:modifierId                                  controllers.HistoryController.findHeaderView(modifierId: String)
-GET        /api/history/headersAt/:height                                controllers.HistoryController.findHeaderAtHeightApi(height: Int)
-GET        /history/headersAt/:height                                    controllers.HistoryController.findHeaderAtHeightView(height: Int)
+GET        /api/history/headersAt/:height                                controllers.HistoryController.listHeadersAtHeightApi(height: Int)
+GET        /history/headersAt/:height                                    controllers.HistoryController.listHeadersAtHeightView(height: Int)
 GET        /api/history/bestHeaderAt/:height                             controllers.HistoryController.findBestHeaderAtHeightApi(height: Int)
 GET        /history/bestHeaderAt/:height                                 controllers.HistoryController.findBestHeaderAtHeightView(height: Int)
 GET        /api/history/lastHeaders/:qty                                 controllers.HistoryController.listLastHeadersApi(qty: Int)
 GET        /history/lastHeaders/:qty                                     controllers.HistoryController.listLastHeadersView(qty: Int)
 GET        /api/history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRangeApi(from: Int, to: Int)
 GET        /history/headers/range/:from/:to                              controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
+GET        /history/findHeadersByDate/:date/:count                       controllers.HistoryController.findHeadersByDateView(date: String, count: Int)
+GET        /api/history/findHeadersByDate/:date/:count                   controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)
 
 GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
 GET        /api/transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddressApi(address: String)
@@ -33,5 +35,3 @@ GET        /api/transactions/tx/range/:from/:to                          control
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)
-GET        /findHeadersByDate/:date/:count                               controllers.HistoryController.findHeadersByDateView(date: String, count: Int)
-GET        /api/findHeadersByDate/:date/:count                           controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)

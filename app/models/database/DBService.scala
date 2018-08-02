@@ -7,25 +7,18 @@ import doobie.implicits._
 import javax.inject.Inject
 import play.api.Configuration
 import doobie.hikari.implicits._
+import settings.ExplorerSettings
 import scala.concurrent.Future
 
-class DBService @Inject()(config: Configuration) {
+class DBService @Inject()(config: Configuration, settings: ExplorerSettings) {
 
   def runAsync[T](io: ConnectionIO[T]): Future[T] = (for {
     pool <- newHikariTransactor[IO](
       "org.postgresql.Driver",
-      host,
-      user,
-      pass)
+      settings.postgres.host,
+      settings.postgres.user,
+      settings.postgres.password)
     _ <- pool.configure(ds => IO(ds.setMaximumPoolSize(5)))
     result <- io.transact(pool).guarantee(pool.shutdown)
   } yield result).unsafeToFuture()
-
-  private val host: String = config.get[String]("encry.postgres.host")
-  private val user: String = config.get[String]("encry.postgres.username")
-  private val pass: String = config.get[String]("encry.postgres.password")
-
-
-
-
 }

@@ -1,17 +1,17 @@
 package controllers
 
-import models.{Input, Output, Transaction}
+import models.{Input, Output, Transaction, TransactionsDao}
 import org.mockito.Mockito._
 import org.scalatestplus.play.PlaySpec
 import org.mockito.ArgumentMatchers.{eq => eq_}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
-import services.TransactionsService
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-
+import protocol.AccountLockedContract
+import utils._
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
@@ -25,20 +25,22 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     }
   }
 
+  private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
+
   "TransactionsController#listOutputsByAddress" should {
     "return all outputs w given address" in new TransactionControllerSpecWiring {
-      when(transactionsServiceMock.listOutputsByAddress(sampleAddress, false)).thenReturn(Future.successful(List(sampleOutput)))
+      when(transactionsServiceMock.listOutputsByContractHash(contractHashByAddress(sampleAddress), false)).thenReturn(Future.successful(List(sampleOutput)))
       val result: Future[Result] = controller.listOutputsByAddressApi(sampleAddress).apply(FakeRequest())
-      verify(transactionsServiceMock).listOutputsByAddress(eq_(sampleAddress), eq_(false))
+      verify(transactionsServiceMock).listOutputsByContractHash(eq_(contractHashByAddress(sampleAddress)), eq_(false))
       status(result) shouldBe OK
     }
   }
 
   "TransactionsController#listUnspentOutputsByAddress" should {
     "return all unspent outputs w given address" in new TransactionControllerSpecWiring {
-      when(transactionsServiceMock.listOutputsByAddress(sampleAddress, true)).thenReturn(Future.successful(List(sampleOutput)))
+      when(transactionsServiceMock.listOutputsByContractHash(contractHashByAddress(sampleAddress), true)).thenReturn(Future.successful(List(sampleOutput)))
       val result: Future[Result] = controller.listUnspentOutputsByAddressApi(sampleAddress).apply(FakeRequest())
-      verify(transactionsServiceMock).listOutputsByAddress(eq_(sampleAddress), eq_(true))
+      verify(transactionsServiceMock).listOutputsByContractHash(eq_(contractHashByAddress(sampleAddress)), eq_(true))
       status(result) shouldBe OK
     }
   }
@@ -90,9 +92,9 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
 
   "TransactionsController#listByBlockId" should {
     "find transactions from block with given id" in new TransactionControllerSpecWiring {
-      when(transactionsServiceMock.listTransactionsByBlockId(sampleBlockId)).thenReturn(Future.successful(List(sampleTransaction)))
+      when(transactionsServiceMock.listByBlockId(sampleBlockId)).thenReturn(Future.successful(List(sampleTransaction)))
       val result: Future[Result] = controller.listByBlockIdApi(sampleBlockId).apply(FakeRequest())
-      verify(transactionsServiceMock).listTransactionsByBlockId(eq_(sampleBlockId))
+      verify(transactionsServiceMock).listByBlockId(eq_(sampleBlockId))
       status(result) shouldBe OK
     }
   }
@@ -143,11 +145,13 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
   }
 
   private trait TransactionControllerSpecWiring {
-    val transactionsServiceMock: TransactionsService = mock[TransactionsService]
+    val transactionsServiceMock: TransactionsDao = mock[TransactionsDao]
     val controller: TransactionsController =
-      new TransactionsController(stubControllerComponents(), transactionsServiceMock)(inject[ExecutionContext])
+      new TransactionsController(stubControllerComponents(), transactionsServiceMock,
+        inject[Base16CheckActionFactory], inject[HeightCheckActionFactory],
+        inject[FromToCheckActionFactory], inject[Base58CheckActionFactory])(inject[ExecutionContext])
     val sampleOutputId: String = "010000691b35d6eaae31a43a2327f58a78f47293a03715821cf83399e4e3a0b0"
-    val sampleAddress: String = Array.fill(32)(0).mkString
+    val sampleAddress: String = "3jSD9fwHEHJwHq99ARqhnNhqGXeKnkJMyX4FZjHV6L3PjbCmjG"
     val sampleContractHash: String = sampleAddress
     val sampleTxId: String = "0b6df74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleOutput: Output = Output(

@@ -2,35 +2,39 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import models.{Block, Header, Transaction}
+import models._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import services.{HistoryService, TransactionsService}
+import utils.Base16CheckActionFactory
 import views.html.getBlock
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BlockController @Inject()
-(cc: ControllerComponents, historyService: HistoryService, transactionsService: TransactionsService)(implicit ex: ExecutionContext)
-  extends AbstractController(cc) with Circe {
+class BlockController @Inject()(cc: ControllerComponents,
+                                historyDao: HistoryDao,
+                                transactionsDao: TransactionsDao,
+                                base16Check: Base16CheckActionFactory)
+                               (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
-  def findBlockView(id: String): Action[AnyContent] = Action.async {
-    findBlock(id).map {
-      case Some(block) => Ok(getBlock(block))
-      case None => NotFound
-    }
+  def findBlockView(id: String): Action[AnyContent] = base16Check(id).async {
+    findBlock(id)
+      .map {
+        case Some(block) => Ok(getBlock(block))
+        case None => NotFound
+      }
   }
 
-  def findBlockApi(id: String): Action[AnyContent] = Action.async {
-    findBlock(id).map {
-      case Some(block) => Ok(block.asJson)
-      case None => NotFound
-    }
+  def findBlockApi(id: String): Action[AnyContent] = base16Check(id).async {
+    findBlock(id)
+      .map {
+        case Some(block) => Ok(block.asJson)
+        case None => NotFound
+      }
   }
 
   def findBlock(id: String): Future[Option[Block]] = {
-    val headerFuture: Future[Option[Header]] = historyService.findHeader(id)
-    val payloadFuture: Future[List[Transaction]] = transactionsService.listTransactionsByBlockId(id)
+    val headerFuture: Future[Option[Header]] = historyDao.findHeader(id)
+    val payloadFuture: Future[List[Transaction]] = transactionsDao.listByBlockId(id)
     for {
       headerOpt <- headerFuture
       payload <- payloadFuture
