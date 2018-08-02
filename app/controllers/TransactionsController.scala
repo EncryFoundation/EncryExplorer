@@ -16,8 +16,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
                                        base16Check: Base16CheckActionFactory,
                                        heightCheck: HeightCheckActionFactory,
                                        fromToCheck: FromToCheckActionFactory,
-                                       base58Check: Base58CheckActionFactory,
-                                      )
+                                       base58Check: Base58CheckActionFactory)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def findOutputApi(id: String): Action[AnyContent] = base16Check(id).async {

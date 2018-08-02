@@ -40,7 +40,7 @@ class QtyCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class FromToCheckAction(parser: BodyParsers.Default, from: Int, to: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (from >= 0 && to >= from) block(request) else resolve(Results.Forbidden)
+    if (from >= 0 && to >= from) block(request) else resolve(Results.BadGateway)
 }
 
 class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -49,18 +49,18 @@ class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class FromCountCheckAction(parser: BodyParsers.Default, from: Int, count: Int) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-    if (from >= 0 && count > 0) block(request) else resolve(Results.Forbidden)
+    if (from >= 0 && count > 0) block(request) else resolve(Results.BadGateway)
 }
 
 class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
-  def apply(from: Int, count: Int): FromToCheckAction = new FromToCheckAction(parser, from, count)
+  def apply(from: Int, count: Int): FromCountCheckAction = new FromCountCheckAction(parser, from, count)
 }
 
 class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int) extends ActionBuilderImpl(parser) {
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
-    val parsedDate: Try[Date] = Try(sdf.parse(date + " 23:59:59"))
+    val parsedDate: Try[Date] = Try(sdf.parse(date + " 0:0:0"))
     if (parsedDate.isSuccess && count > 0) block(request) else resolve(Results.Forbidden)
   }
 }

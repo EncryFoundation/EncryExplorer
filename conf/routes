@@ -13,12 +13,15 @@ GET        /api/history/lastHeaders/:qty                                 control
 GET        /history/lastHeaders/:qty                                     controllers.HistoryController.listLastHeadersView(qty: Int)
 GET        /api/history/headers/range/:from/:to                          controllers.HistoryController.listHeadersByHeightRangeApi(from: Int, to: Int)
 GET        /history/headers/range/:from/:to                              controllers.HistoryController.listHeadersByHeightRangeView(from: Int, to: Int)
-GET        /findHeadersByDate/:date/:count                               controllers.HistoryController.findHeadersByDateView(date: String, count: Int)
-GET        /api/findHeadersByDate/:date/:count                           controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)
+GET        /history/findHeadersByDate/:date/:count                               controllers.HistoryController.findHeadersByDateView(date: String, count: Int)
+GET        /api/history/findHeadersByDate/:date/:count                           controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)
 
 GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
 GET        /api/transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddressApi(address: String)
+
+#check
 GET        /api/transactions/:address/outputs/unspent                    controllers.TransactionsController.listUnspentOutputsByAddressApi(address: String)
+
 GET        /api/transactions/tx/:modifierId/outputs                      controllers.TransactionsController.findOutputsByTxIdApi(modifierId: String)
 GET        /api/transactions/input/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputsByTxIdApi(modifierId: String)
 GET        /api/transactions/input/:modifierId                           controllers.TransactionsController.findInputApi(modifierId: String)
