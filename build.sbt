@@ -7,6 +7,7 @@ scalaVersion := "2.12.6"
 organization := "org.encryfoundation"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+PlayKeys.devSettings := Seq("play.server.http.port" -> "9053")
 
 val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"

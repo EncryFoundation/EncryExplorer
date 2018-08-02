@@ -18,8 +18,7 @@ class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class Base16CheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -32,8 +31,7 @@ class HeightCheckAction(parser: BodyParsers.Default, height: Int) extends Action
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class HeightCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -46,8 +44,7 @@ class QtyCheckAction(parser: BodyParsers.Default, qty: Int) extends ActionBuilde
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class QtyCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -60,8 +57,7 @@ class FromToCheckAction(parser: BodyParsers.Default, from: Int, to: Int) extends
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class FromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -74,8 +70,7 @@ class FromCountCheckAction(parser: BodyParsers.Default, from: Int, count: Int) e
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
@@ -91,8 +86,7 @@ class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int)
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
   }
 }
 
@@ -106,8 +100,7 @@ class Base58CheckAction(parser: BodyParsers.Default, address: String) extends Ac
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
-    else
-      resolve(Results.BadRequest)
+    else resolve(Results.BadRequest)
 }
 
 class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
