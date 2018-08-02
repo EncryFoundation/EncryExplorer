@@ -11,6 +11,8 @@ import play.api.test.Helpers._
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
+import utils.Base16CheckActionFactory
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
@@ -38,7 +40,7 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
   private trait BlockControllerSpecWiring {
     val historyServiceMock: HistoryDao = mock[HistoryDao]
     val transactionsServiceMock: TransactionsDao = mock[TransactionsDao]
-    val controller: BlockController = new BlockController(stubControllerComponents(), historyServiceMock, transactionsServiceMock)(inject[ExecutionContext])
+    val controller: BlockController = new BlockController(stubControllerComponents(), historyServiceMock, transactionsServiceMock, inject[Base16CheckActionFactory])(inject[ExecutionContext])
     val sampleBlockId: String = "000097b22265ddb9197a49ff3ed21ce8dc21dc0fa51cb0f2ba2fbe326bbe175a"
     val sampleHeight: Int = 2134
     val sampleHeader: Header = Header(
