@@ -12,7 +12,6 @@ import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
 import utils.Base16CheckActionFactory
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
