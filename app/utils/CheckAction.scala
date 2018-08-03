@@ -79,6 +79,7 @@ class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int) extends ActionBuilderImpl(parser) {
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+  sdf.setLenient(false)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val parsedDate: Try[Date] = Try(sdf.parse(date + " 0:0:0"))
@@ -109,6 +110,7 @@ class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class DateFromToCheckAction(parser: BodyParsers.Default, fromDate: String, toDate: String) extends ActionBuilderImpl(parser) {
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+  sdf.setLenient(false)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val fromDateParse: Try[Date] = Try(sdf.parse(fromDate + " 0:0:0"))
