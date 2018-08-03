@@ -7,6 +7,7 @@ scalaVersion := "2.12.6"
 organization := "org.encryfoundation"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
+PlayKeys.devSettings := Seq("play.server.http.port" -> "9053")
 
 val akkaHttpVersion = "10.1.3"
 val circeVersion = "0.9.3"
@@ -40,9 +41,9 @@ val loggingDependencies = Seq(
   "org.slf4j" % "slf4j-api" % "1.7.25",
   "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
-
 libraryDependencies += guice
 libraryDependencies ++= (Seq(
+  "net.codingwell" %% "scala-guice" % "4.2.1",
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.google.guava" % "guava" % "21.+",
@@ -51,8 +52,7 @@ libraryDependencies ++= (Seq(
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
-  "org.encry" %% "prism" % "0.2.3",
+  "org.encry" %% "prism" % "0.2.7",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
   .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
-

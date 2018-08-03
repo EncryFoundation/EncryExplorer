@@ -1,3 +1,4 @@
+@import java.util.Date
 @(requestBlock: Block)
 
 <html lang="en">
@@ -8,7 +9,7 @@
         </div>
     </head>
     <body>
-        <center> <table width="50%" border="1">
+        <center> <table width="50%" border="1" rules="all">
             <tr><td>id: @requestBlock.header.id</td></tr>
             <tr><td>parentId: @requestBlock.header.parentId</td></tr>
             <tr><td>version: @requestBlock.header.version</td></tr>
@@ -16,6 +17,9 @@
             <tr><td>adProofsRoot: @requestBlock.header.adProofsRoot</td></tr>
             <tr><td>stateRoot: @requestBlock.header.stateRoot</td></tr>
             <tr><td>transactionsRoot: @requestBlock.header.transactionsRoot</td></tr>
+            <tr><td>timestamp: @{
+                new Date(requestBlock.header.timestamp).format("yyyy-MM-dd HH:mm:ss")
+            }</td></tr>
             <tr><td>timestamp: @requestBlock.header.timestamp</td></tr>
             <tr><td>difficulty: @requestBlock.header.difficulty</td></tr>
             <tr><td>blockSize: @requestBlock.header.blockSize</td></tr>
@@ -28,8 +32,13 @@
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
             <tr><td><ul>@for(transaction <- requestBlock.payload) {
                 <li><a href ="@routes.TransactionsController.findTransactionView(transaction.id)">@transaction.id</a>
-                    isCoinbase: @transaction.isCoinbase
-                    </li>
+                    <br>@{
+                        new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                    }
+                        @{
+                            if(transaction.isCoinbase) "Coinbase" else None
+                        }
+                </li>
             }</ul> </td>
             </tr>
         </table>

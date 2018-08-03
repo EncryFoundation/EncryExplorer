@@ -1,3 +1,4 @@
+@import java.util.Date
 @(requestBlocks: List[Header])
 
 <html lang="en">
@@ -9,7 +10,7 @@
     </head>
     <body>
         <center>
-            <table class="table" width="50%" border="1">
+            <table class="table" width="50%" border="1" rules="all">
                 <thead>
                     <tr>
                         <th scope="col">height</th>
@@ -17,17 +18,20 @@
                         <th scope="col">txsSize</th>
                         <th scope="col">blockSize</th>
                         <th scope="col">id</th>
+                        <th scope="col">txs</th>
                     </tr>
                 </thead>
                 @for(requestBlock <- requestBlocks) {
                     <tbody>
                         <tr>
                             <th>@requestBlock.height</th>
-                            <td>@requestBlock.timestamp</td>
+                            <td>@{
+                                new Date(requestBlock.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                            }</td>
                             <td>@requestBlock.txsSize</td>
                             <td>@requestBlock.blockSize</td>
-
                             <td><a href="@routes.BlockController.findBlockView(requestBlock.id)">@requestBlock.id</a></td>
+                            <td>@requestBlock.txsQty</td>
                         </tr>
                     </tbody>
                 }
