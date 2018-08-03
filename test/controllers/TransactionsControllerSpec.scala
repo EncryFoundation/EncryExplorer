@@ -10,7 +10,8 @@ import play.api.test.Helpers._
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-import protocol.AccountLockedContract
+import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import scorex.crypto.encode.Base16
 import utils._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -25,7 +26,10 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     }
   }
 
-  private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
+  private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
+    case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
+    case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
+  }.getOrElse(throw EncryAddress.InvalidAddressException)
 
   "TransactionsController#listOutputsByAddress" should {
     "return all outputs w given address" in new TransactionControllerSpecWiring {
