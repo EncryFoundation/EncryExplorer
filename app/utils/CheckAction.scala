@@ -79,7 +79,7 @@ class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int) extends ActionBuilderImpl(parser) {
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-  sdf.setLenient(false)
+  sdf.setLenient(true)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val parsedDate: Try[Date] = Try(sdf.parse(date + " 0:0:0"))
@@ -110,12 +110,12 @@ class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
 
 class DateFromToCheckAction(parser: BodyParsers.Default, fromDate: String, toDate: String) extends ActionBuilderImpl(parser) {
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-  sdf.setLenient(false)
+  sdf.setLenient(true)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val fromDateParse: Try[Date] = Try(sdf.parse(fromDate + " 0:0:0"))
     val toDateParse: Try[Date] = Try(sdf.parse(toDate + " 23:59:59"))
-    if (fromDateParse.isSuccess && toDateParse.isSuccess && fromDateParse.get.getTime <= toDateParse.get.getTime)
+    if (fromDateParse.map(from => toDateParse.map(_.getTime >= from.getTime).getOrElse(false)).getOrElse(false))
       block(request).recoverWith {
         case NonFatal(_) => resolve(Results.BadRequest)
       }(executionContext)
