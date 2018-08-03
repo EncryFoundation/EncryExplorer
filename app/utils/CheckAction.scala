@@ -106,3 +106,21 @@ class Base58CheckAction(parser: BodyParsers.Default, address: String) extends Ac
 class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(address: String): Base58CheckAction = new Base58CheckAction(parser, address)
 }
+
+class DateFromToCheckAction(parser: BodyParsers.Default, fromDate: String, toDate: String) extends ActionBuilderImpl(parser) {
+  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
+    val fromDateParse: Try[Date] = Try(sdf.parse(fromDate + " 0:0:0"))
+    val toDateParse: Try[Date] = Try(sdf.parse(toDate + " 23:59:59"))
+    if (fromDateParse.isSuccess && toDateParse.isSuccess && fromDateParse.get.getTime <= toDateParse.get.getTime)
+      block(request).recoverWith {
+        case NonFatal(_) => resolve(Results.BadRequest)
+      }(executionContext)
+    else resolve(Results.BadRequest)
+  }
+}
+
+class DateFromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(fromDate: String, toDate: String): DateFromToCheckAction = new DateFromToCheckAction(parser, fromDate, toDate)
+}
