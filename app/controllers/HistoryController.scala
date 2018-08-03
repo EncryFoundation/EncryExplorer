@@ -73,6 +73,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case Some(header) => Ok(getHeaderView(header))
         case None => NotFound
       }
+
     }
   }
 
