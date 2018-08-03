@@ -10,8 +10,11 @@
     </head>
     <body>
         <center>
-            <tr><td><a href="@routes.SortController.sortByDate(requestBlocks)"></a></td></tr>
-            <table class="table" width="50%" border="1" rules="all">
+            <tr><td>
+                <a href="@routes.HistoryController.listHeadersMainRoute("lastHeaders", "byHeight", 10)">sortByHeight</a>
+            </td></tr>
+
+            <table class=" table" width="50%" border="1" rules="all">
                 <thead>
                     <tr>
                         <th scope="col">height</th>
@@ -36,7 +39,7 @@
                         </tr>
                     </tbody>
                 }
-            </table>
+                </table>
         </center>
     </body>
 </html>

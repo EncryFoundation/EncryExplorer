@@ -23,6 +23,59 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
+  def listHeadersMainRoute(query: String, mode: String, param: Int): Action[AnyContent] = heightCheck(param).async {
+    query match {
+      case "lastHeaders" => mode match {
+        case "byHeight" => historyDao.listLastHeadersByHeight(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byDate" => historyDao.listLastHeadersByDate(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byTxs" => historyDao.listLastHeadersByTxs(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byBlockSize" => historyDao.listLastHeadersByBlockSize(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byTxsSize" => historyDao.listLastHeadersByTxsSize(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+      }
+      case "headersAt" => mode match {
+        case "byHeight" => historyDao.listHeadersAtHeightByHeight(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byDate" => historyDao.listHeadersAtHeightByDate(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byTxs" => historyDao.listHeadersAtHeightByTxs(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byBlockSize" => historyDao.listHeadersAtHeightByBlockSize(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+        case "byTxsSize" => historyDao.listHeadersAtHeightByTxsSize(param).map {
+          case Nil => NotFound
+          case list: List[Header] => Ok(getHeaderListView(list))
+        }
+      }
+      case "bestHeaderAt" => historyDao.findBestHeaderAtHeight(param).map {
+        case Some(header) => Ok(getHeaderView(header))
+        case None => NotFound
+      }
+    }
+  }
+
   def findHeaderView(id: String): Action[AnyContent] = base16Check(id).async {
     historyDao
       .findHeader(id)
@@ -43,7 +96,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def listHeadersAtHeightView(height: Int): Action[AnyContent] = heightCheck(height).async {
     historyDao
-      .listHeadersAtHeight(height)
+      .listHeadersAtHeightByHeight(height)
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
@@ -52,7 +105,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def listHeadersAtHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
     historyDao
-      .listHeadersAtHeight(height)
+      .listHeadersAtHeightByHeight(height)
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
@@ -79,7 +132,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def listLastHeadersApi(qty: Int): Action[AnyContent] = qtyCheck(qty).async {
     historyDao
-      .listLastHeaders(qty)
+      .listLastHeadersByHeight(qty)
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
@@ -88,7 +141,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def listLastHeadersView(qty: Int): Action[AnyContent] = qtyCheck(qty).async {
     historyDao
-      .listLastHeaders(qty)
+      .listLastHeadersByHeight(qty)
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(getHeaderListView(list))
