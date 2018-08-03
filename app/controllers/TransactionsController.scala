@@ -9,7 +9,6 @@ import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKe
 import scorex.crypto.encode.Base16
 import utils.{Base16CheckActionFactory, Base58CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
-
 import scala.concurrent.ExecutionContext
 
 class TransactionsController @Inject()(cc: ControllerComponents,
