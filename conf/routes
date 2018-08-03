@@ -35,3 +35,5 @@ GET        /api/transactions/tx/range/:from/:to                          control
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)
+
+GET        /sortByDate/:headers                                          controllers.SortController.sortByDate(headers: List[models.Header])
