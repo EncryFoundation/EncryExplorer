@@ -2,10 +2,13 @@ package utils
 
 import java.text.SimpleDateFormat
 import java.util.Date
+
 import javax.inject.Inject
 import play.api.mvc._
+import protocol.EncryAddress
 import protocol.crypto.Base58Check
 import scorex.crypto.encode.Base16
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.{successful => resolve}
@@ -105,4 +108,17 @@ class Base58CheckAction(parser: BodyParsers.Default, address: String) extends Ac
 
 class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(address: String): Base58CheckAction = new Base58CheckAction(parser, address)
+}
+
+class AddressCheckAction(parser: BodyParsers.Default, address: String) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (EncryAddress.resolveAddress(address).isSuccess)
+      block(request).recoverWith {
+        case NonFatal(_) => resolve(Results.BadRequest)
+      }(executionContext)
+    else resolve(Results.BadRequest)
+}
+
+class AddressCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(address: String): AddressCheckAction = new AddressCheckAction(parser, address)
 }

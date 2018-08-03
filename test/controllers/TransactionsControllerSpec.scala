@@ -153,7 +153,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     val controller: TransactionsController =
       new TransactionsController(stubControllerComponents(), transactionsServiceMock,
         inject[Base16CheckActionFactory], inject[HeightCheckActionFactory],
-        inject[FromToCheckActionFactory], inject[Base58CheckActionFactory])(inject[ExecutionContext])
+        inject[FromToCheckActionFactory], inject[AddressCheckActionFactory])(inject[ExecutionContext])
     val sampleOutputId: String = "010000691b35d6eaae31a43a2327f58a78f47293a03715821cf83399e4e3a0b0"
     val sampleAddress: String = "9efRdrhgkXDvpy1NVsJ3x3Z4Ddbe8eNsXHLXVjwQswN51c53LeY"
     val sampleContractHash: String = sampleAddress

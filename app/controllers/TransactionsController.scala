@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import scorex.crypto.encode.Base16
-import utils.{Base16CheckActionFactory, Base58CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
+import utils.{Base16CheckActionFactory, AddressCheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
 import scala.concurrent.ExecutionContext
 
@@ -16,7 +16,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
                                        base16Check: Base16CheckActionFactory,
                                        heightCheck: HeightCheckActionFactory,
                                        fromToCheck: FromToCheckActionFactory,
-                                       base58Check: Base58CheckActionFactory)
+                                       addressCheck: AddressCheckActionFactory)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def findOutputApi(id: String): Action[AnyContent] = base16Check(id).async {
@@ -25,7 +25,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .map(output => Ok(output.asJson))
   }
 
-  def listOutputsByAddressApi(address: String): Action[AnyContent] = base58Check(address).async {
+  def listOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
       .map {
@@ -34,7 +34,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = base58Check(address).async {
+  def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = true)
       .map(outputs => Ok(outputs.asJson))
