@@ -24,7 +24,7 @@ GET        /api/transactions/input/:modifierId/outputs/unspent           control
 GET        /api/transactions/input/:modifierId                           controllers.TransactionsController.findInputApi(modifierId: String)
 GET        /api/transactions/tx/:id/inputs                               controllers.TransactionsController.listInputsByTxIdApi(id: String)
 GET        /api/transactions/:id                                         controllers.TransactionsController.findTransactionApi(id: String)
-GET        /transactions/:id                                             controllers.TransactionsController.findTransactionView(id: String)
+GET        /transactions/:id                                             controllers.TransactionsController.findTransactionWithOutputsInputsView(id: String)
 GET        /api/transactions/block/:id                                   controllers.TransactionsController.listByBlockIdApi(id: String)
 GET        /transactions/block/:id                                       controllers.TransactionsController.listByBlockIdView(id: String)
 GET        /api/transactions/block/height/:height/outputs                controllers.TransactionsController.outputsByBlockHeightApi(height: Int)

@@ -7,7 +7,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import scorex.crypto.encode.Base16
-import utils.{Base16CheckActionFactory, AddressCheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
+import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
 import scala.concurrent.ExecutionContext
 
@@ -51,6 +51,21 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .map(outputs => Ok(outputs.asJson))
   }
 
+  def findTransactionWithOutputsInputsView(id: String): Action[AnyContent] = base16Check(id).async {
+    transactionsDao
+      .findTransaction(id)
+      .flatMap { transaction =>
+        transactionsDao.findOutputsByTxId(id).flatMap { out =>
+          transactionsDao.listInputs(id).map { in =>
+            transaction match {
+              case Some(tx) => Ok(getTransactions(tx, out, in))
+              case None => NotFound
+            }
+          }
+        }
+      }
+  }
+
   def findUnspentOutputsByTxIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findUnspentOutputsByTxId(id)
@@ -74,15 +89,6 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .findTransaction(id)
       .map {
         case Some(transaction) => Ok(transaction.asJson)
-        case None => NotFound
-      }
-  }
-
-  def findTransactionView(id: String): Action[AnyContent] = base16Check(id).async {
-    transactionsDao
-      .findTransaction(id)
-      .map {
-        case Some(transaction) => Ok(getTransactions(transaction))
         case None => NotFound
       }
   }
