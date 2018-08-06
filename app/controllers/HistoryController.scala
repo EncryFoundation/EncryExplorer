@@ -23,19 +23,22 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
+  private def sortedWith(mode: String, list: List[Header]): List[Header] = mode match {
+    case "byHeight" => list.sortWith(_.height > _.height)
+    case "byDate" => list.sortWith(_.timestamp > _.timestamp)
+    case "byTxs" => list.sortWith(_.txsQty > _.txsQty)
+    case "byBlockSize" => list.sortWith(_.blockSize > _.blockSize)
+    case "byTxsSize" => list.sortWith(_.txsSize > _.txsSize)
+    case _ => throw new IllegalArgumentException
+  }
+
   def listLastHeadersView(mode: String, param: Int): Action[AnyContent] = heightCheck(param).async {
-    val result: Future[List[Header]] = mode match {
-      case "byHeight" => historyDao.listLastHeadersByHeight(param)
-      case "byDate" => historyDao.listLastHeadersByHeight(param).map(_.sortWith(_.timestamp > _.timestamp))
-      case "byTxs" => historyDao.listLastHeadersByHeight(param).map(_.sortWith(_.txsQty > _.txsQty))
-      case "byBlockSize" => historyDao.listLastHeadersByHeight(param).map(_.sortWith(_.blockSize > _.blockSize))
-      case "byTxsSize" => historyDao.listLastHeadersByHeight(param).map(_.sortWith(_.txsSize > _.txsSize))
-      case _ => Future.failed(new IllegalArgumentException)
-    }
-    result.map {
-      case Nil => NotFound
-      case list: List[Header] => Ok(lastHeadersView(list, param))
-    }
+    historyDao.listLastHeadersByHeight(param)
+      .map(list => sortedWith(mode, list))
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(lastHeadersView(list, param))
+      }
   }
 
   def listLastHeadersApi(qty: Int): Action[AnyContent] = qtyCheck(qty).async {
@@ -48,18 +51,12 @@ class HistoryController @Inject()(cc: ControllerComponents,
   }
 
   def listHeadersAtHeightView(mode: String, param: Int): Action[AnyContent] = heightCheck(param).async {
-    val result: Future[List[Header]] = mode match {
-      case "byHeight" => historyDao.listHeadersAtHeight(param)
-      case "byDate" => historyDao.listHeadersAtHeight(param).map(_.sortWith(_.timestamp > _.timestamp))
-      case "byTxs" => historyDao.listHeadersAtHeight(param).map(_.sortWith(_.txsQty > _.txsQty))
-      case "byBlockSize" => historyDao.listHeadersAtHeight(param).map(_.sortWith(_.blockSize > _.blockSize))
-      case "byTxsSize" => historyDao.listHeadersAtHeight(param).map(_.sortWith(_.txsSize > _.txsSize))
-      case _ => Future.failed(new IllegalArgumentException)
-    }
-    result.map {
-      case Nil => NotFound
-      case list: List[Header] => Ok(headersAtView(list, param))
-    }
+    historyDao.listHeadersAtHeight(param)
+      .map(list => sortedWith(mode, list))
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(headersAtView(list, param))
+      }
   }
 
   def listHeadersAtHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
@@ -72,18 +69,12 @@ class HistoryController @Inject()(cc: ControllerComponents,
   }
 
   def listHeadersByCountView(mode: String, from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
-    val result: Future[List[Header]] = mode match {
-      case "byHeight" => historyDao.listHeadersByCount(from, count)
-      case "byDate" => historyDao.listHeadersByCount(from, count).map(_.sortWith(_.timestamp > _.timestamp))
-      case "byTxs" => historyDao.listHeadersByCount(from, count).map(_.sortWith(_.txsQty > _.txsQty))
-      case "byBlockSize" => historyDao.listHeadersByCount(from, count).map(_.sortWith(_.blockSize > _.blockSize))
-      case "byTxsSize" => historyDao.listHeadersByCount(from, count).map(_.sortWith(_.txsSize > _.txsSize))
-      case _ => Future.failed(new IllegalArgumentException)
-    }
-    result.map {
-      case Nil => NotFound
-      case list: List[Header] => Ok(headersByCountView(list, from, count))
-    }
+    historyDao.listHeadersByCount(from, count)
+      .map(list => sortedWith(mode, list))
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(headersByCountView(list, from, count))
+      }
   }
 
   def listHeadersByCountApi(from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
@@ -96,18 +87,12 @@ class HistoryController @Inject()(cc: ControllerComponents,
   }
 
   def findHeadersByDateView(mode: String, date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
-    val result: Future[List[Header]] = mode match {
-      case "byHeight" => historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
-      case "byDate" => historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count).map(_.sortWith(_.timestamp > _.timestamp))
-      case "byTxs" => historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count).map(_.sortWith(_.txsQty > _.txsQty))
-      case "byBlockSize" => historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count).map(_.sortWith(_.blockSize > _.blockSize))
-      case "byTxsSize" => historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count).map(_.sortWith(_.txsSize > _.txsSize))
-      case _ => Future.failed(new IllegalArgumentException)
-    }
-    result.map {
-      case Nil => NotFound
-      case list: List[Header] => Ok(headersByDateView(list, date, count))
-    }
+    historyDao.findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
+      .map(list => sortedWith(mode, list))
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(headersByDateView(list, date, count))
+      }
   }
 
   def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
@@ -120,18 +105,12 @@ class HistoryController @Inject()(cc: ControllerComponents,
   }
 
   def listHeadersByHeightRangeView(mode: String, from: Int, to: Int): Action[AnyContent] = fromToCheck(from, to).async {
-    val result: Future[List[Header]] = mode match {
-      case "byHeight" => historyDao.listHeadersByHeightRange(from, to)
-      case "byDate" => historyDao.listHeadersByHeightRange(from, to).map(_.sortWith(_.timestamp > _.timestamp))
-      case "byTxs" => historyDao.listHeadersByHeightRange(from, to).map(_.sortWith(_.txsQty > _.txsQty))
-      case "byBlockSize" => historyDao.listHeadersByHeightRange(from, to).map(_.sortWith(_.blockSize > _.blockSize))
-      case "byTxsSize" => historyDao.listHeadersByHeightRange(from, to).map(_.sortWith(_.txsSize > _.txsSize))
-      case _ => Future.failed(new IllegalArgumentException)
-    }
-    result.map {
-      case Nil => NotFound
-      case list: List[Header] => Ok(headersByRangeView(list, from, to))
-    }
+    historyDao.listHeadersByHeightRange(from, to)
+      .map(list => sortedWith(mode, list))
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(headersByRangeView(list, from, to))
+      }
   }
 
   def listHeadersByHeightRangeApi(from: Int, to: Int): Action[AnyContent] = fromToCheck(from, to).async {
