@@ -9,29 +9,11 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def findHeader(id: String): Future[Option[Header]] = dBService.runAsync(findByIdQuery(id))
 
-
-  def listHeadersAtHeightByHeight(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightByHeightQuery(height))
-
-  def listHeadersAtHeightByDate(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightByDateQuery(height))
-
-  def listHeadersAtHeightByTxs(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightByTxsQuery(height))
-
-  def listHeadersAtHeightByBlockSize(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightByBlockSizeQuery(height))
-
-  def listHeadersAtHeightByTxsSize(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightByTxsSizeQuery(height))
+  def listHeadersAtHeight(height: Int): Future[List[Header]] = dBService.runAsync(findByHeightQuery(height))
 
   def findBestHeaderAtHeight(height: Int): Future[Option[Header]] = dBService.runAsync(findBestByHeightQuery(height))
 
   def listLastHeadersByHeight(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByHeightQuery(qty))
-
-  def listLastHeadersByDate(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByDateQuery(qty))
-
-  def listLastHeadersByTxs(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByTxsQuery(qty))
-
-  def listLastHeadersByBlockSize(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByBlockSizeQuery(qty))
-
-  def listLastHeadersByTxsSize(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByTxsSizeQuery(qty))
-
 
   def listHeadersByHeightRange(from: Int, to: Int): Future[List[Header]] = dBService.runAsync(findByHeightRangeQuery(from, to))
 
