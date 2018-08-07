@@ -9,7 +9,7 @@ import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKe
 import scorex.crypto.encode.Base16
 import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao,
@@ -54,15 +54,12 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def findTransactionWithOutputsInputsView(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findTransaction(id)
-      .flatMap { transaction =>
-        transactionsDao.findOutputsByTxId(id).flatMap { out =>
-          transactionsDao.listInputs(id).map { in =>
-            transaction match {
-              case Some(tx) => Ok(getTransactions(tx, out, in))
-              case None => NotFound
-            }
+      .flatMap {
+        case Some(tx) => transactionsDao.findOutputsByTxId(id).flatMap { out =>
+            transactionsDao.listInputs(id).map { in => Ok(getTransactions(tx, out, in))
+              }
           }
-        }
+        case None => Future.successful(NotFound)
       }
   }
 
