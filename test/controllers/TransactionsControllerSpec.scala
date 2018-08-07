@@ -13,7 +13,6 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
 import scorex.crypto.encode.Base16
 import utils._
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
