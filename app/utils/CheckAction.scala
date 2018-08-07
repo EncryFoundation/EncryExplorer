@@ -109,6 +109,19 @@ class Base58CheckActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(address: String): Base58CheckAction = new Base58CheckAction(parser, address)
 }
 
+class AddressCheckAction(parser: BodyParsers.Default, address: String) extends ActionBuilderImpl(parser) {
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+    if (EncryAddress.resolveAddress(address).isSuccess)
+      block(request).recoverWith {
+        case NonFatal(_) => resolve(Results.BadRequest)
+      }(executionContext)
+    else resolve(Results.BadRequest)
+}
+
+class AddressCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(address: String): AddressCheckAction = new AddressCheckAction(parser, address)
+}
+
 class DateFromToCheckAction(parser: BodyParsers.Default, fromDate: String, toDate: String) extends ActionBuilderImpl(parser) {
   sdf.setLenient(true)
 
