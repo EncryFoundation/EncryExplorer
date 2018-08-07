@@ -1,6 +1,7 @@
 package controllers
 
 import models.{Input, Output, Transaction, TransactionsDao}
+import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import org.mockito.Mockito._
 import org.scalatestplus.play.PlaySpec
 import org.mockito.ArgumentMatchers.{eq => eq_}
@@ -10,9 +11,9 @@ import play.api.test.Helpers._
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import scorex.crypto.encode.Base16
 import utils._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {

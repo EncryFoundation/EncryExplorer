@@ -3,9 +3,9 @@ package utils
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
+import org.encryfoundation.common.crypto.encoding.Base58Check
+import org.encryfoundation.common.transaction.EncryAddress
 import play.api.mvc._
-import protocol.EncryAddress
-import protocol.crypto.Base58Check
 import scorex.crypto.encode.Base16
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

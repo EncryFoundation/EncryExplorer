@@ -53,6 +53,7 @@ libraryDependencies ++= (Seq(
   "org.rudogma" %% "supertagged" % "1.+",
   "org.scorexfoundation" %% "scrypto" % "2.1.1",
   "org.encry" %% "prism" % "0.2.7",
+  "org.encry" %% "encry-common" % "0.1.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
   .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
