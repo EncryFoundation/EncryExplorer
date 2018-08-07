@@ -12,6 +12,7 @@ import scala.concurrent.Future
 import scala.concurrent.Future.{successful => resolve}
 import scala.util.Try
 import scala.util.control.NonFatal
+import ActionBuilderUtils._
 
 class Base16CheckAction(parser: BodyParsers.Default, modifierId: String) extends ActionBuilderImpl(parser) {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
@@ -79,7 +80,7 @@ class FromCountCheckActionFactory @Inject()(parser: BodyParsers.Default) {
 }
 
 class DateFromCountAction(parser: BodyParsers.Default, date: String, count: Int) extends ActionBuilderImpl(parser) {
-  private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+  sdf.setLenient(true)
 
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
     val parsedDate: Try[Date] = Try(sdf.parse(date + " 0:0:0"))
@@ -119,4 +120,26 @@ class AddressCheckAction(parser: BodyParsers.Default, address: String) extends A
 
 class AddressCheckActionFactory @Inject()(parser: BodyParsers.Default) {
   def apply(address: String): AddressCheckAction = new AddressCheckAction(parser, address)
+}
+
+class DateFromToCheckAction(parser: BodyParsers.Default, fromDate: String, toDate: String) extends ActionBuilderImpl(parser) {
+  sdf.setLenient(true)
+
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] = {
+    val fromDateParse: Try[Date] = Try(sdf.parse(fromDate + " 0:0:0"))
+    val toDateParse: Try[Date] = Try(sdf.parse(toDate + " 23:59:59"))
+    if (fromDateParse.flatMap(from => toDateParse.map(_.getTime >= from.getTime)).getOrElse(false))
+      block(request).recoverWith {
+        case NonFatal(_) => resolve(Results.BadRequest)
+      }(executionContext)
+    else resolve(Results.BadRequest)
+  }
+}
+
+class DateFromToCheckActionFactory @Inject()(parser: BodyParsers.Default) {
+  def apply(fromDate: String, toDate: String): DateFromToCheckAction = new DateFromToCheckAction(parser, fromDate, toDate)
+}
+
+object ActionBuilderUtils {
+  val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 }

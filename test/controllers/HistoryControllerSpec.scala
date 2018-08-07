@@ -67,7 +67,8 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
     val controller: HistoryController = new HistoryController(stubControllerComponents(), historyServiceMock,
       inject[Base16CheckActionFactory],inject[HeightCheckActionFactory],
       inject[FromToCheckActionFactory],inject[QtyCheckActionFactory],
-      inject[FromCountCheckActionFactory],inject[DateFromCountActionFactory])(inject[ExecutionContext])
+      inject[FromCountCheckActionFactory],inject[DateFromCountActionFactory],
+      inject[DateFromToCheckActionFactory])(inject[ExecutionContext])
     val sampleHeaderId: String = "000097b22265ddb9197a49ff3ed21ce8dc21dc0fa51cb0f2ba2fbe326bbe175a"
     val sampleHeight: Int = 2134
     val sampleHeader: Header = Header(

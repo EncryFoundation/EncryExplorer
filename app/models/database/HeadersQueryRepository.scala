@@ -24,7 +24,11 @@ object HeadersQueryRepository {
   def findByCountQuery(from:Int, count: Int): ConnectionIO[List[Header]] =
     sql"SELECT * FROM headers WHERE (height BETWEEN $from AND ($from + $count - 1) AND best_chain = TRUE)".query[Header].to[List]
 
+  def findHeadersByFromToDateQuery(from: Long, to: Long): ConnectionIO[List[Header]] =
+    sql"select * from headers where ts >= $from AND ts <= $to ORDER BY height DESC".query[Header].to[List]
+
   def findHeadersByDateQuery(time: Long, count: Int): ConnectionIO[List[Header]] =
     sql"select * from headers where ts >= $time ORDER BY height DESC LIMIT $count".query[Header].to[List]
+
 }
 
