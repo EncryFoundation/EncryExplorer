@@ -31,7 +31,7 @@
             <tr><td>txsSize: @requestBlock.header.txsSize</td></tr>
             <tr><td>bestChain: @requestBlock.header.bestChain</td></tr>
             <tr><td><ul>@for(transaction <- requestBlock.payload) {
-                <li><a href ="@routes.TransactionsController.findTransactionView(transaction.id)">@transaction.id</a>
+                <li><a href ="@routes.TransactionsController.findTransactionWithOutputsInputsView(transaction.id)">@transaction.id</a>
                     <br>@{
                         new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
                     }
