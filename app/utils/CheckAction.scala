@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
 import play.api.mvc._
+import protocol.EncryAddress
 import protocol.crypto.Base58Check
 import scorex.crypto.encode.Base16
 import scala.concurrent.ExecutionContext.Implicits.global
