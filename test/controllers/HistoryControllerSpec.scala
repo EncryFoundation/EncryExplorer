@@ -46,9 +46,9 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
 
   "HistoryController#listLastHeaders" should {
     "return header with \"bestChain\" equal true and lowest height" in new HistoryControllerSpecWiring{
-      when(historyServiceMock.listLastHeaders(5)).thenReturn(Future.successful(List(oneLevelLowerHeader)))
+      when(historyServiceMock.listLastHeadersByHeight(5)).thenReturn(Future.successful(List(oneLevelLowerHeader)))
       val result: Future[Result] = controller.listLastHeadersApi(5).apply(FakeRequest())
-      verify(historyServiceMock).listLastHeaders(eq_(5))
+      verify(historyServiceMock).listLastHeadersByHeight(eq_(5))
       status(result) shouldBe OK
     }
   }
