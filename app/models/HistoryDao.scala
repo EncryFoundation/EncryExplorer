@@ -13,7 +13,7 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def findBestHeaderAtHeight(height: Int): Future[Option[Header]] = dBService.runAsync(findBestByHeightQuery(height))
 
-  def listLastHeaders(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByHeightQuery(qty))
+  def listLastHeadersByHeight(qty: Int): Future[List[Header]] = dBService.runAsync(findLastByHeightQuery(qty))
 
   def listHeadersByHeightRange(from: Int, to: Int): Future[List[Header]] = dBService.runAsync(findByHeightRangeQuery(from, to))
 

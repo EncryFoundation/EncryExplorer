@@ -1,5 +1,5 @@
 @import java.util.Date
-@(requestBlocks: List[Header])
+@(requestBlocks: List[Header], from: Int, count: Int)
 
 <html lang="en">
     <head>
@@ -10,15 +10,20 @@
     </head>
     <body>
         <center>
-            <table class="table" width="50%" border="1" rules="all">
+            <table class=" table" width="50%" border="1" rules="all">
                 <thead>
                     <tr>
-                        <th scope="col">height</th>
-                        <th scope="col">Timestamp</th>
-                        <th scope="col">txsSize</th>
-                        <th scope="col">blockSize</th>
+                        <th scope="col"><a href="@routes.HistoryController.listHeadersByCountView("byHeight", from, count)">
+                            height</a></th>
+                        <th scope="col"><a href="@routes.HistoryController.listHeadersByCountView("byDate", from, count)">
+                            Timestamp</a></th>
+                        <th scope="col"> <a href="@routes.HistoryController.listHeadersByCountView("byTxsSize", from, count)">
+                            TxsSize</a></th>
+                        <th scope="col"> <a href="@routes.HistoryController.listHeadersByCountView("byBlockSize", from, count)">
+                            BlockSize</a></th>
                         <th scope="col">id</th>
-                        <th scope="col">txs</th>
+                        <th scope="col"> <a href="@routes.HistoryController.listHeadersByCountView("byTxs", from, count)">
+                            Txs</a></th>
                     </tr>
                 </thead>
                 @for(requestBlock <- requestBlocks) {
