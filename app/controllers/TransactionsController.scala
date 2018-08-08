@@ -3,9 +3,9 @@ package controllers
 import io.circe.syntax._
 import javax.inject.Inject
 import models._
+import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
 import scorex.crypto.encode.Base16
 import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
