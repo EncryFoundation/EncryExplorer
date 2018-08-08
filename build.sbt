@@ -10,7 +10,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 PlayKeys.devSettings := Seq("play.server.http.port" -> "9053")
 
 val akkaHttpVersion = "10.1.3"
-val circeVersion = "0.9.3"
 val doobieVersion = "0.5.2"
 
 val databaseDependencies = Seq(
@@ -21,9 +20,6 @@ val databaseDependencies = Seq(
 )
 
 val apiDependencies = Seq(
-  "io.circe" %% "circe-core" % circeVersion,
-  "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion,
   "com.dripower" %% "play-circe" % "2609.1" exclude("io.circe", "*"),
   "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.14.1",
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
@@ -46,13 +42,10 @@ libraryDependencies ++= (Seq(
   "net.codingwell" %% "scala-guice" % "4.2.1",
   "javax.xml.bind" % "jaxb-api" % "2.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-  "com.google.guava" % "guava" % "21.+",
   "com.iheart" %% "ficus" % "1.4.2",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",
-  "org.scorexfoundation" %% "scrypto" % "2.1.1",
-  "org.encry" %% "prism" % "0.2.7",
   "org.encry" %% "encry-common" % "0.1.2",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
