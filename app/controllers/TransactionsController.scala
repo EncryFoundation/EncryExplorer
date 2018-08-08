@@ -2,20 +2,21 @@ package controllers
 
 import io.circe.syntax._
 import javax.inject.Inject
-import models.{Output, Transaction, TransactionsDao}
+import models._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import protocol.AccountLockedContract
-import utils.{Base16CheckActionFactory, Base58CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
+import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import scorex.crypto.encode.Base16
+import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao,
                                        base16Check: Base16CheckActionFactory,
                                        heightCheck: HeightCheckActionFactory,
                                        fromToCheck: FromToCheckActionFactory,
-                                       base58Check: Base58CheckActionFactory)
+                                       addressCheck: AddressCheckActionFactory)
                                       (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   def findOutputApi(id: String): Action[AnyContent] = base16Check(id).async {
@@ -24,7 +25,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .map(output => Ok(output.asJson))
   }
 
-  def listOutputsByAddressApi(address: String): Action[AnyContent] = base58Check(address).async {
+  def listOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
       .map {
@@ -33,18 +34,33 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = base58Check(address).async {
+  def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = true)
       .map(outputs => Ok(outputs.asJson))
   }
 
-  private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
+  private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
+    case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
+    case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
+  }.getOrElse(throw EncryAddress.InvalidAddressException)
 
   def findOutputsByTxIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findOutputsByTxId(id)
       .map(outputs => Ok(outputs.asJson))
+  }
+
+  def findTransactionWithOutputsInputsView(id: String): Action[AnyContent] = base16Check(id).async {
+    transactionsDao
+      .findTransaction(id)
+      .flatMap {
+        case Some(tx) => transactionsDao.findOutputsByTxId(id).flatMap { out =>
+            transactionsDao.listInputs(id).map { in => Ok(getTransactions(tx, out, in))
+              }
+          }
+        case None => Future.successful(NotFound)
+      }
   }
 
   def findUnspentOutputsByTxIdApi(id: String): Action[AnyContent] = base16Check(id).async {
@@ -70,15 +86,6 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .findTransaction(id)
       .map {
         case Some(transaction) => Ok(transaction.asJson)
-        case None => NotFound
-      }
-  }
-
-  def findTransactionView(id: String): Action[AnyContent] = base16Check(id).async {
-    transactionsDao
-      .findTransaction(id)
-      .map {
-        case Some(transaction) => Ok(getTransactions(transaction))
         case None => NotFound
       }
   }

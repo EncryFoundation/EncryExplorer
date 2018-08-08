@@ -1,7 +1,7 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${application.home:-.}/logs/Application.log</file>
+        <file>${application.home:-.}/logs/application.log</file>
         <encoder>
             <pattern>[%d{HH:mm:ss}] [%level] - %message%n%xException</pattern>
         </encoder>

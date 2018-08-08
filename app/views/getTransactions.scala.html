@@ -1,5 +1,5 @@
 @import java.util.Date
-@(transaction: Transaction)
+@(transaction: Transaction, outputs: List[Output], inputs: List[Input])
 
 <html lang="en">
     <head>
@@ -7,17 +7,42 @@
         <title>get transaction</title>
     </head>
     <body>
-        <center> <table width="50%" border="1" rules="all">
-            <tr><td>id: @transaction.id</td></tr>
-            <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
-            <tr><td>blockId: @transaction.blockId</td></tr>
-            <tr><td>
-                timestamp:
+        <center>
+            <tr><td>Tx info</td></tr>
+            <table width="50%" border="1" rules="all">
+                <tr><td>id: @transaction.id</td></tr>
+                <tr><td>isCoinbase: @transaction.isCoinbase</td></tr>
+                <tr><td>blockId: @transaction.blockId</td></tr>
+                <tr><td>
+                    timestamp:
                     @{
                         new Date(transaction.timestamp).format("yyyy-MM-dd HH:mm:ss")
                     }
-            </td></tr>
-        </table>
+                </td>
+                </tr>
+            </table>
+            <br>
+            <tr><td>Outputs info</td></tr>
+            @for(output <- outputs) {
+                <table width="50%" border="1" rules="all">
+                    <tr><td>id: @output.id</td></tr>
+                    <tr><td>txId: @output.txId</td></tr>
+                    <tr><td>coinId: @output.coinId</td></tr>
+                    <tr><td>monetaryValue: @output.monetaryValue</td></tr>
+                    <tr><td>contractHash: @output.contractHash</td></tr>
+                    <tr><td>data: @output.data</td></tr>
+                </table>
+                <br>
+            }
+            <tr><td>Inputs info</td></tr>
+            @for(input <- inputs) {
+                <table width="50%" border="1" rules="all">
+                    <tr><td>id: @input.id</td></tr>
+                    <tr><td>tx_id: @input.txId</td></tr>
+                    <tr><td>serialized_proofs: @input.proofs</td></tr>
+                </table>
+                <br>
+                }
         </center>
     </body>
 </html>

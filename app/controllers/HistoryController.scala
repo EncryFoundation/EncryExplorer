@@ -18,7 +18,8 @@ class HistoryController @Inject()(cc: ControllerComponents,
                                   fromToCheck: FromToCheckActionFactory,
                                   qtyCheck: QtyCheckActionFactory,
                                   fromCountCheck: FromCountCheckActionFactory,
-                                  dateFromCount: DateFromCountActionFactory)
+                                  dateFromCount: DateFromCountActionFactory,
+                                  dateFromToCheck: DateFromToCheckActionFactory)
                                  (implicit ex: ExecutionContext) extends AbstractController(cc) with Circe {
 
   private val sdf: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
@@ -140,6 +141,42 @@ class HistoryController @Inject()(cc: ControllerComponents,
       }
   }
 
+  def listHeadersByDateFromToView(fromDate: String, toDate: String): Action[AnyContent] = dateFromToCheck(fromDate, toDate).async {
+    historyDao
+      .findHeadersByFromToDate(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(getHeaderListView(list))
+      }
+  }
+
+  def listHeadersByDateFromToApi(fromDate: String, toDate: String): Action[AnyContent] = dateFromToCheck(fromDate, toDate).async {
+    historyDao
+      .findHeadersByFromToDate(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(list.asJson)
+      }
+  }
+
+  def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
+    historyDao
+      .findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(getHeaderListView(list))
+      }
+  }
+
+  def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
+    historyDao
+      .findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
+      .map {
+        case Nil => NotFound
+        case list: List[Header] => Ok(list.asJson)
+      }
+  }
+
   def findBestHeaderAtHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
     historyDao
       .findBestHeaderAtHeight(height)
@@ -157,4 +194,5 @@ class HistoryController @Inject()(cc: ControllerComponents,
         case None => NotFound
       }
   }
+
 }

@@ -10,7 +10,8 @@ import play.api.test.Helpers._
 import org.scalatest.Matchers._
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-import protocol.AccountLockedContract
+import protocol.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}
+import scorex.crypto.encode.Base16
 import utils._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -25,7 +26,10 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     }
   }
 
-  private def contractHashByAddress(address: String): String = AccountLockedContract(address).contractHashHex
+  private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
+    case p2pk: Pay2PubKeyAddress => PubKeyLockedContract(p2pk.pubKey).contractHashHex
+    case p2sh: Pay2ContractHashAddress => Base16.encode(p2sh.contractHash)
+  }.getOrElse(throw EncryAddress.InvalidAddressException)
 
   "TransactionsController#listOutputsByAddress" should {
     "return all outputs w given address" in new TransactionControllerSpecWiring {
@@ -149,9 +153,9 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     val controller: TransactionsController =
       new TransactionsController(stubControllerComponents(), transactionsServiceMock,
         inject[Base16CheckActionFactory], inject[HeightCheckActionFactory],
-        inject[FromToCheckActionFactory], inject[Base58CheckActionFactory])(inject[ExecutionContext])
+        inject[FromToCheckActionFactory], inject[AddressCheckActionFactory])(inject[ExecutionContext])
     val sampleOutputId: String = "010000691b35d6eaae31a43a2327f58a78f47293a03715821cf83399e4e3a0b0"
-    val sampleAddress: String = "3jSD9fwHEHJwHq99ARqhnNhqGXeKnkJMyX4FZjHV6L3PjbCmjG"
+    val sampleAddress: String = "9efRdrhgkXDvpy1NVsJ3x3Z4Ddbe8eNsXHLXVjwQswN51c53LeY"
     val sampleContractHash: String = sampleAddress
     val sampleTxId: String = "0b6df74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleOutput: Output = Output(
