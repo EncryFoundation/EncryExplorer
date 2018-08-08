@@ -7,8 +7,8 @@ import models.{Header, HistoryDao}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import utils._
-import views.html.{headersAtView, headersByCountView, headersByDateView, headersByRangeView, lastHeadersView, getHeader => getHeaderView}
-import scala.concurrent.{ExecutionContext, Future}
+import views.html.{headersAtView, headersByCountView, headersByDateView, headersByRangeView, lastHeadersView, getHeader => getHeaderView, headersByDateFromTo}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class HistoryController @Inject()(cc: ControllerComponents,
@@ -141,36 +141,19 @@ class HistoryController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def listHeadersByDateFromToView(fromDate: String, toDate: String): Action[AnyContent] = dateFromToCheck(fromDate, toDate).async {
+  def listHeadersByDateFromToView(mode: String, fromDate: String, toDate: String): Action[AnyContent] = dateFromToCheck(fromDate, toDate).async {
     historyDao
       .findHeadersByFromToDate(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
+      .map(list => sortedWith(mode, list))
       .map {
         case Nil => NotFound
-        case list: List[Header] => Ok(getHeaderListView(list))
+        case list: List[Header] => Ok(headersByDateFromTo(list, fromDate, toDate))
       }
   }
 
   def listHeadersByDateFromToApi(fromDate: String, toDate: String): Action[AnyContent] = dateFromToCheck(fromDate, toDate).async {
     historyDao
       .findHeadersByFromToDate(sdf.parse(fromDate + " 00:00:00").getTime, sdf.parse(toDate + " 23:59:59").getTime)
-      .map {
-        case Nil => NotFound
-        case list: List[Header] => Ok(list.asJson)
-      }
-  }
-
-  def findHeadersByDateView(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
-    historyDao
-      .findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
-      .map {
-        case Nil => NotFound
-        case list: List[Header] => Ok(getHeaderListView(list))
-      }
-  }
-
-  def findHeadersByDateApi(date: String, count: Int): Action[AnyContent] = dateFromCount(date, count).async {
-    historyDao
-      .findHeadersByDate(sdf.parse(date + " 0:0:0").getTime, count)
       .map {
         case Nil => NotFound
         case list: List[Header] => Ok(list.asJson)
