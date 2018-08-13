@@ -22,7 +22,10 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def findOutputApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findOutput(id)
-      .map(output => Ok(output.asJson))
+      .map {
+        case Some(output) => Ok(output.asJson)
+        case None => NotFound
+      }
   }
 
   def listOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
@@ -37,7 +40,10 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = true)
-      .map(outputs => Ok(outputs.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   private def contractHashByAddress(address: String): String = EncryAddress.resolveAddress(address).map {
@@ -48,7 +54,10 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def findOutputsByTxIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findOutputsByTxId(id)
-      .map(outputs => Ok(outputs.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def findTransactionWithOutputsInputsView(id: String): Action[AnyContent] = base16Check(id).async {
@@ -56,9 +65,9 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .findTransaction(id)
       .flatMap {
         case Some(tx) => transactionsDao.findOutputsByTxId(id).flatMap { out =>
-            transactionsDao.listInputs(id).map { in => Ok(getTransactions(tx, out, in))
-              }
+          transactionsDao.listInputs(id).map { in => Ok(getTransactions(tx, out, in))
           }
+        }
         case None => Future.successful(NotFound)
       }
   }
@@ -66,19 +75,28 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def findUnspentOutputsByTxIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findUnspentOutputsByTxId(id)
-      .map(outputs => Ok(outputs.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def findInputApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findInput(id)
-      .map(inputs => Ok(inputs.asJson))
+      .map {
+        case Some(input) => Ok(input.asJson)
+        case None => NotFound
+      }
   }
 
   def listInputsByTxIdApi(txId: String): Action[AnyContent] = base16Check(txId).async {
     transactionsDao
       .listInputs(txId)
-      .map(inputs => Ok(inputs.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Input] => Ok(list.asJson)
+      }
   }
 
   def findTransactionApi(id: String): Action[AnyContent] = base16Check(id).async {
@@ -111,31 +129,46 @@ class TransactionsController @Inject()(cc: ControllerComponents,
   def outputsByBlockHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
     transactionsDao
       .listOutputsByBlockHeight(height)
-      .map(tx => Ok(tx.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def unspentOutputsByBlockHeightApi(height: Int): Action[AnyContent] = heightCheck(height).async {
     transactionsDao
       .listOutputsByBlockHeightUnspent(height)
-      .map(tx => Ok(tx.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def findOutputByBlockIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findOutputByBlockId(id)
-      .map(tx => Ok(tx.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def findUnspentOutputByBlockIdApi(id: String): Action[AnyContent] = base16Check(id).async {
     transactionsDao
       .findUnspentOutputByBlockId(id)
-      .map(tx => Ok(tx.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
   }
 
   def findTransactionByBlockHeightRangeApi(from: Int, to: Int): Action[AnyContent] = fromToCheck(from, to).async {
     transactionsDao
       .findTransactionByBlockHeightRange(from, to)
-      .map(tx => Ok(tx.asJson))
+      .map {
+        case Nil => NotFound
+        case list: List[Transaction] => Ok(list.asJson)
+      }
   }
 
 }
