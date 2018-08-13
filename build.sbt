@@ -46,7 +46,7 @@ libraryDependencies ++= (Seq(
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
   "org.whispersystems" % "curve25519-java" % "+",
   "org.rudogma" %% "supertagged" % "1.+",
-  "org.encry" %% "encry-common" % "0.1.2",
+  "org.encry" %% "encry-common" % "0.8.0",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
   .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
