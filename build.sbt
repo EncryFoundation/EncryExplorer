@@ -1,9 +1,6 @@
-name := """Explorer"""
-
-version := "1.0-SNAPSHOT"
-
+name := "Explorer"
+version := "0.8.0"
 scalaVersion := "2.12.6"
-
 organization := "org.encryfoundation"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
@@ -26,10 +23,10 @@ val apiDependencies = Seq(
 )
 
 val testingDependencies = Seq(
-  "com.typesafe.akka" %% "akka-testkit" % "2.4.+" % "test",
+  "com.typesafe.akka" %% "akka-testkit" % "2.5.14" % "test",
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
-  "org.scalacheck" %% "scalacheck" % "1.13.+" % "test",
+  "org.scalacheck" %% "scalacheck" % "1.14.0" % "test",
   "org.mockito" % "mockito-core" % "2.19.1" % Test
 )
 
@@ -44,8 +41,8 @@ libraryDependencies ++= (Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "com.iheart" %% "ficus" % "1.4.2",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.58",
-  "org.whispersystems" % "curve25519-java" % "+",
-  "org.rudogma" %% "supertagged" % "1.+",
+  "org.whispersystems" % "curve25519-java" % "0.5.0",
+  "org.rudogma" %% "supertagged" % "1.4",
   "org.encry" %% "encry-common" % "0.8.0",
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
