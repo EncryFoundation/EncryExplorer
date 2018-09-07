@@ -3,11 +3,11 @@ package models
 case class Directive(txId: String,
                      typeId: Short,
                      isValid: Boolean,
-                     contracthash: String,
+                     contractHash: String,
                      amount: Long,
                      address: String,
                      tokenIdOpt: Option[String],
-                     datafield: String)
+                     dataField: String)
 
 object Directive{
 
@@ -18,10 +18,10 @@ object Directive{
     "txId"   -> d.txId.asJson,
     "typeId" -> d.typeId.asJson,
     "isValid" -> d.isValid.asJson,
-    "contracthash" -> d.contracthash.asJson,
+    "contracthash" -> d.contractHash.asJson,
     "amount" -> d.amount.asJson,
     "address" -> d.address.asJson,
     "tokenIdOpt" -> d.tokenIdOpt.asJson,
-    "datafield" -> d.datafield.asJson
+    "datafield" -> d.dataField.asJson
   ).asJson
 }
