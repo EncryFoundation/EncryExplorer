@@ -8,6 +8,7 @@ case class Header(id: String,
                   stateRoot: String,
                   transactionsRoot: String,
                   timestamp: Long,
+                  nonce: Long,
                   difficulty: Long,
                   blockSize: Long,
                   equihashSolutions: String,
@@ -33,6 +34,7 @@ object Header {
     "stateRoot"         -> h.stateRoot.asJson,
     "transactionsRoot"  -> h.transactionsRoot.asJson,
     "timestamp"         -> h.timestamp.asJson,
+    "nonce"             -> h.nonce.asJson,
     "difficulty"        -> h.difficulty.asJson,
     "blockSize"         -> h.blockSize.asJson,
     "equihashSolutions" -> h.equihashSolutions.asJson,
@@ -45,4 +47,3 @@ object Header {
     "bestChain"         -> h.bestChain.asJson
   ).asJson
 }
-
