@@ -1,6 +1,7 @@
 package controllers
 
 import io.circe.syntax._
+import io.circe.generic.auto._
 import javax.inject.{Inject, Singleton}
 import models._
 import play.api.libs.circe.Circe
