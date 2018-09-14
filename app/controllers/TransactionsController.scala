@@ -1,6 +1,7 @@
 package controllers
 
 import io.circe.syntax._
+import io.circe.generic.auto._
 import javax.inject.Inject
 import models._
 import org.encryfoundation.common.transaction.{EncryAddress, Pay2ContractHashAddress, Pay2PubKeyAddress, PubKeyLockedContract}

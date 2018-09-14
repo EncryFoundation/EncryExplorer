@@ -51,6 +51,7 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
       "69b8d7c7d8ebfe499ddaa1de177114608f4ee3c1dd61ab060ee12abbb4f767b510",
       "6955076caa10ccbac39a7fd19cede5ad058f5eaa574f76fc13ace1fcc48dfd54",
       1532087272902L,
+      1532036033902L,
       56,
       447,
       Array(432,11576,23592,85771,5416,55037,53893,124149,14068,25170,31805,39989,36280,101932,57359,123648,15589,125264,41411,96028,81408,122850,118361,121825,27357,84717,41906,74892,51146,100436,72845,109986).mkString(","),
@@ -66,15 +67,19 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
     val sampleTxId2: String = "0b6bf74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleTransaction1: Transaction = Transaction(
       sampleTxId1,
+      1532036033902L,
       sampleBlockId,
       true,
-      1532037033902L
+      1532037033902L,
+      None
     )
     val sampleTransaction2: Transaction = Transaction(
       sampleTxId2,
+      1532037033902L,
       sampleBlockId,
       false,
-      1532036033902L
+      1532036033902L,
+      None
     )
     val transactions: List[Transaction] = List(sampleTransaction2, sampleTransaction1)
   }

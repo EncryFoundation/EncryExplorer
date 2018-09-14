@@ -2,6 +2,7 @@ package controllers
 
 import java.text.SimpleDateFormat
 import io.circe.syntax._
+import io.circe.generic.auto._
 import javax.inject.{Inject, Singleton}
 import models.{Header, HistoryDao}
 import play.api.libs.circe.Circe
