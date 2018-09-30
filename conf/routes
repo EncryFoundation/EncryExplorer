@@ -37,3 +37,5 @@ GET        /api/transactions/tx/range/:from/:to                          control
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)
+
+GET        /nodeinfo/:id                                                  controllers.NodeController.nodeinfo(id: Int)

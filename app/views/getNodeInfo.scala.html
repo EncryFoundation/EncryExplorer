@@ -1,0 +1,19 @@
+@(info: Seq[String])
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>get nodeInfo</title>
+    </head>
+    <body>
+
+        <center> <table width="50%" border="1" rules="all">
+            <tr><td>name: @info(0)</td></tr>
+            <tr><td>fullHeight: @info(1)</td></tr>
+            <tr><td>headersHeight: @info(2)</td></tr>
+            <tr><td>isMining: @info(3)</td></tr>
+        </table>
+
+        </center>
+    </body>
+</html>
