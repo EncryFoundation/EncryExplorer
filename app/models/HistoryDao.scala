@@ -23,4 +23,7 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def findHeadersByDate(time: Long, count: Int): Future[List[Header]] = dBService.runAsync(findHeadersByDateQuery(time, count))
 
+  def findAllHeaders(from: Int, to: Int): Future[List[Header]] = dBService.runAsync(findHeaders(from, to))
+
+  def findMaxHeaders: Future[List[Header]] = dBService.runAsync(findMaxHeightQuery)
 }
