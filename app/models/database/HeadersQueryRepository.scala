@@ -34,7 +34,7 @@ object HeadersQueryRepository {
     sql"select * from headers where best_chain = true ORDER BY height DESC LIMIT 500".query[Header].to[List]
 
   def findHeaders(from: Int, to: Int): ConnectionIO[List[Header]] =
-    sql"select * from headers where best_chain = true AND height >= $from AND height < $to ORDER BY height ".query[Header].to[List]
+    sql"select * from headers where best_chain = true AND height >= $from AND height < $to ORDER BY height DESC".query[Header].to[List]
 
 }
 

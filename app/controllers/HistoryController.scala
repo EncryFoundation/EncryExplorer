@@ -63,7 +63,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def listHeaders(from: Int, to: Int): Action[AnyContent] = fromToCheck(from, to).async{
     historyDao.findAllHeaders(from, to)
-      .map(list => sortedWith("byHeight", list))
       .map{
         case Nil => NotFound
         case list: List[Header] => Ok(headersList(list, from, to))
@@ -72,7 +71,6 @@ class HistoryController @Inject()(cc: ControllerComponents,
 
   def maxHeight : Action[AnyContent] = Action.async{
     historyDao.findMaxHeaders
-      .map(list => sortedWith("byHeight", list))
       .map{
         case Nil => NotFound
         case list: List[Header] => Ok(maxHeadersList(list))
