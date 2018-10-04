@@ -61,12 +61,14 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
       1991616,
       0,
       112,
-      bestChain = true
+      bestChain = true,
+      None
     )
     val sampleTxId1: String = "0b6df74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleTxId2: String = "0b6bf74842f4088b8ba3b6ad7b744cd415769b4a27470f993699c3827a98030c"
     val sampleTransaction1: Transaction = Transaction(
       sampleTxId1,
+      5,
       1532036033902L,
       sampleBlockId,
       true,
@@ -75,6 +77,7 @@ class BlockControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injectin
     )
     val sampleTransaction2: Transaction = Transaction(
       sampleTxId2,
+      3,
       1532037033902L,
       sampleBlockId,
       false,
