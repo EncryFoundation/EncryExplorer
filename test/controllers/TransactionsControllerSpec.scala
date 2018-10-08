@@ -176,6 +176,7 @@ class TransactionsControllerSpec extends PlaySpec with GuiceOneAppPerTest with I
     val sampleBlockId: String = "06de77e451d0c326a0350faa76b31c3421f0677d7da3530501db4cd13103bf3f"
     val sampleTransaction: Transaction = Transaction(
       sampleTxId,
+      5,
       1532036033902L,
       sampleBlockId,
       true,

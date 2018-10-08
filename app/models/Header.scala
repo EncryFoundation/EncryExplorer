@@ -18,4 +18,5 @@ case class Header(id: String,
                   minerReward: Long,
                   feesTotal: Long,
                   txsSize: Long,
-                  bestChain: Boolean)
+                  bestChain: Boolean,
+                  blockAdProofs: Option[String])

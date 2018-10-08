@@ -1,0 +1,59 @@
+
+@import java.util.Date
+@(requestBlocks: List[Header])
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <div style="text-align: center;">
+            <title>Header list</title>
+        </div>
+    </head>
+    <body>
+        <center>
+            <table class=" table" width="50%" border="1" rules="all">
+                <thead>
+                    <tr>
+                        <th scope="col"><a href="@routes.HistoryController.maxHeight">
+                            height</a></th>
+                        <th scope="col"><a href="@routes.HistoryController.maxHeight">
+                            Timestamp</a></th>
+                        <th scope="col"> <a href="@routes.HistoryController.maxHeight">
+                            TxsSize</a></th>
+                        <th scope="col"> <a href="@routes.HistoryController.maxHeight">
+                            BlockSize</a></th>
+                        <th scope="col">id</th>
+                        <th scope="col"> <a href="@routes.HistoryController.maxHeight">
+                            Txs</a></th>
+                    </tr>
+                </thead>
+                @for(requestBlock <- requestBlocks) {
+                    <tbody>
+                        <tr>
+                            <th>@requestBlock.height</th>
+                            <td>@{
+                                new Date(requestBlock.timestamp).format("yyyy-MM-dd HH:mm:ss")
+                            }</td>
+                            <td>@requestBlock.txsSize</td>
+                            <td>@requestBlock.blockSize</td>
+                            <td><a href="@routes.BlockController.findBlockView(requestBlock.id)">@requestBlock.id</a></td>
+                            <td>@requestBlock.txsQty</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </center>
+    </body>
+
+    @makeLink(from: Int,to: Int) = @{
+            s"http://testnet01.encry.ru:9053/history/allHeaders/${from}/${to}"
+    }
+    <head>
+        <meta charset="utf-8">
+        <title>Тег BUTTON</title>
+    </head>
+    <body>
+        <form>
+            <p style="text-align: center"><button formaction=@makeLink(from = requestBlocks.last.height - 100, to = requestBlocks.last.height)>Next</button></p>
+        </form>
+    </body>
+</html>

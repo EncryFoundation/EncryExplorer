@@ -90,7 +90,8 @@ class HistoryControllerSpec extends PlaySpec with GuiceOneAppPerTest with Inject
       1991616,
       0,
       112,
-      bestChain = true
+      bestChain = true,
+      None
     )
     val oneLevelLowerHeader: Header = sampleHeader.copy(
       id = "000540338775ab9dad5effefe993c43d8ab2cf66f8a26b883c980d5e10d4899a",

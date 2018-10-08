@@ -1,4 +1,4 @@
-GET        /                                                             controllers.HomeController.index
+GET        /                                                             controllers.HistoryController.maxHeight
 GET        /assets/*file                                                 controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /history/bestHeaderAt/:height                                 controllers.HistoryController.findBestHeaderAtHeightView(height: Int)
@@ -17,6 +17,7 @@ GET        /history/findHeadersByDate/:mode/:date/:count                 control
 GET        /api/history/findHeadersByDate/:date/:count                   controllers.HistoryController.findHeadersByDateApi(date: String, count: Int)
 GET        /history/headers/findByDateFromTo/:mode/:from/:to             controllers.HistoryController.listHeadersByDateFromToView(mode: String, from: String, to: String)
 GET        /api/history/headers/findByDateFromTo/:from/:to               controllers.HistoryController.listHeadersByDateFromToApi(from: String, to: String)
+GET        /history/allHeaders/:from/:to                                 controllers.HistoryController.listHeaders(from: Int , to: Int)
 
 GET        /api/transactions/output/:modifierId                          controllers.TransactionsController.findOutputApi(modifierId: String)
 GET        /api/transactions/:address/outputs                            controllers.TransactionsController.listOutputsByAddressApi(address: String)
