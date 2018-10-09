@@ -55,7 +55,7 @@ class HistoryController @Inject()(cc: ControllerComponents,
   def listHeadersForMainPageView(from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
     historyDao.listHeadersByCount(from, count)
       .map {
-        case Nil => NotFound
+        case Nil => Redirect("/")
         case list: List[Header] => Ok(NextPageView(list))
       }
   }
