@@ -19,8 +19,8 @@
                         <th scope="col">BlockSize</th>
                         <th scope="col">id</th>
                         <th scope="col">Txs</th>
-                        <th scope="col"><a href="@routes.HistoryController.listHeadersForMainPageView(requestBlocks.last.height - 100, 100)">next page</a>
-                        </th>
+                        <th scope="col"> <a href="@routes.HistoryController.listHeadersForMainPageView(requestBlocks.last.height - 100, 100)">next page</a></th>
+                        <th scope="col"> <a href="@routes.HistoryController.listHeadersForMainPageView(requestBlocks.last.height + 100, 100)">prev page</a></th>
                     </tr>
                 </thead>
                 @for(requestBlock <- requestBlocks) {
