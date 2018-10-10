@@ -8,7 +8,7 @@ import models.{Header, HistoryDao}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import utils._
-import views.html.{headersAtView, headersByCountView, headersByDateFromTo, headersByDateView, headersByRangeView, headersList, lastHeadersView, maxHeadersList, getHeader => getHeaderView}
+import views.html.{NextPageView, headersAtView, headersByCountView, headersByDateFromTo, headersByDateView, headersByRangeView, headersList, lastHeadersView, maxHeadersList, getHeader => getHeaderView}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -52,6 +52,14 @@ class HistoryController @Inject()(cc: ControllerComponents,
       }
   }
 
+  def listHeadersForMainPageView(from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
+    historyDao.listHeadersByCount(from, count)
+      .map {
+        case Nil => Redirect("/")
+        case list: List[Header] => Ok(NextPageView(list))
+      }
+  }
+
   def listHeadersAtHeightView(mode: String, param: Int): Action[AnyContent] = heightCheck(param).async {
     historyDao.listHeadersAtHeight(param)
       .map(list => sortedWith(mode, list))
@@ -69,9 +77,9 @@ class HistoryController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def maxHeight : Action[AnyContent] = Action.async{
+  def maxHeight: Action[AnyContent] = Action.async {
     historyDao.findMaxHeaders
-      .map{
+      .map {
         case Nil => NotFound
         case list: List[Header] => Ok(maxHeadersList(list))
       }
