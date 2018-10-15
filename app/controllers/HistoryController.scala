@@ -53,7 +53,10 @@ class HistoryController @Inject()(cc: ControllerComponents,
   }
 
   def listHeadersForMainPageView(from: Int, count: Int): Action[AnyContent] = fromCountCheck(from, count).async {
-    historyDao.listHeadersByCount(from, count)
+    historyDao.listHeadersByCountWithoutBestChain(from, count)
+      .map(_.map { x =>
+
+      })
       .map {
         case Nil => Redirect("/")
         case list: List[Header] => Ok(NextPageView(list))

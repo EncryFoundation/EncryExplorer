@@ -19,6 +19,8 @@ class HistoryDao @Inject()(dBService: DBService)(implicit ec: ExecutionContext) 
 
   def listHeadersByCount(from: Int, count: Int): Future[List[Header]] = dBService.runAsync(findByCountQuery(from, count))
 
+  def listHeadersByCountWithoutBestChain(from: Int, count: Int): Future[List[Header]] = dBService.runAsync(findByCountWithoutBestChainQuery(from, count))
+
   def findHeadersByFromToDate(from: Long, to: Long): Future[List[Header]] = dBService.runAsync(findHeadersByFromToDateQuery(from, to))
 
   def findHeadersByDate(time: Long, count: Int): Future[List[Header]] = dBService.runAsync(findHeadersByDateQuery(time, count))

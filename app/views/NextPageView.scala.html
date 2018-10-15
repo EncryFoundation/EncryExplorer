@@ -24,7 +24,7 @@
                 @for(requestBlock <- requestBlocks) {
                     <tbody>
                         <tr>
-                            <th>@requestBlock.height</th>
+                            <th><a href="@routes.HistoryController.listHeadersAtHeightView("byHeight", requestBlock.height)">@requestBlock.height</a></th>
                             <td>@{
                                 new Date(requestBlock.timestamp).format("yyyy-MM-dd HH:mm:ss")
                             }</td>
