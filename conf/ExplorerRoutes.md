@@ -5,7 +5,7 @@
 |2) `/api/history/bestHeaderAt/:height`                       | get  | 
 | Description: same as 1), but this one returns JSON format instead of view.
 |3) `/history/headers/findByCount/:mode/:from/:count`         | get  |
-| Description: shows information about `number of headers`. It has 3 parameters. First - kind of sort ( by height, by date, by txsNum ). Second - height of the header with which will show information. Third - number of headers. 
+| Description: shows information about `number of headers`. It has 3 parameters. First - kind of sort ( by height, by date, by txsNum ). Second - height of the header starting from which information will be shown. Third - number of headers. 
 |4) `/api/history/headers/findByCount/:from/:count`           | get  |
 | Description: same as 3), but this one returns JSON format instead of view.
 |5) `/api/history/headers/:modifierId`                        | get  |
