@@ -1,9 +1,14 @@
 | Route | get/post |
 |-------|----------|
-|1) /history/bestHeaderAt/:height                           | get  |
-|2) /api/history/bestHeaderAt/:height                       | get  | 
-|3) /history/headers/findByCount/:mode/:from/:count         | get  | 
-|4) /api/history/headers/findByCount/:from/:count           | get  |
+|1) `/history/bestHeaderAt/:height`                           | get  |
+| Description: shows information about `header` with `best_chain` mark at the `'height'`. 
+| It means that on every height it's possible to be different number of headers, but on every height there is always only one with mark 'best_chain'.
+|2) `/api/history/bestHeaderAt/:height`                       | get  | 
+| Description: Same as 1) but this one returns JSON format instead view.
+|3) `/history/headers/findByCount/:mode/:from/:count`         | get  |
+| Description: Shows information about `number of headers`. It has 3 parameters. First - kind of sort ( by height, by date, by txsNum ).
+| Second - first height from which information will be show. Third - number of headers. 
+|4) `/api/history/headers/findByCount/:from/:count`           | get  |
 |5) /api/history/headers/:modifierId                        | get  | 
 |6) /history/headers/:modifierId                            | get  | 
 |7) /history/headersAt/:mode/:param                         | get  | 
@@ -37,13 +42,9 @@
 |35) /api/block/:id                                         | get  |
 |36) /block/:id                                             | get  |
 
-Description:
 
-1)  Show information about `header` with `best_chain` mark at the `'height'`. It's mean that on every height it's possible to 
-be different number of headers, but it's always only one with mark 'best_chain'.
-2)  Same as 1) but this one returns JSON format instead view.
-3)  Show information about `number of headers`. It has 3 parameters. First - kind of sort ( by height, by date, by txsNum ).
-Second - first height from which information will be show. Third - number of headers.
+2)  
+3)  
 4)  Same as 3) but this one returns JSON format instead view.
 5)  Show information about header by `header's ID`. Return format is JSON.
 6)  Same as 5) but this one shows view with list of headers.
