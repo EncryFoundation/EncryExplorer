@@ -2,7 +2,6 @@
 |-------|----------|
 |1) `/history/bestHeaderAt/:height`                           | get  |
 | Description: shows information about `header` with `best_chain` mark at the `'height'`. It means that on every height it's possible to be different number of headers, but on every height there is always only one with mark 'best_chain'.
-|
 |2) `/api/history/bestHeaderAt/:height`                       | get  | 
 | Description: Same as 1) but this one returns JSON format instead view.
 |3) `/history/headers/findByCount/:mode/:from/:count`         | get  |
