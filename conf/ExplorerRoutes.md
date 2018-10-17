@@ -45,7 +45,7 @@
 |22) `/api/transactions/tx/:modifierId/outputs`               | get  |
 | Description: Shows all information about outputs which belong to transaction with _`modID`_
 |23) `/api/transactions/input/:modifierId/outputs/unspent`    | get  |
-| Description: Shows all information about unspent outputs with
+| Description: Shows all information about unspent outputs
 |24) `/api/transactions/input/:modifierId`                    | get  |
 | Description: Shows input with `ID`
 |25) `/api/transactions/tx/:id/inputs`                        | get  |
