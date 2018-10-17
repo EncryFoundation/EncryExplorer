@@ -3,35 +3,35 @@
 |1) `/history/bestHeaderAt/:height`                           | get  |
 | Description: shows information about `header` with `best_chain` mark at the `height`. It means that on every height it's possible to be different number of headers, but on every height there is always only one with mark `'best_chain'`.
 |2) `/api/history/bestHeaderAt/:height`                       | get  | 
-| Description: same as 1), but this one returns JSON format instead of view.
+| Description: same as 1), but this one returns JSON document instead of view.
 |3) `/history/headers/findByCount/:mode/:from/:count`         | get  |
-| Description: shows information about `number of headers`. It has 3 parameters. First - kind of sort ( by height, by date, by txsNum ). Second - height of the header starting from which information will be shown. Third - number of headers. 
+| Description: shows information about `number of headers`. It has 3 parameters. First - type of sorting ( by height, by date, by txsNum ). Second - height of the header starting from which information will be shown. Third - number of headers. 
 |4) `/api/history/headers/findByCount/:from/:count`           | get  |
-| Description: same as 3), but this one returns JSON format instead of view.
+| Description: same as 3), but this one returns JSON document instead of view.
 |5) `/api/history/headers/:modifierId`                        | get  |
 | Description: shows information about header by `header's ID` in JSON format.
 |6) `/history/headers/:modifierId`                            | get  | 
-| Description: same as 5) but this one shows view with list of headers.
+| Description: same as 5) but this one shows view with the list of headers.
 |7) `/history/headersAt/:mode/:param`                         | get  |
 | Description: shows all headers at the `:param` height.
 |8) `/api/history/headersAt/:height`                          | get  |
-| Description: same as 7), but this one returns JSON format. 
+| Description: same as 7), but this one returns JSON document. 
 |9)  `/history/lastHeaders/:mode/:param`                      | get  |
 | Description: shows list of last `:param` headers started at the end of the chain.
 |10) `/api/history/lastHeaders/:qty`                          | get  |
-| Description: same as 9) but this one returns JSON format.
+| Description: same as 9) but this one returns JSON document.
 |11) `/history/headers/:mode/range/:from/:to`                 | get  |
-| Description: shows list of headers with height greater than `:from` and less then `:to`.
+| Description: shows list of the headers with height greater than `:from` and less then `:to`.
 |12) `/api/history/headers/range/:from/:to`                   | get  |
-| Description: same as 11), but this one returns JSON format.
+| Description: same as 11), but this one returns JSON document.
 |13) `/history/findHeadersByDate/:mode/:da`                   | get  |
-| Description: shows list of headers with `:count` size and with timestamp >= `:date`.
+| Description: shows list of the headers with `:count` size and with timestamp >= `:date`.
 |14) `/api/history/findHeadersByDate/:date/:count`            | get  |
-| Description: same as 13), but this one returns JSON format.
+| Description: same as 13), but this one returns JSON document.
 |15) `/history/headers/findByDateFromTo/:mode/:from/:to`      | get  |
 | Description: shows all headers where timestamp >= `:from` and timestamp =< `:to`.
 |16) `/api/history/headers/findByDateFromTo/:from/:to`        | get  |
-| Description: same as 15), but this one returns JSON format.
+| Description: same as 15), but this one returns JSON document.
 |17) `/mainPage/:from/:to`                                    | get  |
 | Description: the main explorer's page. Shows information about last 100 `:best_chain` headers. It has `next`, `prev` buttons.
 |18) `/history/allHeaders/:from/:to`                          | get  |
@@ -51,11 +51,11 @@
 |25) `/api/transactions/tx/:id/inputs`                        | get  |
 | Description: shows all inputs belong to transaction with `transaction ID`.
 |26) `/api/transactions/:id`                                  | get  |
-| Description: same as 27). Return format is JSON.
+| Description: same as 27). Returns JSON document.
 |27) `/transactions/:id`                                      | get  |
 | Description: shows view with inputs / outputs belong to transaction with `ID`.
 |28) `/api/transactions/block/:id`                            | get  |
-| Description: same as 29), but this one returns JSON format.
+| Description: same as 29), but this one returns JSON document.
 |29) `/transactions/block/:id`                                | get  |
 | Description: shows all transactions belong to block with `ID`.
 |30) `/api/transactions/block/height/:height/outputs`         | get  |
