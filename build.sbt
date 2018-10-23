@@ -47,3 +47,6 @@ libraryDependencies ++= (Seq(
   "de.heikoseeberger" %% "akka-http-circe" % "1.20.1",
 ) ++ databaseDependencies ++ apiDependencies ++ testingDependencies ++ loggingDependencies)
   .map(_ exclude("ch.qos.logback", "*") exclude("ch.qos.logback", "*"))
+libraryDependencies ++= Seq(
+  ws
+)
