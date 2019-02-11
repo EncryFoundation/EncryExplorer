@@ -32,5 +32,5 @@ object OutputsQueryRepository {
 
   def listByBlockHeightQueryUnspentQuery(height: Int): ConnectionIO[List[Output]] =
     sql"SELECT * FROM outputs WHERE tx_id IN (SELECT id FROM transactions WHERE block_id IN (SELECT id FROM headers WHERE height = $height))".query[Output].to[List]
-}
 
+}

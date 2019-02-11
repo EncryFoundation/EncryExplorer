@@ -10,7 +10,9 @@ import play.api.mvc._
 import scorex.crypto.encode.Base16
 import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
+
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Random
 
 class TransactionsController @Inject()(cc: ControllerComponents,
                                        transactionsDao: TransactionsDao,
@@ -43,7 +45,7 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = true)
       .map {
         case Nil => NotFound
-        case list: List[Output] => Ok(list.asJson)
+        case list: List[Output] => Ok(Random.shuffle(list).take(300).asJson)
       }
   }
 
