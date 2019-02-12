@@ -10,7 +10,6 @@ import play.api.mvc._
 import scorex.crypto.encode.Base16
 import utils.{AddressCheckActionFactory, Base16CheckActionFactory, FromToCheckActionFactory, HeightCheckActionFactory}
 import views.html.{getTransactions, getTransactionsList}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
 
@@ -31,14 +30,17 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def listOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
-    transactionsDao
-      .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
+  def walletBalanceByAddress(address: String): Action[AnyContent] = addressCheck(address).async(
+    transactionsDao.walletBalanceByAddress(contractHashByAddress(address)).map(v => Ok(v.asJson))
+  )
+
+  def outputsWithLimit(address: String, limit: Long): Action[AnyContent] = addressCheck(address).async(
+    transactionsDao.listOutputsWithLimitByContractHash(contractHashByAddress(address), limit)
       .map {
         case Nil => NotFound
         case list: List[Output] => Ok(list.asJson)
       }
-  }
+  )
 
   def listUnspentOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
     transactionsDao
@@ -173,5 +175,4 @@ class TransactionsController @Inject()(cc: ControllerComponents,
         case list: List[Transaction] => Ok(list.asJson)
       }
   }
-
 }

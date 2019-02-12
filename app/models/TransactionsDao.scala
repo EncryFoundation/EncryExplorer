@@ -27,13 +27,22 @@ class TransactionsDao @Inject()(dBService: DBService)(implicit ec: ExecutionCont
 
   def findOutputByBlockId(id: String): Future[List[Output]] = dBService.runAsync(findOutputByBlockIdQuery(id))
 
-  def findUnspentOutputByBlockId(id: String): Future[List[Output]] = dBService.runAsync(findUnspentOutputByBlockIdQuery(id))
+  def findUnspentOutputByBlockId(id: String): Future[List[Output]] =
+    dBService.runAsync(findUnspentOutputByBlockIdQuery(id))
 
-  def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] = dBService.runAsync(findTransactionByBlockHeightRangeQuery(from, to))
+  def findTransactionByBlockHeightRange(from: Int, to: Int): Future[List[Transaction]] =
+    dBService.runAsync(findTransactionByBlockHeightRangeQuery(from, to))
 
   def listByBlockId(blockId: String): Future[List[Transaction]] = dBService.runAsync(listByBlockIdQuery(blockId))
 
   def listOutputsByBlockHeight(height: Int): Future[List[Output]] = dBService.runAsync(listByBlockHeightQuery(height))
 
-  def listOutputsByBlockHeightUnspent(height: Int): Future[List[Output]] = dBService.runAsync(listByBlockHeightQueryUnspentQuery(height))
+  def listOutputsByBlockHeightUnspent(height: Int): Future[List[Output]] =
+    dBService.runAsync(listByBlockHeightQueryUnspentQuery(height))
+
+  def walletBalanceByAddress(contractHash: String): Future[Option[Long]] =
+    dBService.runAsync(getBalanceByContractHash(contractHash))
+
+  def listOutputsWithLimitByContractHash(contractHash: String, limit: Long): Future[List[Output]] =
+    dBService.runAsync(getUnspentOutputsWithLimit(contractHash, limit))
 }

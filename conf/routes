@@ -36,6 +36,8 @@ GET        /api/transactions/block/height/:height/outputs/unspent        control
 GET        /api/transactions/block/:modifierId/outputs                   controllers.TransactionsController.findOutputByBlockIdApi(modifierId: String)
 GET        /api/transactions/block/:modifierId/outputs/unspent           controllers.TransactionsController.findUnspentOutputByBlockIdApi(modifierId: String)
 GET        /api/transactions/tx/range/:from/:to                          controllers.TransactionsController.findTransactionByBlockHeightRangeApi(from: Int, to: Int)
+GET        /wallet/balance/:address                                      controllers.TransactionsController.walletBalanceByAddress(address: String)
+GET        /outputs/:address/limit/:limit                                controllers.TransactionsController.outputsWithLimit(address: String, limit: Long)
 
 GET        /api/block/:id                                                controllers.BlockController.findBlockApi(id: String)
 GET        /block/:id                                                    controllers.BlockController.findBlockView(id: String)

@@ -33,4 +33,9 @@ object OutputsQueryRepository {
   def listByBlockHeightQueryUnspentQuery(height: Int): ConnectionIO[List[Output]] =
     sql"SELECT * FROM outputs WHERE tx_id IN (SELECT id FROM transactions WHERE block_id IN (SELECT id FROM headers WHERE height = $height))".query[Output].to[List]
 
+  def getBalanceByContractHash(contractHash: String): ConnectionIO[Option[Long]] =
+    sql"SELECT sum(monetary_value) FROM outputs WHERE contract_hash = $contractHash AND id NOT IN (SELECT id FROM inputs)".query[Long].option
+
+  def getUnspentOutputsWithLimit(contractHash: String, limit: Long): ConnectionIO[List[Output]] =
+    sql"SELECT * FROM outputs WHERE contract_hash = $contractHash AND id NOT IN (SELECT id FROM inputs) LIMIT $limit".query[Output].to[List]
 }
