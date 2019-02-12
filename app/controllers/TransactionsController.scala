@@ -30,6 +30,15 @@ class TransactionsController @Inject()(cc: ControllerComponents,
       }
   }
 
+  def listOutputsByAddressApi(address: String): Action[AnyContent] = addressCheck(address).async {
+    transactionsDao
+      .listOutputsByContractHash(contractHashByAddress(address), unspentOnly = false)
+      .map {
+        case Nil => NotFound
+        case list: List[Output] => Ok(list.asJson)
+      }
+  }
+
   def walletBalanceByAddress(address: String): Action[AnyContent] = addressCheck(address).async(
     transactionsDao.walletBalanceByAddress(contractHashByAddress(address)).map(v => Ok(v.asJson))
   )
